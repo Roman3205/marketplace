@@ -1,4 +1,4 @@
-# 1.Sneakers-shop
+# 1.Clothes-shop
 
 This template should help get you started developing with Vue 3 in Vite.
 
