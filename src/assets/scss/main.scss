@@ -1,0 +1,12 @@
+$border: 100px;
+$click: yellow;
+
+.test {
+    width: $border;
+    background-color: red;
+    height: 500px;
+    transition: 0.9s;
+    &:hover {
+        background-color: yellow;
+    }
+}
