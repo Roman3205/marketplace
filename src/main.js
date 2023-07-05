@@ -1,7 +1,5 @@
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:3004'
-import './assets/style.scss';
-
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
