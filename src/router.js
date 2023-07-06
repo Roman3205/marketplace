@@ -2,18 +2,36 @@ import { createRouter, createWebHistory } from "vue-router";
 import SignupPage from './views/SignupPage.vue'
 import LoginPage from  './views/LoginPage.vue'
 import MainPage from './views/MainPage.vue'
+import OplataPage from './views/OplataPage.vue'
+import VozvratPage from './views/VozvratPage.vue'
+import PravilaPol from './views/PravilaPol.vue'
+import PravilaPr from './views/PravilaPr.vue'
+import SellLogin from './views/SellerLog.vue'
+import SellSignup from  './views/SellerSignup.vue'
+import NotFoundPage from './views/NotFoundPage.vue'
+import LkPage from './views/LkPage.vue'
 
 export default createRouter({
     history: createWebHistory(),
 
     routes: [
         {
-            path: '/login',
+            path: '/seller/login',
+            name: 'sellLogin',
+            component: SellLogin
+        },
+        {
+            path: '/seller/sign-up',
+            name: 'sellSignup',
+            component: SellSignup
+        },
+        {
+            path: '/security/login',
             name: 'login',
             component: LoginPage
         },
         {
-            path: '/signup',
+            path: '/security/sign-up',
             name: 'signup',
             component: SignupPage
         },
@@ -21,6 +39,36 @@ export default createRouter({
             path: '/',
             name: 'main',
             component: MainPage
+        },
+        {
+            path: '/services/sposoby-oplaty',
+            name: 'sposob',
+            component: OplataPage
+        },
+        {
+            path: '/services/vozvrat-tovara',
+            name: 'vozvrat',
+            component: VozvratPage
+        },
+        {
+            path: '/services/pravila-polzovaniya-torgovoy-ploshchadkoy',
+            name: 'pravilapol',
+            component: PravilaPol
+        },
+        {
+            path: '/services/pravila-prodazhi',
+            name: 'pravilapr',
+            component: PravilaPr
+        },
+        {
+            path: '/lk',
+            name: 'lk',
+            component: LkPage
+        },
+        {
+            path: '/:pathMatch(.*)',
+            name: 'notfound',
+            component: NotFoundPage
         }
     ]
 })

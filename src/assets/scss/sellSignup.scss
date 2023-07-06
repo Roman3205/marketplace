@@ -1,0 +1,68 @@
+@import '../scss/signup.scss';
+
+.wrapper {
+    background: url('../../images/seller.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper input,
+.wrapper textarea {
+    margin-top: 5px;
+}
+
+.form__block__toggle {
+    margin-top: 4.5px;
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.inner {
+    background: none;
+
+    h3 {
+        margin-top: 10px;
+    }
+
+    textarea {
+        resize: none;
+        border-radius: 10px;
+        padding: 8px;
+    }
+
+	.form {
+        padding: 60px;
+        background: #fff;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 700px;
+        height: fit-content;
+        display: block;
+        padding-top: 40px;
+	    border-radius: 10px;
+        transform: translate(-50%, -50%);
+	}
+}
+
+.form-content {
+    display: flex;
+    gap: 60px;
+}
+
+.password-user {
+    display: flex;
+    gap: 15px;
+}
+
+.form__submit {
+    padding: 0 77px;
+    width: fit-content;
+    position: absolute;
+    bottom: 55px;
+    right: 70px;
+}

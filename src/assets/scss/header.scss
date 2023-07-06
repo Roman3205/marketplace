@@ -1,0 +1,118 @@
+%flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background-color: rgb(145, 51, 208);
+    width: 100%;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: #e6e6e6;
+    border-radius: 0px 0px 30px 30px;
+}
+
+.fa-bars {
+    border: 1px solid #fff;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 44px!important;
+    height: 56px;
+}
+
+.btn {
+    transition: 0.6s;
+}
+
+.header-bottom h1 {
+    font-size: 44px!important;
+    padding-top: 1px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.container i {
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.header-bottom input {
+    width: 700px;
+    font-size: 20px;
+    height: 50px;
+    box-shadow: none;
+}
+
+.box__user, .header__cart {
+    flex-direction: column;
+    @extend %flex;
+    gap: 5px;
+    cursor: pointer;
+    font-size: 21px;
+    transition: 0.5s;
+}
+
+.box__user:hover, .header__cart:hover {
+    opacity: 0.8;
+}
+
+.header__menu, .header__search, .box {
+    display: flex;
+    gap: 35px;
+}
+
+.header__search {
+    gap: 15px;
+    @extend %flex;
+}
+
+.header-bottom {
+    @extend %flex;
+    gap: 60px;
+}
+
+.header__money {
+    @extend %flex;
+    gap: 5px;
+}
+
+.header-top {
+    @extend %flex;
+    gap: 40px;
+    justify-content: left;
+    margin-left: 70px;
+    margin-top: 10px;
+}
+
+@media screen and (max-width: 767px) {
+    .container {
+        flex-wrap: wrap;
+        height: fit-content;
+    }
+
+    .header-bottom {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .box {
+        gap: 80px;
+    }
+
+    .header__menu {
+        margin-top: 15px;
+    }
+
+    .header__search {
+        order: 4;
+        margin: 10px 0px 30px 0px;
+    }
+
+    .header__search input {
+        width: 300px;
+    }
+}

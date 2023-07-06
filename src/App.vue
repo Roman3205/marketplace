@@ -13,6 +13,10 @@ export default {
   computed: {
     Auth() {
       return this.$route.name === 'signup' || this.$route.name === 'login'
+    },
+
+    Seller() {
+      return this.$route.name === 'sellLogin' || this.$route.name === 'sellSignup'
     }
   }
 }
@@ -20,7 +24,7 @@ export default {
 
 <template>
   <div class="app">
-    <div class="col" v-if="!Auth">
+    <div class="col" v-if="!Auth && !Seller">
       <div class="row header">
         <app-header></app-header>
       </div>
@@ -32,6 +36,7 @@ export default {
       </div>
     </div>
     <router-view v-if="Auth"></router-view>
+    <router-view v-if="Seller"></router-view>
   </div>
 </template>
 

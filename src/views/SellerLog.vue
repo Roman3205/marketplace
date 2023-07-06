@@ -12,7 +12,7 @@ export default {
         goReg(evt) {
             evt.preventDefault()
             this.$router.push({
-                name: 'signup'
+                name: 'sellSignup'
             })
         },
 
@@ -41,7 +41,7 @@ export default {
 				</div>
 				<button class="form__submit submit-button" type="submit">Войти</button>
                 <div class="form__info">
-                    <a @click="goReg" href="">Нет аккаунта?</a>
+                    <a @click="goReg" href="">Пройдите регистрацию</a>
                     <div class="form__info__alert alert alert-danger">Произошла ошибка</div>
                     <!-- <div class="form__info__alert alert alert-success">Вход выполнен успешно</div> -->
                 </div>
@@ -51,5 +51,5 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/login.scss';
+    @import '../assets/scss/sellLogin.scss';
 </style>

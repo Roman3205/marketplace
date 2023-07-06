@@ -62,6 +62,7 @@ export default {
                 <div class="form__info">
                     <a @click="goLogin" href="">Уже есть аккаунт?</a>
                     <div class="form__info__alert alert alert-danger">Произошла ошибка</div>
+                    <!-- <div class="form__info__alert alert alert-success">Вы успешно зарегистрировались</div> -->
                 </div>
 			</form>
 		</div>
