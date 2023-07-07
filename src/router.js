@@ -10,6 +10,9 @@ import SellLogin from './views/SellerLog.vue'
 import SellSignup from  './views/SellerSignup.vue'
 import NotFoundPage from './views/NotFoundPage.vue'
 import LkPage from './views/LkPage.vue'
+import BalancePage from './views/BalancePage.vue'
+import AboutUs from './views/AboutUs.vue'
+import InfoDetails from './views/InfoDetails.vue'
 
 export default createRouter({
     history: createWebHistory(),
@@ -64,6 +67,21 @@ export default createRouter({
             path: '/lk',
             name: 'lk',
             component: LkPage
+        },
+        {
+            path: '/lk/mywallet/purchases',
+            name: 'balance',
+            component: BalancePage
+        },
+        {
+            path: '/services/o-nas',
+            name: 'about-us',
+            component: AboutUs
+        },
+        {
+            path: '/lk/details',
+            name: 'details',
+            component: InfoDetails
         },
         {
             path: '/:pathMatch(.*)',

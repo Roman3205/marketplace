@@ -1,0 +1,146 @@
+.wrapper, .rub {
+    display: flex;
+}
+
+.wrapper {
+    align-items: center;
+    justify-content: center;
+    gap: 90px;
+    padding-right: 80px;
+    margin-bottom: 60px;
+}
+
+.opacity {
+    opacity: 0.4;
+}
+
+.balance, .history, .balance-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.balance {
+    margin: 60px 0px;
+    gap: 35px;
+    align-self: start;
+}
+
+.history {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    height: auto;
+    width: 850px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.container h2 {
+    font-size: 24px;
+}
+
+.balance-menu {
+    background-color: #efefef;
+    padding: 25px;
+    overflow: hidden;
+    box-shadow: 5px 5px 5px lightgrey;
+    margin: 0px 15px 15px 0px;
+    border-radius: 15px;
+    width: 350px;
+    gap: 20px;
+
+    i {
+        margin-top: 10px;
+        font-size: 26px;
+    }
+    
+    button {
+        background-color: rgb(145, 51, 208);
+        transition: 0.6s;
+        color: #fff;
+    }
+
+    button:hover {
+        opacity: 0.8!important;
+    }
+
+    .rub {
+        gap: 10px;
+
+        p {
+            font-size: 30px;
+        }
+    }
+}
+
+.alert {
+    padding: 20px 70px;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.donate-balance {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 320px;
+    border-radius: 15px;
+    background-color: #efefef;
+    padding: 25px;
+    overflow: hidden;
+    box-shadow: 5px 5px 5px lightgrey;
+    padding: 20px;
+
+    i {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    .auto-don {
+        display: flex;
+        gap: 25px;
+
+        span {
+            background-color: rgb(213, 213, 213);
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    }
+
+    input {
+        width: 100%;
+        margin: 8px 0px 20px 0px;
+        box-shadow: none;
+    }
+
+    button {
+        width: 100%;
+        transition: 0.6s;
+        margin: 10px 0px;
+        color: rgb(145, 51, 208);
+        border: 3px solid rgb(145, 51, 208);
+        background-color: #fff;
+
+        &:hover {
+            background-color: rgb(145, 51, 208);
+            opacity: 0.8!important;
+            color: #fff;
+        }
+        
+    }
+}

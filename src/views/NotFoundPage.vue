@@ -22,28 +22,6 @@ export default {
     </div>
 </template>
 
-<style scoped>
-    .container__box {
-        display: flex;
-        flex-direction: column;
-        gap: 60px;
-    }
-
-    .container {
-        display: flex;
-        gap: 110px;
-        margin: 70px 0px 100px 70px;
-    }
-
-    .container button {
-        background-color: rgb(145, 51, 208);
-        width: 300px;
-        color: #fff;
-        transition: 0.6s;
-    }
-
-    .container button:hover {
-        opacity: 0.8!important;
-    }
-
+<style scoped lang="scss">
+    @import '../assets/scss/notfound.scss';
 </style>

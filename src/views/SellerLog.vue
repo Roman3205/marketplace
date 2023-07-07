@@ -51,5 +51,5 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/sellLogin.scss';
+    @import '../assets/scss/selllogin.scss';
 </style>

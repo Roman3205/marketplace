@@ -36,34 +36,6 @@
     </div>
 </template>
 
-<style scoped>
-.container {
-    margin: 60px 0px 90px 70px;
-}
-
-.container h2 {
-    font-size: 24px;
-}
-
-.container p {
-    font-size: 20px;
-}
-
-.box {
-    width: 91%;
-    margin-top: 30px;
-}
-
-.container h2:last-of-type {
-    margin-top: 50px;
-}
-
-.box p {
-    line-height: 30px!important;
-}
-
-.text {
-    text-indent: 20px;
-}
-
+<style scoped lang="scss">
+  @import '../assets/scss/vozvrat.scss';
 </style>

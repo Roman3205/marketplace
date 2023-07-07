@@ -6,7 +6,7 @@
     <div class="container">
         <h2><b>Правила пользования торговой площадкой «Marketplace»</b></h2>
         <div class="blocks-container">
-            <div class="toggle-menu__1">
+            <div class="toggle-menu__1 toggle-m">
                 <label for="toggle__1" class="toggle__label"><h2><b>1. Общие положения</b></h2>
                     <input type="checkbox" id="toggle__1">
                     <ul class="toggle__on__1">
@@ -14,7 +14,7 @@
                     </ul>
                 </label>
             </div>
-            <div class="toggle-menu__2">
+            <div class="toggle-menu__2 toggle-m">
                 <label for="toggle__2" class="toggle__label"><h2><b>2. Регистрация на сайте</b></h2>
                     <input type="checkbox" id="toggle__2">
                     <ul class="toggle__on__2">
@@ -22,7 +22,7 @@
                     </ul>
                 </label>
             </div>
-            <div class="toggle-menu__3">
+            <div class="toggle-menu__3 toggle-m">
                 <label for="toggle__3" class="toggle__label"><h2><b>3. Оформление заказа</b></h2>
                     <input type="checkbox" id="toggle__3">
                     <ul class="toggle__on__3">
@@ -30,7 +30,7 @@
                     </ul>
                 </label>
             </div>
-            <div class="toggle-menu__4">
+            <div class="toggle-menu__4 toggle-m">
                 <label for="toggle__4" class="toggle__label"><h2><b>4. Цена и оплата</b></h2>
                     <input type="checkbox" id="toggle__4">
                     <ul class="toggle__on__4">
@@ -38,7 +38,7 @@
                     </ul>
                 </label>
             </div>
-            <div class="toggle-menu__5">
+            <div class="toggle-menu__5 toggle-m">
                 <label for="toggle__5" class="toggle__label"><h2><b>5. Доставка товара</b></h2>
                     <input type="checkbox" id="toggle__5">
                     <ul class="toggle__on__5">
@@ -50,77 +50,6 @@
     </div>
 </template>
 
-<style scoped>
-    .container {
-        margin: 60px 0px 50px 70px;
-    }
-
-    .container h2 {
-        font-size: 24px;
-    }
-
-    .container p {
-        color: #a7a7a7;
-        line-height: 60px;
-        font-size: 20px;
-    }
-
-    .blocks-container {
-        margin-top: 50px;
-    }
-
-    .toggle__on__1,
-    .toggle__on__2,
-    .toggle__on__3,
-    .toggle__on__4,
-    .toggle__on__5 {
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
-        height: 0;
-        list-style: none;
-        font-size: 0px;
-        margin: 0;
-        padding: 0;
-    }
-
-    .toggle__label {
-        cursor: pointer;
-        transition: 0.6s;
-        font-size: 20px;
-        display: flex;
-        padding-top: 20px;
-        width: 91%;
-        flex-direction: column;
-        border-top: 2px solid lightgrey;
-    }
-
-    .blocks-container:last-child {
-        border-bottom: 2px solid lightgrey;
-    }
-
-    .toggle__label:hover {
-        opacity: 0.7;
-    }
-
-    #toggle__1:checked ~ .toggle__on__1,
-    #toggle__2:checked ~ .toggle__on__2,
-    #toggle__3:checked ~ .toggle__on__3,
-    #toggle__4:checked ~ .toggle__on__4,
-    #toggle__5:checked ~ .toggle__on__5 {
-        opacity: 1;
-        padding-bottom: 30px;
-        padding-top: 10px;
-        visibility: visible;
-        font-size: 20px;
-        height: auto;
-    }
-
-    #toggle__1,
-    #toggle__2,
-    #toggle__3,
-    #toggle__4,
-    #toggle__5 {
-        visibility: hidden;
-    }
+<style scoped lang="scss">
+    @import '../assets/scss/polprav.scss';
 </style>

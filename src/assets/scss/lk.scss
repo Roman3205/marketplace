@@ -16,6 +16,12 @@
     padding: 25px;
     overflow: hidden;
     box-shadow: inset -5px -5px 5px lightgrey;
+    transition: 0.35s;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
 }
 
 .wrapper h2 {
@@ -24,15 +30,14 @@
 }
 
 .wrapper {
-    width: 93%;
     height: 600px;
-    margin: 60px;
+    margin: 70px 60px;
     display: grid;
+    max-width: 1400px;
 }
 
 .block__1, .block__3 {
     @extend %grid, %layout;
-    
 }
 
 .block__3 {
@@ -46,28 +51,68 @@
     
 }
 
-.block__1 .block__content {
+.block__content {
     @extend %content;
+
+    &:hover {
+        box-shadow: inset 8px 8px 10px lightgrey;
+        opacity: 0.85;
+    }
+
+    p {
+        overflow: hidden;
+    }
 }
 
 .block__2 .block__content {
-    @extend %content;
     height: 120px;
-}
-
-.block__3 .block__content {
-    @extend %content;
 }
 
 .block__2 .block__content:first-of-type {
     font-size: 19.5px;
 }
 
+.block__1 .block__content, .block__3 .block__content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.block__1 .block__content:first-of-type {
+    gap: 5px;
+}
+
+.block__content__top, .user-info {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.user-info {
+    gap: 120px;
+
+    p {
+        margin: 0;
+    }
+}
+
 .rub {
     display: flex;
     gap: 8px;
+
+    i {
+        margin-top: 5px;
+    }
 }
 
-.rub i {
-    margin-top: 5px;
+.upper-span {
+    font-size: 17px;
+}
+
+strong .upper-span {
+    font-size: 21px;
+}
+
+.tov {
+    gap: 11px!important;
 }

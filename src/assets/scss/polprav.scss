@@ -1,0 +1,87 @@
+.container {
+    margin: 60px 0px 50px 70px;
+}
+
+.container h2 {
+    font-size: 24px;
+}
+
+.container p {
+    color: #a7a7a7;
+    line-height: 60px;
+    font-size: 20px;
+}
+
+.blocks-container {
+    margin-top: 50px;
+}
+
+.toggle__on__1,
+.toggle__on__2,
+.toggle__on__3,
+.toggle__on__4,
+.toggle__on__5 {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+    height: 0;
+    list-style: none;
+    font-size: 0px;
+    margin: 0;
+    padding: 0;
+}
+
+.toggle__label {
+    cursor: pointer;
+    transition: 0.6s;
+    font-size: 20px;
+    display: flex;
+    padding-top: 20px;
+    width: 91%;
+    flex-direction: column;
+    border-top: 2px solid lightgrey;
+}
+
+.toggle-menu__5 .toggle__label {
+    border-bottom: 2px solid lightgrey;
+}
+
+.toggle__label:hover {
+    opacity: 0.7;
+}
+
+#toggle__1:checked ~ .toggle__on__1,
+#toggle__2:checked ~ .toggle__on__2,
+#toggle__3:checked ~ .toggle__on__3,
+#toggle__4:checked ~ .toggle__on__4,
+#toggle__5:checked ~ .toggle__on__5 {
+    opacity: 1;
+    padding-bottom: 30px;
+    padding-top: 10px;
+    visibility: visible;
+    font-size: 20px;
+    height: auto;
+}
+
+#toggle__1,
+#toggle__2,
+#toggle__3,
+#toggle__4,
+#toggle__5 {
+    visibility: hidden;
+}
+
+@media screen and (min-width: 1700px) {
+    .container, .toggle-m, .blocks-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .blocks-container, .container {
+        margin: 60px 0px; 
+    }
+}
