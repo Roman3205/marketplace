@@ -144,3 +144,36 @@
         
     }
 }
+
+@media screen and (max-width: 768px) {  
+    .wrapper {
+        flex-direction: column-reverse;
+        width: 100%;
+        padding: 0px 30px;
+        gap: 0px;
+    }
+
+    .history, .balance, .balance-menu {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        gap: 10px;
+    }
+
+    .alert {
+        padding: 10px;
+        gap: 10px;
+        align-items: center;
+
+        span {
+            width: fit-content;
+            word-wrap: break-word;
+        }
+
+        .no-wrap {
+            word-wrap: none;
+            width: 270px;
+            text-align: left;
+        }
+    }
+}

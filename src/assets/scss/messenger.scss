@@ -1,0 +1,155 @@
+%layout {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    padding: 5px 17px 0px 17px;
+    max-width: 350px;
+    word-wrap: break-word;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper {
+    width: 100%;
+    padding: 60px 70px;
+    overflow: hidden;
+    width: 1540px;
+}
+
+.block-box {
+    height: 520px;
+    border-radius: 15px;
+    box-shadow: 10px 10px 10px lightgrey;
+    background-color: #e0e0e0;
+    padding: 60px 100px;
+    overflow: hidden;
+}
+
+.send-message-form {
+    width: 100%;
+    height: 10%;
+    margin-top: 30px;
+}
+
+.info-user, .form-control {
+    border: 2px solid rgb(145, 51, 208)!important;
+}
+
+form {
+    display: flex;
+    gap: 10px;
+}
+
+.info-user {
+    width: 100%;
+    height: 50px;
+    font-size: 22px;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-control {
+    box-shadow: none;
+}
+
+.text-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0px;
+}
+
+.left {
+    align-self: flex-start;
+}
+
+.right {
+    align-self: flex-end;
+}
+
+.send-message-form input {
+    width: 83%;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    font-size: 24px;
+    padding-left: 10px;
+}
+
+.send-message-form button {
+    width: 17%;
+    height: 40px;
+}
+
+.messages-container {
+    height: 65%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    margin: 20px 0px 20px 0px;
+    border: 2px solid rgb(145, 51, 208);
+    border-radius: 10px;
+    font-size: 25px;
+    padding: 20px;
+    gap: 10px;
+}
+
+.messages-container p {
+    font-size: 19.5px;
+}
+
+.messages-container::-webkit-scrollbar {
+    width: 12px;
+}
+.messages-container::-webkit-scrollbar-track {
+    background: rgb(145, 51, 208);
+    border-radius: 20px;
+}
+
+.message-l {
+    @extend %layout;
+}
+
+.message-r {
+    @extend %layout;
+    align-self: flex-end;
+}
+
+.message-l,
+.message-r {
+    background-color: #fff;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.btn {
+    transition: 0.6s;
+    background-color: rgb(145, 51, 208);
+    color: #fff;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .block-box {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .wrapper {
+        padding: 25px;
+    }
+
+    button {
+        width: 130px!important;
+    }
+}

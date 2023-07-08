@@ -24,5 +24,15 @@
 }
 
 .form__submit {
-    padding: 0 180px;
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .form {
+        width: 100%;
+	}
+
+    .form__submit {
+        width: 100%;
+    }
 }

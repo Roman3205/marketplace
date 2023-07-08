@@ -82,7 +82,7 @@ export default {
       <div class="copyright">
         <p>2023 © Marketplace — интернет-магазин одежды, обуви и аксессуаров. <br>Все права защищены.</p>
       </div>
-      <div class="scroll-up" @click="scrollUp" v-if="showScroll" >
+      <div class="scroll-up inden-scroll" @click="scrollUp" v-if="showScroll" >
         <i class="fa fa-arrow-up"></i>
       </div>
     </div>

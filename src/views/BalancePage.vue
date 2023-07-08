@@ -1,4 +1,32 @@
 <script>
+
+const opacityEffectsOn = () => {
+    document.documentElement.style.overflowY = 'hidden'
+    document.querySelector('.header').style.pointerEvents = 'none'
+    document.querySelector('.footer').style.pointerEvents = 'none'
+    document.querySelector('.header').classList.add('changemenu-opacity')
+    document.querySelector('.footer').classList.add('changemenu-opacity')
+    document.querySelector('.inden-scroll').style.pointerEvents = 'none'
+    document.querySelector('.inden-scroll').style.opacity = '0.4'
+}
+
+const opacityEffectsOff = () => {
+    document.documentElement.style.overflowY = 'scroll'
+    document.querySelector('.header').style.pointerEvents = 'all'
+    document.querySelector('.footer').style.pointerEvents = 'all'
+    document.querySelector('.header').classList.remove('changemenu-opacity')
+    document.querySelector('.footer').classList.remove('changemenu-opacity')
+    document.querySelector('.inden-scroll').style.pointerEvents = 'all'
+    document.querySelector('.inden-scroll').style.opacity = '1'
+}
+
+const scrollMenu = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    })
+}
+
 export default {
     data() {
         return {
@@ -17,13 +45,15 @@ export default {
         showDon(evt) {
             evt.preventDefault()
             this.showDonateBar = true
-            document.documentElement.style.overflowY = 'hidden'
+            scrollMenu()
+            opacityEffectsOn()
         },
 
         closeDon(evt) {
             evt.preventDefault()
             this.showDonateBar = false
-            document.documentElement.style.overflowY = 'scroll';
+            scrollMenu()
+            opacityEffectsOff()
         },
 
         autoV(evt, value) {
@@ -46,7 +76,7 @@ export default {
                     <div class="rub">
                         <p><b>0</b></p><i class="fa fa-rub"></i>
                     </div>
-                    <button class="btn" @click="showDon" >Пополнить</button>
+                    <button class="btn" @click="showDon" :disabled="showDonateBar" >Пополнить</button>
                     <p>Средства с баланса списываются автоматически при оплате покупок</p>
                 </div>
             </div>
@@ -57,14 +87,14 @@ export default {
                 </div> -->
                 <div class="transactions">
                     <div class="alert"><span><h2><b>Дата</b></h2></span><span><h2><b>Операция</b></h2></span></div>
-                    <div class="alert alert-success"><span>07.07.2023</span><span>Баланс пополнен на 500р</span></div>
-                    <div class="alert alert-danger"><span>07.07.2023</span><span>С баланса списано 450р по покупке</span></div>
-                    <div class="alert alert-danger"><span>07.07.2023</span><span>С баланса списано 280р по покупке</span></div>
-                    <div class="alert alert-success"><span>06.07.2023</span><span>Баланс пополнен на 140р</span></div>
-                    <div class="alert alert-success"><span>04.07.2023</span><span>Баланс пополнен на 650р</span></div>
-                    <div class="alert alert-danger"><span>03.07.2023</span><span>С баланса списано 350р по покупке</span></div>
-                    <div class="alert alert-success"><span>01.07.2023</span><span>Баланс пополнен на 220р</span></div>
-                    <div class="alert alert-success"><span>29.06.2023</span><span>Баланс пополнен на 450р</span></div>
+                    <div class="alert alert-success"><span class="no-wrap">07.07.2023</span><span>Баланс пополнен на 500р</span></div>
+                    <div class="alert alert-danger"><span class="no-wrap">07.07.2023</span><span>С баланса списано 450р по покупке</span></div>
+                    <div class="alert alert-danger"><span class="no-wrap">07.07.2023</span><span>С баланса списано 280р по покупке</span></div>
+                    <div class="alert alert-success"><span class="no-wrap">06.07.2023</span><span>Баланс пополнен на 140р</span></div>
+                    <div class="alert alert-success"><span class="no-wrap">04.07.2023</span><span>Баланс пополнен на 650р</span></div>
+                    <div class="alert alert-danger"><span class="no-wrap">03.07.2023</span><span>С баланса списано 350р по покупке</span></div>
+                    <div class="alert alert-success"><span class="no-wrap">01.07.2023</span><span>Баланс пополнен на 220р</span></div>
+                    <div class="alert alert-success"><span class="no-wrap">29.06.2023</span><span>Баланс пополнен на 450р</span></div>
                 </div>
             </div>
         </div>

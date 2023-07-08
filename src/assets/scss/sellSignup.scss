@@ -21,32 +21,28 @@
     flex-direction: column;
 }
 
-.inner {
-    background: none;
+h3 {
+    margin-top: 10px;
+}
 
-    h3 {
-        margin-top: 10px;
-    }
+textarea {
+    resize: none;
+    border-radius: 10px;
+    padding: 8px;
+}
 
-    textarea {
-        resize: none;
-        border-radius: 10px;
-        padding: 8px;
-    }
-
-	.form {
-        padding: 60px;
-        background: #fff;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 700px;
-        height: fit-content;
-        display: block;
-        padding-top: 40px;
-	    border-radius: 10px;
-        transform: translate(-50%, -50%);
-	}
+.form {
+    padding: 60px;
+    background: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 700px;
+    height: fit-content;
+    display: block;
+    padding-top: 40px;
+	border-radius: 10px;
+    transform: translate(-50%, -50%);
 }
 
 .form-content {
@@ -62,7 +58,48 @@
 .form__submit {
     padding: 0 77px;
     width: fit-content;
-    position: absolute;
-    bottom: 55px;
-    right: 70px;
+    position: static;
+    border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	background: #333;
+	font-size: 15px;
+	color: #fff;
+	transition: 0.6s ease-in;
+	padding: 10px 70px;
+    width: 100%;
+    margin-top: 77px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .form-content {
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .wrapper {
+        padding: 50px 0px;
+    }
+
+    .form {
+        height: 500px;
+        overflow-y: scroll;
+        width: 300px;
+        padding: 36.5px;
+    }
+
+    .form__submit {
+        padding: 10px 40px;
+        text-align: center;
+        width: fit-content;
+        position: static;
+        margin: 0px;
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    textarea {
+        columns: 0;
+    }
 }

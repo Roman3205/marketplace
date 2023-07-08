@@ -22,10 +22,10 @@ export default {
             evt.preventDefault()
             if(field === 'F') {
                 this.typeF = this.typeF === 'password' ? 'text' : 'password'
-                this.imageF = this.typeF === 'password' ? '.../../images/hide.png' : '.../../images/show.png'
+                this.imageF = this.typeF === 'password' ? '../../images/hide.png' : '../../images/show.png'
             } else if(field === 'S') {
                 this.typeS = this.typeS === 'password' ? 'text' : 'password'
-                this.imageS = this.typeS === 'password' ? '.../../images/hide.png' : '.../../images/show.png'
+                this.imageS = this.typeS === 'password' ? '../../images/hide.png' : '../../images/show.png'
             }
         }
     }
@@ -34,9 +34,9 @@ export default {
 
 <template>
     <div class="wrapper">
-		<div class="wrapper__inner inner">
-			<div class="inner__image">
-				<img src="../../images/regimage.png" alt="">
+			<div class="container-regis">
+                <div class="inner__image">
+				<img src="../../images/regimage.png" width="420" alt="">
 			</div>
 			<form action="" class="inner__form form">
 				<h3>Форма регистрации</h3>
@@ -65,7 +65,7 @@ export default {
                     <!-- <div class="form__info__alert alert alert-success">Вы успешно зарегистрировались</div> -->
                 </div>
 			</form>
-		</div>
+        </div>
 	</div>
 </template>
 

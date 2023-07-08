@@ -19,7 +19,7 @@ export default {
         toggle(evt) {
             evt.preventDefault()
             this.type = this.type === 'password' ? 'text' : 'password'
-            this.image = this.type === 'password' ? '.../../images/hide.png' : '.../../images/show.png'
+            this.image = this.type === 'password' ? '../../images/hide.png' : '../../images/show.png'
         }
     }
 }
@@ -27,7 +27,6 @@ export default {
 
 <template>
     <div class="wrapper">
-		<div class="wrapper__inner inner">
 			<form action="" class="inner__form form">
 				<h3>Вход</h3>
 				<div class="form__block form-wrapper">
@@ -46,7 +45,6 @@ export default {
                     <!-- <div class="form__info__alert alert alert-success">Вход выполнен успешно</div> -->
                 </div>
 			</form>
-		</div>
 	</div>
 </template>
 

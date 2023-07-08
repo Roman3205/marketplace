@@ -14,11 +14,15 @@ export default {
 
 <template>
     <div class="container">
-        <div class="container__box">
-            <h2><b>По вашему запросу ничего не найдено</b></h2>
-            <button class="btn" @click="goMain" >На главную</button>
+        <div class="wrapper">
+            <div class="container__box">
+                <h2><b>По вашему запросу ничего не найдено</b></h2>
+                <button class="btn" @click="goMain" >На главную</button>
+            </div>
+            <div class="image">
+                <img src="../../images/notfound.png" alt="" width="240">
+            </div>
         </div>
-        <img src="../../images/notfound.png" alt="" width="240">
     </div>
 </template>
 

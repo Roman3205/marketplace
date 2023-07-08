@@ -1,12 +1,12 @@
-.container {
-    margin: 60px 0px 50px 70px;
+.wrapper {
+    margin: 60px 70px;
 }
 
-.container h2 {
+.wrapper h2 {
     font-size: 24px;
 }
 
-.container p {
+.wrapper p {
     color: #a7a7a7;
     line-height: 60px;
     font-size: 20px;
@@ -37,7 +37,7 @@
     font-size: 20px;
     display: flex;
     padding-top: 20px;
-    width: 91%;
+    width: 100%;
     flex-direction: column;
     border-top: 2px solid lightgrey;
 }
@@ -72,7 +72,7 @@
 }
 
 @media screen and (min-width: 1700px) {
-    .container, .toggle-m, .blocks-container {
+    .wrapper, .toggle-m, .blocks-container {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -81,7 +81,19 @@
         padding: 0;
     }
 
-    .blocks-container, .container {
+    .blocks-container, .wrapper {
         margin: 60px 0px; 
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .wrapper {
+        margin: 40px;
+        margin-bottom: 80px;
+    }
+
+    .toggle__label {
+        margin: 0;
+        width: 100%;
     }
 }

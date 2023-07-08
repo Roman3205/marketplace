@@ -1,14 +1,14 @@
-.container {
+.wrapper {
     margin: 60px 70px;
 }
 
-.container p {
+.wrapper p {
     color: #a7a7a7;
     line-height: 60px;
     font-size: 20px;
 }
 
-.container h2 {
+.wrapper h2 {
     font-size: 24px;
 }
 
@@ -29,7 +29,7 @@
     font-size: 20px;
     display: flex;
     padding-top: 20px;
-    width: 91%;
+    width: 100%;
     flex-direction: column;
     border-top: 2px solid lightgrey;
     border-bottom: 2px solid lightgrey;
@@ -53,11 +53,28 @@
 }
 
 @media screen and (min-width: 1700px) {
-    .container, .toggle-menu {
+    .wrapper, .toggle-menu {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 100%;
         margin: 60px 0px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .wrapper {
+        margin: 40px;
+        margin-bottom: 80px;
+    
+        p {
+            margin: 30px 0px;
+            line-height: 30px;
+        }
+    }
+
+    .toggle__label {
+        margin: 0;
+        width: 100%;
     }
 }

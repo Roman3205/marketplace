@@ -43,11 +43,9 @@ ul {
 }
 
 .footer-col h4 {
-    font-size: 18px;
     text-transform: capitalize;
     margin-bottom: 35px;
     font-weight: 500;
-    position: relative;
     padding-left: 30px;
     font-size: 32px;
 }
@@ -65,6 +63,11 @@ ul {
   color: #e6e6e6;
 }
 
+.none {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
 .footer-col ul li:hover {
   opacity: 0.7;
 }
@@ -77,6 +80,37 @@ ul {
     }
 
     .footer-col:last-child {
-        margin-bottom: 60px;
+        margin-bottom: 40px;
+    }
+
+    .footer {
+        gap: 50px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .footer-col {
+        width: 100%;
+        text-align: left;
+        padding-left: 30px;
+    }
+
+    .footer h4, .footer ul {
+        margin: 0;
+        margin-bottom: 30px;
+    }
+
+    .footer-col h4 {
+        font-size: 25px;
+        padding-left: 0px;
+    }
+
+    .footer-col li {
+        font-size: 20px!important;
+    }
+
+    .scroll-up {
+        left: 25px;
+        bottom: 40px;
     }
 }

@@ -13,6 +13,8 @@ import LkPage from './views/LkPage.vue'
 import BalancePage from './views/BalancePage.vue'
 import AboutUs from './views/AboutUs.vue'
 import InfoDetails from './views/InfoDetails.vue'
+import ChatsPage from './views/ChatsPage.vue'
+import MessengerPage from './views/MessengerPage.vue'
 
 export default createRouter({
     history: createWebHistory(),
@@ -82,6 +84,16 @@ export default createRouter({
             path: '/lk/details',
             name: 'details',
             component: InfoDetails
+        },
+        {
+            path: '/lk/chats',
+            name: 'chats',
+            component: ChatsPage
+        },
+        {
+            path: '/lk/chats/messenger', //:id
+            name: 'messenger',
+            component: MessengerPage
         },
         {
             path: '/:pathMatch(.*)',

@@ -28,7 +28,7 @@ export default {
       <div class="row header">
         <app-header></app-header>
       </div>
-      <div class="row content">
+      <div class="row content-app">
         <router-view></router-view>
       </div>
       <div class="row footer">
@@ -42,14 +42,25 @@ export default {
 
 <style>
   * {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
     font-family: 'FreeMono', monospace;
     overflow-x: hidden;
   }
 
-  .content {
-    min-height: calc(100vh - 535px);
+  html::-webkit-scrollbar {
+    background: rgb(208, 208, 208);
+    width: 12px;
+  }
+
+  html::-webkit-scrollbar-thumb {
+    background: rgb(145, 51, 208);
+    width: 12px;
+    height: 35%;
+  }
+
+  .changemenu-opacity {
+    opacity: 0.4;
   }
 </style>

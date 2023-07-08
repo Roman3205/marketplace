@@ -1,6 +1,6 @@
 <script>
 
-const ScrollWin = () => {
+const scrollWin = () => {
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
@@ -9,20 +9,12 @@ const ScrollWin = () => {
 
 export default {
     methods: {
-        goWallet(evt) {
+        goRoute(evt, routeTo) {
             evt.preventDefault()
             this.$router.push({
-                name: 'balance'
+                name: routeTo
             })
-            ScrollWin()
-        },
-
-        goDetails(evt) {
-            evt.preventDefault()
-            this.$router.push({
-                name: 'details'
-            })
-            ScrollWin()
+            scrollWin()
         }
     }
 }
@@ -33,7 +25,7 @@ export default {
     <div class="container">
         <div class="wrapper col">
             <div class="row block__1">
-                <div class="block__content" @click="goDetails" >
+                <div class="block__content" @click="goRoute($event, 'details')" >
                     <div class="block__content__top">
                         <img src="../../images/user.png" alt="" width="68">
                         <h2>Роман</h2>
@@ -59,19 +51,28 @@ export default {
                 </div>
             </div>
             <div class="row block__2">
-                <div class="block__content" @click="goWallet" >
-                    <h2>Баланс</h2>
-                    <div class="rub">
-                        <p><b>0</b></p><i class="fa fa-rub"></i>
+                <div class="block__content balmoney" @click="goRoute($event, 'balance')" >
+                    <div class="block__content__top balance-cont">
+                        <div class="balance-title">
+                            <img src="../../images/picbalance.png" alt="" width="55">
+                            <h2>Баланс</h2>
+                        </div>
+                        <div class="rub">
+                            <h4><b>0</b></h4><i class="fa fa-rub"></i>
+                        </div>
                     </div>
+                    <p>Узнайте все операции вашего баланса</p>
                 </div>
                 <div class="block__content">
-                    <h2>Чеки</h2>
-                    <p>После каждой покупки добавляются чеки</p>
+                    <div class="block__content__top">
+                        <img src="../../images/otzv.png" alt="" width="68">
+                        <h2>Отзывы</h2>
+                    </div>
+                    <p>Все ваши отзывы</p>
                 </div>
             </div>
             <div class="row block__3">
-                <div class="block__content">
+                <div class="block__content" @click="goRoute($event, 'chats')" >
                     <div class="block__content__top">
                         <img src="../../images/chats.png" alt="" width="70">
                         <h2>Чаты</h2>
@@ -84,13 +85,6 @@ export default {
                         <h2>Возвраты</h2>
                     </div>
                     <p>Возвраты и их оформление</p>
-                </div>
-                <div class="block__content">
-                    <div class="block__content__top">
-                        <img src="../../images/otzv.png" alt="" width="68">
-                        <h2>Отзывы</h2>
-                    </div>
-                    <p>Все ваши отзывы</p>
                 </div>
             </div>
         </div>
