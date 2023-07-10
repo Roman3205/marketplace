@@ -1,0 +1,181 @@
+@mixin flex($dir, $gap, $align) {
+    display: flex;
+    flex-direction: $dir;
+    gap: $gap;
+    justify-content: $align;
+}
+
+.container {
+    @include flex(row, 0px, center);
+}
+
+.container h2 {
+    font-size: 24px;
+}
+
+.wrapper {
+    margin: 60px 70px 80px 70px;
+    width: 1400px;
+    @include flex(column, 40px, none);
+
+    .no-feedbacks button {
+        background-color: rgb(145, 51, 208);
+        padding: 10px 25px;
+        margin-top: 10px;
+        border-radius: 10px;
+        color: #fff;
+        border: none;
+        transition: 0.6s;
+
+        &:hover {
+            opacity: 0.75;
+        }
+    }
+}
+
+.number-rev {
+    @include flex(row, 10px, none);
+}
+
+.feedbacks-container {
+    @include flex(column, 30px, none);
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.time, .user {
+    @include flex(column, 0px, none);
+}
+
+.stars {
+    @include flex(row, 15px, none);
+    align-items: center;
+    
+    .items {
+        margin-top: 6px;
+    }
+}
+
+.time {
+    gap: 0px;
+    align-self: flex-start;
+
+    p {
+        margin-top: 20px;
+    }
+}
+
+.feedback {
+    background-color: #efefef;
+    border-radius: 15px;
+    width: 100%;
+    @include flex(row, 0px, space-between);
+
+    img {
+        border-radius: 10px;
+        width: 160px
+    }
+}
+
+.opacity {
+    opacity: 0.4
+}
+
+.main-content {
+    @include flex(row, 150px, space-between);
+    align-items: center;
+    padding: 10px 30px 10px 0px;
+
+    textarea {
+        resize: none;
+        padding: 10px;
+        border-radius: 15px;
+        border: 2px solid lightgray;
+        cursor: pointer;
+        background-color: #fff;
+        width: 330px;
+        overflow-y: scroll;
+    }
+
+    .action-menu {
+        align-self: flex-start;
+        @include flex(column, 20px, none);
+    
+        .btn-danger, .btn-edit {
+            @include flex(row, 8px, center);
+            align-items: center;
+            transition: 0.6s;
+
+            &:hover {
+                opacity: 0.75;
+            }
+        }
+
+        .btn-edit {
+            background-color: rgb(145, 51, 208);
+            color: #fff;
+        }
+    }
+}
+
+.edit-menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 305px;
+    min-height: 305px;
+    border-radius: 15px;
+    background-color: #efefef;
+    padding: 25px;
+    overflow: hidden;
+    box-shadow: 5px 5px 5px lightgrey;
+    padding: 20px;
+
+    i {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    .inp-edit {
+        @include flex(column, 10px, none);
+
+        .options-edit {
+            @include flex(row, 0px, space-between);
+        }
+
+        textarea {
+            resize: none;
+            border: 2px solid lightgray;
+            padding: 5px;
+            border-radius: 10px;
+            height: 160px;
+        }
+    }
+
+    button {
+        width: 100%;
+        transition: 0.6s;
+        margin: 15px 0px;
+        color: rgb(145, 51, 208);
+        border: 3px solid rgb(145, 51, 208);
+        background-color: #fff;
+
+        &:hover {
+            background-color: rgb(145, 51, 208);
+            opacity: 0.8!important;
+            color: #fff;
+        }
+        
+    }
+}

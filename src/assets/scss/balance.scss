@@ -2,12 +2,17 @@
     display: flex;
 }
 
+.container {
+    display: flex;
+    justify-content: center;
+}
+
 .wrapper {
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 90px;
-    padding-right: 80px;
     margin-bottom: 60px;
+    width: 1380px;
 }
 
 .opacity {
@@ -145,7 +150,7 @@
     }
 }
 
-@media screen and (max-width: 768px) {  
+@media screen and (max-width: 1350px) {  
     .wrapper {
         flex-direction: column-reverse;
         width: 100%;

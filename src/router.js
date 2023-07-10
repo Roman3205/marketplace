@@ -15,6 +15,10 @@ import AboutUs from './views/AboutUs.vue'
 import InfoDetails from './views/InfoDetails.vue'
 import ChatsPage from './views/ChatsPage.vue'
 import MessengerPage from './views/MessengerPage.vue'
+import ProductPage from './views/ProductPage.vue'
+import CartPage from './views/CartPage.vue'
+import ReviewsPage from './views/ReviewsPage.vue'
+import OrdersPage from './views/OrdersPage.vue'
 
 export default createRouter({
     history: createWebHistory(),
@@ -86,6 +90,11 @@ export default createRouter({
             component: InfoDetails
         },
         {
+            path: '/lk/myorders/archive',
+            name: 'orders',
+            component: OrdersPage
+        },
+        {
             path: '/lk/chats',
             name: 'chats',
             component: ChatsPage
@@ -94,6 +103,21 @@ export default createRouter({
             path: '/lk/chats/messenger', //:id
             name: 'messenger',
             component: MessengerPage
+        },
+        {
+            path: '/lk/discussion/feedback',
+            name: 'reviews',
+            component: ReviewsPage
+        },
+        {
+            path: '/catalog', //:article
+            name: 'product',
+            component: ProductPage
+        },
+        {
+            path: '/cart',
+            name: 'cart',
+            component: CartPage
         },
         {
             path: '/:pathMatch(.*)',

@@ -1,0 +1,362 @@
+@mixin flex($dir, $gap) {
+    display: flex;
+    flex-direction: $dir;
+    gap: $gap;
+}
+
+.wrapper {
+    background-color: #fff;
+    width: 1400px;
+    height: fit-content;
+    margin: 70px 70px 110px 70px;
+    @include flex(column, 20px)
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+
+    h2 {
+        font-size: 24px;
+    }
+}
+
+.info, .prod-content {
+    @include flex(row, 50px);
+}
+
+.prod-title {
+    @include flex(column, 5px);
+
+    .star {
+        display: flex;
+        gap: 5px;
+
+        i {
+            color: gold;
+            margin-top: 3px;
+        }
+    }
+}
+
+.prod-content {
+    justify-content: space-between;
+
+    img {
+        border-radius: 15px;
+        height: 620px;
+    }
+}
+
+.brand, .balance, .prod-description {
+    background-color: #efefef;
+    padding: 25px;
+    overflow: hidden;
+    box-shadow: 5px 5px 5px lightgrey;
+    margin: 0px 8px 8px 0px;
+    border-radius: 15px;
+    width: 350px;
+    height: 215px;
+}
+
+.brand {
+    height: 150px;
+    @include flex(column, 10px);
+    cursor: pointer;
+
+    h2 {
+        overflow: hidden;
+    }
+
+    .brand-info {
+        @include flex(row, 10px);
+        justify-content: space-between;
+
+        .sale, .reg {
+            border-radius: 10px;
+            padding: 5px;
+            background-color: rgb(182, 182, 182);
+            overflow: hidden;
+
+            i {
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
+.balance {
+    @include flex(column, 0px);
+
+    p {
+        overflow: hidden;
+    }
+
+    .rub {
+        @include flex(row, 10px);
+        font-size: 30px;
+
+        p {
+            overflow: hidden;
+        }
+
+        i {
+            margin-top: 8px;
+        }
+    }
+
+    .button-buy, .button-cart {
+        margin-bottom: 20px;
+        width: 100%;
+        transition: 0.6s;
+        color: #fff;
+        padding: 10px;
+        font-size: 18px;
+        border-radius: 10px;
+        background-color: rgb(145, 51, 208);
+        overflow: hidden;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    .button-cart {
+        background-color: #fff;
+        color:  rgb(145, 51, 208);
+        border: 2px solid rgb(145, 51, 208);
+        
+        &:hover {
+            color: #fff;
+            background-color: rgb(145, 51, 208);
+            opacity: 0.8;
+        }
+    }
+}
+
+.textarea-options {
+    @include flex(row, 0px);
+    justify-content: space-between
+}
+
+.prod-menu {
+    @include flex(column-reverse, 100px);
+
+    .prod-description {
+        @include flex(column, 10px);
+        width: 450px;
+        height: 360px;
+    }
+
+    .cat {
+        @include flex(row, 10px);
+
+        span {
+            margin-top: -2.5px;
+        }
+    }
+
+    .lock {
+        @include flex(row, 10px);
+
+        i {
+            margin-top: 4px;
+        }
+    }
+}
+
+.reviews {
+    margin-top: 60px;
+
+    .stars i {
+        color: gold;
+    }
+}
+
+.review {
+    background-color: #efefef;
+    padding: 25px;
+    overflow: hidden;
+    box-shadow: 0 5px 5px 2px lightgrey;
+    margin: 8px 8px 9px 8px;
+    border-radius: 15px;
+    max-width: 420px;
+    height: fit-content;
+    @include flex(column, 10px);
+    cursor: pointer;
+
+    p {
+        word-wrap: break-word;
+        margin-bottom: 0;
+    }
+}
+
+.box {
+    margin: 20px 0px;
+    padding-bottom: 20px;
+
+    .row {
+        gap: 30px;
+        flex-wrap: nowrap;
+        padding: 30px 0px;
+        border-top: 2px solid lightgray;
+        border-bottom: 2px solid lightgray;
+        padding-right: 10px;
+    }
+
+    .rev-user {
+        @include flex(row, 20px);
+
+        img {
+            height: 85px;
+            width: 80px;
+        }
+
+        .time {
+            @include flex(column, 7px);
+        }
+    }
+}
+
+.opacity {
+    opacity: 0.4;
+}
+
+.buttons {
+    @include flex(row, 20px);
+
+    button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 40px;
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        border: none;
+        transition: 0.6s;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}
+
+.write-review1, .write-review2 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 280px;
+    border-radius: 15px;
+    background-color: #efefef;
+    padding: 25px;
+    overflow: hidden;
+    box-shadow: 5px 5px 5px lightgrey;
+    padding: 20px;
+
+    .fa-times {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 25px;
+
+        .inp-review1 {
+            margin-top: 10px;
+        }
+
+        .inp-review2 {
+            text-align: center;
+        }
+    }
+
+    input {
+        width: 100%;
+        margin: 8px 0px 20px 0px;
+        box-shadow: none;
+    }
+
+    button {
+        width: 100%;
+        transition: 0.6s;
+        color: rgb(145, 51, 208);
+        border: 3px solid rgb(145, 51, 208);
+        background-color: #fff;
+
+        &:hover {
+            background-color: rgb(145, 51, 208);
+            opacity: 0.8!important;
+            color: #fff;
+        }
+        
+    }
+}
+
+.review-title {
+    @include flex(row, 0);
+    justify-content: space-between;
+    align-items: center;
+
+    .write-active-button {
+        border-radius: 10px;
+        height: fit-content;
+        padding: 10px 20px;
+        transition: 0.6s;
+        color: rgb(145, 51, 208);
+        border: 3px solid rgb(145, 51, 208);
+        background-color: #fff;
+
+        &:hover {
+            opacity: 0.8;
+            color: #fff;
+            background-color: rgb(145, 51, 208);
+        }
+    }
+}
+
+.write-review1 {
+    width: 600px;
+    height: 490px;
+
+    button {
+        margin-top: 10px;
+    }
+
+    .stars-review {
+        @include flex(row, 10px);
+        margin-top: 10px;
+    }
+
+    .textarea-review {
+        @include flex(column, 10px);
+        margin-top: 30px;
+        
+        textarea {
+            resize: none;
+            border: none;
+            border: 2px solid lightgray;
+            border-radius: 10px;
+            padding: 10px;
+        }
+    }
+
+    .fa-star {
+        font-size: 25px;
+        color: lightgray;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .fa-star.active {
+        color: gold;
+    }
+}

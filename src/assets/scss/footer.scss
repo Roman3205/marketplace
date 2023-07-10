@@ -3,7 +3,6 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     border-radius: 30px 30px 0px 0px;
     height: 600px;
     gap: 50px;
@@ -11,9 +10,8 @@
 
 .footer {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     color: #e6e6e6;
-    gap: 200px;
     padding-top: 60px;
 }
 
@@ -31,9 +29,9 @@ ul {
   background-color: rgb(208, 107, 248);
   color: #e6e6e6;
   position: fixed;
-  bottom: 50px;
+  bottom: 40px;
   align-self: flex-start;
-  left: 50px;
+  left: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -72,7 +70,7 @@ ul {
   opacity: 0.7;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 1100px) {
     .container {
         flex-direction: column;
         height: fit-content;

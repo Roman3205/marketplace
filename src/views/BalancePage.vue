@@ -1,31 +1,6 @@
 <script>
 
-const opacityEffectsOn = () => {
-    document.documentElement.style.overflowY = 'hidden'
-    document.querySelector('.header').style.pointerEvents = 'none'
-    document.querySelector('.footer').style.pointerEvents = 'none'
-    document.querySelector('.header').classList.add('changemenu-opacity')
-    document.querySelector('.footer').classList.add('changemenu-opacity')
-    document.querySelector('.inden-scroll').style.pointerEvents = 'none'
-    document.querySelector('.inden-scroll').style.opacity = '0.4'
-}
-
-const opacityEffectsOff = () => {
-    document.documentElement.style.overflowY = 'scroll'
-    document.querySelector('.header').style.pointerEvents = 'all'
-    document.querySelector('.footer').style.pointerEvents = 'all'
-    document.querySelector('.header').classList.remove('changemenu-opacity')
-    document.querySelector('.footer').classList.remove('changemenu-opacity')
-    document.querySelector('.inden-scroll').style.pointerEvents = 'all'
-    document.querySelector('.inden-scroll').style.opacity = '1'
-}
-
-const scrollMenu = () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    })
-}
+import { opacityEffectsOff, opacityEffectsOn, scrollMenu } from './InfoDetails.vue'
 
 export default {
     data() {

@@ -39,7 +39,7 @@
     height: 190px;
     border-radius: 15px;
     background-color: #efefef;
-    width: 1400px;
+    width: 1390px;
     margin: 60px 70px;
     padding: 25px;
     overflow: hidden;
@@ -144,7 +144,11 @@
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1250px) {
+    * {
+        overflow: hidden;
+    }
+    
     .wrapper__1, .wrapper__2 {
         width: 100%;
         margin-top: 40px;

@@ -6,8 +6,6 @@ const opacityEffectsOn = () => {
     document.querySelector('.footer').style.pointerEvents = 'none'
     document.querySelector('.header').classList.add('changemenu-opacity')
     document.querySelector('.footer').classList.add('changemenu-opacity')
-    document.querySelector('.inden-scroll').style.pointerEvents = 'none'
-    document.querySelector('.inden-scroll').style.opacity = '0.4'
 }
 
 const opacityEffectsOff = () => {
@@ -16,8 +14,6 @@ const opacityEffectsOff = () => {
     document.querySelector('.footer').style.pointerEvents = 'all'
     document.querySelector('.header').classList.remove('changemenu-opacity')
     document.querySelector('.footer').classList.remove('changemenu-opacity')
-    document.querySelector('.inden-scroll').style.pointerEvents = 'all'
-    document.querySelector('.inden-scroll').style.opacity = '1'
 }
 
 const scrollMenu = () => {
@@ -26,6 +22,8 @@ const scrollMenu = () => {
         behavior: 'smooth'
     })
 }
+
+export { opacityEffectsOff, opacityEffectsOn, scrollMenu }
 
 export default {
     data() {

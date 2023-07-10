@@ -1,16 +1,20 @@
 .container__box {
     display: flex;
     flex-direction: column;
-    gap: 60px;
+    gap: 90px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
 }
 
 .wrapper {
-    padding-right: 565px;
+    width: 1400px;
     display: flex;
-    justify-content: center;
-    align-items: start;
+    justify-content: start;
     gap: 110px;
-    margin: 70px 0px 100px 70px;
+    margin: 70px 0px 100px 20px;
 }
 
 .wrapper button {

@@ -63,4 +63,12 @@ export default {
   .changemenu-opacity {
     opacity: 0.4;
   }
+
+  .content-app {
+    min-height: calc(100vh - 750px);
+  }
+
+  textarea {
+    outline: none;
+  }
 </style>

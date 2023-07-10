@@ -1,11 +1,6 @@
 <script>
 
-const scrollWin = () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    })
-}
+import { scrollWin } from '../components/AppFooter.vue';
 
 export default {
     methods: {
@@ -42,7 +37,7 @@ export default {
                     </div>
                     <p>Мои активные доставки</p>
                 </div>
-                <div class="block__content tov">
+                <div class="block__content tov" @click="goRoute($event, 'orders')" >
                     <div class="block__content__top">
                         <img src="../../images/otzv.png" alt="" width="70">
                         <h2>Покупки</h2>
@@ -63,7 +58,7 @@ export default {
                     </div>
                     <p>Узнайте все операции вашего баланса</p>
                 </div>
-                <div class="block__content">
+                <div class="block__content" @click="goRoute($event, 'reviews')" >
                     <div class="block__content__top">
                         <img src="../../images/otzv.png" alt="" width="68">
                         <h2>Отзывы</h2>

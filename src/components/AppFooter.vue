@@ -7,6 +7,8 @@ const scrollWin = () => {
   })
 }
 
+export { scrollWin }
+
 export default {
   data() {
     return {
@@ -90,4 +92,5 @@ export default {
 
 <style scoped>
   @import '../assets/scss/footer.scss';
+
 </style>

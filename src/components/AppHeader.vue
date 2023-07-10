@@ -41,7 +41,7 @@ export default {
                     <i class="fa fa-user-o"></i>
                     <span>Войти</span>
                 </div>
-                <div class="header__cart">
+                <div class="header__cart" @click="goRoute($event, 'cart')" >
                     <i class="fa fa-shopping-cart"></i>
                     <span>Корзина</span>
                 </div>

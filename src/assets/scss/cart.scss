@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    justify-content: center;
+
+    h2 {
+        font-size: 24px;
+    }
+}
+
+.wrapper {
+    display: flex;
+    justify-content: flex-start;
+    width: 1390px;
+    background-color: red;
+    margin: 70px 70px;
+    height: 500px;
+}
