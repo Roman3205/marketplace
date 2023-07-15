@@ -59,23 +59,23 @@ export default {
     <div class="container">
       <div class="container__footer footer">
         <div class="footer-col">
-          <h4>Покупателям</h4>
+          <h2>Покупателям</h2>
           <ul>
             <li>Как сделать заказ</li>
             <li @click="goRoute($event, 'sposob')" >Способы оплаты</li>
             <li @click="goRoute($event, 'vozvrat')" >Возврат товара</li>
-            <li @click="goRoute($event, 'pravilapol')" >Правила пользования торговой<br> площадкой</li>
+            <li @click="goRoute($event, 'pravilapol')" >Правила пользования<br> торговой площадкой</li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Партнерам</h4>
+          <h2>Партнерам</h2>
           <ul>
             <li @click="goRoute($event, 'sellLogin')" >Продавайте на Marketplace</li>
             <li @click="goRoute($event, 'pravilapr')" >Правила продажи</li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Компания</h4>
+          <h2>Компания</h2>
           <ul>
             <li @click="goRoute($event, 'about-us')" >О нас</li>
           </ul>

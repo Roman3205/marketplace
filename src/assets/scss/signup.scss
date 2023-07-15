@@ -56,6 +56,7 @@ ul {
 	@extend %flex;
 	background: url('../../images/bg.jpg') no-repeat center center fixed;
     background-size: cover;
+	width: 100%;
 }
 
 .form {

@@ -40,8 +40,10 @@ export default {
                             <div class="active">
                                 <p>Заказ: 7 июня</p>
                                 <p>Получение: 10 июня</p>
-                                <button>Создать чат с продавцом</button>
-                                <!-- <button class="disabled" disabled>Чат создан</button> -->
+                                <!-- <button class="create-chat hover">Создать чат с продавцом</button>
+                                <button class="create-chat hover mt-4">Оформить возврат</button> -->
+                                <button class="create-chat" disabled style="pointer-events: none;">Чат создан</button>
+                                <button class="create-chat mt-4" disabled style="pointer-events: none;">Возврат создан</button>
                             </div>
                         </div>
                     </div>

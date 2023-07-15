@@ -30,7 +30,7 @@ export default {
                         <button class="btn btn-danger mt-1">Выйти</button>
                     </div>
                 </div>
-                <div class="block__content">
+                <div class="block__content" @click="goRoute($event, 'delivery')" >
                     <div class="block__content__top">
                         <img src="../../images/dostavka.png" alt="" width="68">
                         <h2>Доставки</h2>
@@ -74,7 +74,7 @@ export default {
                     </div>
                     <p>Все ваши переписки хранятся здесь</p>
                 </div>
-                <div class="block__content">
+                <div class="block__content" @click="goRoute($event, 'refund')" >
                     <div class="block__content__top">
                         <img src="../../images/vozvrat.png" alt="" width="68">
                         <h2>Возвраты</h2>

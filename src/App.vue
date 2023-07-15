@@ -2,12 +2,14 @@
 import { RouterView } from 'vue-router';
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
+import SellerSideBar from './components/SellerSideBar.vue'
 
 export default {
   components: {
     RouterView,
     AppFooter,
-    AppHeader
+    AppHeader,
+    SellerSideBar
   },
 
   computed: {
@@ -17,6 +19,14 @@ export default {
 
     Seller() {
       return this.$route.name === 'sellLogin' || this.$route.name === 'sellSignup'
+    },
+
+    NotFound() {
+      return this.$route.name === 'notfound'
+    },
+
+    SellerMenu() {
+      return this.$route.name === 'statistics' || this.$route.name === 'public' || this.$route.name === 'manage' || this.$route.name === 'sellchats'
     }
   }
 }
@@ -24,7 +34,7 @@ export default {
 
 <template>
   <div class="app">
-    <div class="col" v-if="!Auth && !Seller">
+    <div class="col" v-if="!Auth && !Seller && !SellerMenu && !NotFound">
       <div class="row header">
         <app-header></app-header>
       </div>
@@ -37,6 +47,15 @@ export default {
     </div>
     <router-view v-if="Auth"></router-view>
     <router-view v-if="Seller"></router-view>
+    <router-view v-if="NotFound"></router-view>
+    <div class="seller" v-if="SellerMenu">
+      <div class="sidebar-seller">
+        <seller-side-bar></seller-side-bar>
+      </div>
+      <div class="router-seller">
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -60,15 +79,60 @@ export default {
     height: 35%;
   }
 
+  .content-app {
+    min-height: calc(100vh - 735px);
+  }
+
   .changemenu-opacity {
     opacity: 0.4;
   }
 
-  .content-app {
-    min-height: calc(100vh - 750px);
-  }
-
   textarea {
     outline: none;
+  }
+
+  .app {
+    display: flex;
+    justify-content: center;
+  }
+
+  .seller {
+    display: flex;
+    background-color: #efefef;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+  }
+
+  .sidebar-seller {
+    width: 25%;
+  }
+
+  .router-seller {
+    width: 100%;
+    background-color: #efefef;
+    display: flex;
+    justify-content: center;
+    transition-property: top;
+    transition-duration: 1.3s;
+    top: 0;
+  }
+
+  @media screen and (max-width: 900px) {
+    .seller {
+      flex-direction: column;
+      justify-content: start;
+    }
+
+    .sidebar-seller {
+      width: 100%;
+      overflow: hidden;
+      min-height: 120.5px!important;
+    }
+
+    .opener-sell {
+      position: absolute;
+      top: 390px;
+    }
   }
 </style>

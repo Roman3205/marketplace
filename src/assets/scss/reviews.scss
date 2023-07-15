@@ -73,7 +73,8 @@
 
     img {
         border-radius: 10px;
-        width: 160px
+        width: 160px;
+        height: 100%;
     }
 }
 
@@ -96,30 +97,30 @@
         width: 330px;
         overflow-y: scroll;
     }
+}
 
-    .action-menu {
-        align-self: flex-start;
-        @include flex(column, 20px, none);
-    
-        .btn-danger, .btn-edit {
-            @include flex(row, 8px, center);
-            align-items: center;
-            transition: 0.6s;
+.action-menu {
+    align-self: flex-start;
+    @include flex(column, 20px, none);
 
-            &:hover {
-                opacity: 0.75;
-            }
+    .btn-danger, .btn-edit {
+        @include flex(row, 8px, center);
+        align-items: center;
+        transition: 0.6s;
+
+        &:hover {
+            opacity: 0.75;
         }
+    }
 
-        .btn-edit {
-            background-color: rgb(145, 51, 208);
-            color: #fff;
-        }
+    .btn-edit {
+        background-color: rgb(145, 51, 208);
+        color: #fff;
     }
 }
 
 .edit-menu {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -177,5 +178,65 @@
             color: #fff;
         }
         
+    }
+}
+
+.nothide {
+    display: none;
+}
+
+@media screen and (max-width: 1400px) {
+    .nothide {
+        display: flex;
+    }
+
+    .wrapper {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .main-content {
+        padding: 10px;
+        gap: 30px;
+    }
+
+    .feedback {
+        gap: 20px;
+        width: 350px;
+
+        img {
+            align-self: flex-start;
+        }
+    }
+
+    .stars {
+        align-self: flex-start;
+    }
+
+    .feedback, .main-content, .time {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feedbacks-container {
+        gap: 70px 60px;
+        flex-direction: row;
+        justify-content: left;
+        flex-wrap: wrap;
+    }
+
+    .hide {
+        display: none!important;
+    }
+
+    .image-feed {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+
+        .action-menu {
+            margin: 10px 10px 0px 0px;
+        }
     }
 }

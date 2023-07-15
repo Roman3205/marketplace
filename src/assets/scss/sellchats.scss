@@ -1,0 +1,138 @@
+%layout {
+    background-color: #efefef;
+    padding: 5px 20px;
+    margin: 10px;
+    overflow: hidden;
+    box-shadow: 0px 0px 5px 6px lightgrey;
+    border-radius: 15px;
+}
+
+.icon {
+        @extend %layout;
+        box-shadow: none;
+        background-color: rgb(218, 218, 218);
+        width: fit-content;
+        text-align: center;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 20px;
+        margin: 0;
+
+        p {
+            margin: 0;
+        }
+    }
+
+.container h2 {
+    font-size: 24px;
+}
+
+.chats-container {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    height: auto;
+    width: 1100px;
+    align-self: left;
+    padding: 0px 20px 5px 0px;
+}
+
+.wrapper {
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+    margin: 58px 0px 0px 50px;
+}
+
+.info {
+    align-self: flex-start;
+    width: 100%;
+    padding: 0;
+}
+
+.chat-block {
+    @extend %layout;
+    height: 80px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 40px;
+    align-items: center;
+    cursor: pointer;
+
+    h5, h6 {
+        margin-top: 14px;
+    }
+
+    .user {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        h2 {
+            margin-top: 8px;
+        }
+    }
+}
+
+.disnone {
+    display: none;
+}
+
+.no-chats {
+    align-self: flex-start;
+}
+
+@media screen and (max-width: 900px) {
+    .container {
+        padding-top: 30px;
+        padding-bottom: 60px;
+    }
+
+    .wrapper {
+        flex-direction: column;
+        margin-top: 0px;
+    }
+
+    .chats-container, .wrapper {
+        align-items: center;
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        gap: 25px;
+        padding: 20px;
+    }
+
+    .icon {
+        width: 100%;
+
+        img {
+            width: 200px;
+        }
+    }
+
+    .chats-container {
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-top: 0;
+
+        h5, h6 {
+            margin-top: 12px;
+        }
+    }
+
+    .chat-block {
+        padding: 30px;
+
+        h6 {
+            display: none;
+        }
+    }
+
+    .disnone {
+        display: block;
+    }
+}

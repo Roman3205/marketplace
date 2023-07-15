@@ -80,18 +80,14 @@ export default {
                 <label for="file"><img src="../../images/user.png" alt="" width="140"></label>
                 <input type="file" class="d-none" id="file">
                 <h2><b>Роман</b></h2>
-                <i class="fa fa-pencil" :class="{
-                    'none': showChangeName && !showChangeMail || !showChangeName && showChangeMail
-                }" @click="changeName"></i>
+                <i class="fa fa-pencil" @click="changeName"></i>
             </div>
             <div class="user-data">
                 <div class="email">
                     <p><b>Email</b></p>
                     <div class="mail">
                         <p>Не указано</p>
-                        <i class="fa fa-pencil" @click="showChange" :class="{
-                            'none': !showChangeName && showChangeMail || showChangeName && !showChangeMail
-                        }" ></i>
+                        <i class="fa fa-pencil" @click="showChange"></i>
                     </div>
                 </div>
                 <div class="tel">

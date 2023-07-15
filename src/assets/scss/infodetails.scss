@@ -20,11 +20,6 @@
     }
 }
 
-.none {
-    pointer-events: none;
-    opacity: 0.4;
-}
-
 .username-block {
     display: flex;
     align-items: center;
@@ -39,8 +34,8 @@
     height: 190px;
     border-radius: 15px;
     background-color: #efefef;
-    width: 1390px;
-    margin: 60px 70px;
+    width: 1380px;
+    margin: 70px 70px;
     padding: 25px;
     overflow: hidden;
     display: flex;
@@ -51,6 +46,7 @@
 
 .opacity {
     opacity: 0.4;
+    pointer-events: none;
 }
 
 .wrapper__2 {

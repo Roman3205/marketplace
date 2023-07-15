@@ -19,6 +19,12 @@ import ProductPage from './views/ProductPage.vue'
 import CartPage from './views/CartPage.vue'
 import ReviewsPage from './views/ReviewsPage.vue'
 import OrdersPage from './views/OrdersPage.vue'
+import ReturnPage from './views/ReturnPage.vue'
+import DeliveryPage from './views/DeliveryPage.vue'
+import SellStatistics from './views/SellStatistics.vue'
+import SellCreate from './views/SellCreate.vue'
+import SellManage from './views/SellManage.vue'
+import SellChats from './views/SellChats.vue'
 
 export default createRouter({
     history: createWebHistory(),
@@ -33,6 +39,26 @@ export default createRouter({
             path: '/seller/sign-up',
             name: 'sellSignup',
             component: SellSignup
+        },
+        {
+            path: '/seller/manage',
+            name: 'manage',
+            component: SellManage
+        },
+        {
+            path: '/seller/chats',
+            name: 'sellchats',
+            component: SellChats
+        },
+        {
+            path: '/seller/public',
+            name: 'public',
+            component: SellCreate
+        },
+        {
+            path: '/seller/statistics',
+            name: 'statistics',
+            component: SellStatistics
         },
         {
             path: '/security/login',
@@ -93,6 +119,16 @@ export default createRouter({
             path: '/lk/myorders/archive',
             name: 'orders',
             component: OrdersPage
+        },
+        {
+            path: '/lk/myorders/delivery',
+            name: 'delivery',
+            component: DeliveryPage
+        },
+        {
+            path: '/lk/refund',
+            name: 'refund',
+            component: ReturnPage
         },
         {
             path: '/lk/chats',

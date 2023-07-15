@@ -86,8 +86,92 @@
     @extend %flex;
     gap: 40px;
     justify-content: left;
-    margin-left: -1140px;
+    margin-left: -1135px;
     margin-top: 10px;
+}
+
+.category-item {
+    border-radius: 10px;
+    background-color: rgb(145, 51, 208);
+    color: #fff;
+    padding: 20px;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.7s;
+
+    &:hover {
+        opacity: 0.75;
+    }
+}
+
+.appear-menu {
+    overflow-y: hidden;
+    padding: 0;
+    width: 400px;
+    position: absolute;
+    transform: translateX(-120%);
+    visibility: hidden;
+    height: 100vh;
+    transition-property: visibility, transform;
+    transition-duration: 0.3s;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    pointer-events: all;
+    opacity: 1!important;
+
+    .fa-times {
+        font-size: 38px;
+        color: rgb(101, 101, 101);
+        opacity: 1!important;
+        cursor: pointer;
+        top: 10px;
+        position: absolute;
+        right: 15px;
+    }
+}
+
+.categories::-webkit-scrollbar {
+    border-radius: 15px;
+    background-color: lightgray;
+}
+
+.categories::-webkit-scrollbar-thumb {
+    max-height: 50%;
+    background-color: gray;
+    border-radius: 15px;
+}
+
+.categories {
+    overflow-y: scroll;
+    background-color: #efefef;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 40px 50px 40px;
+    gap: 30px;
+    width: 85%;
+    height: 100%;
+}
+
+.opacity {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.open-menu {
+    visibility: visible;
+    transform: translateX(0%);
+}
+
+@media screen and (min-width: 3000px) {
+    .categories {
+        overflow: hidden;
+    }
 }
 
 @media screen and (max-width: 1350px) {
@@ -104,6 +188,19 @@
 
     .box {
         gap: 80px;
+    }
+
+    .appear-menu {
+        width: 340px;
+
+        .categories {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .category-item {
+            font-size: 14px;
+        }
     }
 
     .header-top {

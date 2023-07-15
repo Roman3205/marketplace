@@ -103,7 +103,7 @@ export default {
                         <div class="rub">
                             <p><b>1 232</b></p><i class="fa fa-rub"></i>
                         </div>
-                        <button class="btn button-buy">Добавить в корзину</button>
+                        <button class="btn button-buy" :disabled="showReviewBar">Добавить в корзину</button>
                         <!-- <button class="btn button-cart">Перейти в корзину</button> -->
                         <p><b>11 июля</b> доставка со склада</p>
                     </div>
@@ -114,12 +114,12 @@ export default {
                 <div class="review-title">
                     <div class="main-title">
                         <h2><b>Отзывы</b></h2>
-                        <h5>Средняя оценка: 4.7</h5>
+                        <h5>Средняя оценка: <b>4.7</b></h5>
                     </div>
                     <button class="write-active-button" @click="showReviewCreate" >Написать отзыв</button>
                 </div>
                 <div class="box">
-                    <div class="row ms-1 mt-3 ms-2" ref="reviews">
+                    <div class="row ms-lg-1 mt-lg-3 ms-lg-2" ref="reviews">
                         <div class="review" v-for="index in 50">
                             <div class="rev-user">
                                 <img src="../..//images/user.png" alt="">
@@ -141,8 +141,8 @@ export default {
                         </div>
                     </div>
                     <div class="buttons mt-4 ms-2">
-                        <button class="scroll-button left" @click="scrollLeft('reviews')">&#8249;</button>
-                        <button class="scroll-button right" @click="scrollRight('reviews')">&#8250;</button>
+                        <button :disabled="showReviewBar" class="scroll-button left" @click="scrollLeft('reviews')">&#8249;</button>
+                        <button :disabled="showReviewBar" class="scroll-button right" @click="scrollRight('reviews')">&#8250;</button>
                     </div>
                 </div>
             </div>
