@@ -82,7 +82,7 @@ export default {
                         </div>
                         <div class="text">
                             <p>Текст вашего отзыва:</p>
-                            <textarea name="" id="" cols="30" rows="6" disabled>Отличный товар, очень понравился!</textarea>
+                            <textarea name="" id="" cols="30" rows="6" disabled maxlength="150">Отличный товар, очень понравился!</textarea>
                         </div>
                         <div class="action-menu hide">
                             <button :disabled="showEditMenu" class="btn btn-edit" @click="showEdit" ><span>Редактировать</span><i class="fa fa-pencil-square-o"></i></button>

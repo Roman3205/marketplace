@@ -1,0 +1,98 @@
+@import './sellmanage.scss';
+
+.sell-order {
+    height: 420px;
+    padding-top: 20px;
+}
+
+.left-side-sell .name {
+    width: 350px;
+    word-wrap: break-word;
+}
+
+.left-side-sell .price {
+    display: flex;
+    font-size: larger;
+    gap: 8px;
+    align-items: center;
+}
+
+.left-side-sell p:nth-of-type(5) {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.textarea {
+    align-self: flex-start;
+    width: 250px;
+}
+
+.textarea .text {
+    background-color: #fff;
+    font-weight: light;
+    resize: none;
+    word-wrap: break-word;
+    font-size: 20px;
+    height: fit-content;
+    max-height: 297px;
+    overflow-y: auto;
+    width: 100%;
+    display: block;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 3px solid gray;
+}
+
+.left-side-sell, .right-side-sell {
+    align-self: start;
+}
+
+@media screen and (max-width: 1100px) {
+    .sell-order {
+        padding: 0 20px;
+
+        .right-side-sell .alert:first-of-type {
+            padding: 10px 0px;
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .container-orders {
+        padding-right: 20px;
+    }
+
+    .wrapper {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .container {
+        padding: 0;
+    }
+
+    .sell-order {
+        padding-top: 30px;
+        gap: 50px;
+        flex-direction: column;
+        height: fit-content;
+        padding-bottom: 40px;
+    }
+
+    .right-side-sell {
+        width: 100%;
+        align-self: center;
+    }
+
+    .right-side-sell .alert:first-of-type {
+        padding: 10px 50px!important;
+        width: 100%;
+    }
+
+    .left-side-sell, .textarea {
+        width: 100%;
+    }
+}

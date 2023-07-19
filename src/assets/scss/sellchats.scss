@@ -35,16 +35,16 @@
     gap: 15px;
     text-align: center;
     height: auto;
-    width: 1100px;
+    width: 100%;
     align-self: left;
-    padding: 0px 20px 5px 0px;
+    padding: 0px 80px 0px 0px;
 }
 
 .wrapper {
     align-items: start;
     display: flex;
     flex-direction: column;
-    margin: 58px 0px 0px 50px;
+    margin: 56px 0px 0px 20px;
 }
 
 .info {
@@ -56,8 +56,8 @@
 .chat-block {
     @extend %layout;
     height: 80px;
-    width: 100%;
     display: flex;
+    width: 100%;
     justify-content: space-between;
     padding: 5px 40px;
     align-items: center;
@@ -86,15 +86,36 @@
     align-self: flex-start;
 }
 
+.container {
+    margin: 0;
+    min-width: 100%;
+    padding-bottom: 80px;
+    overflow-y: scroll;
+}
+
+.container::-webkit-scrollbar {
+    background: rgb(208, 208, 208);
+    width: 10px;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background: rgb(145, 51, 208);
+    width: 10px;
+    height: 35%;
+}
+
 @media screen and (max-width: 900px) {
     .container {
         padding-top: 30px;
         padding-bottom: 60px;
+        margin: 0;
+        min-width: 100%!important;
     }
 
     .wrapper {
         flex-direction: column;
         margin-top: 0px;
+        padding: 8px!important;
     }
 
     .chats-container, .wrapper {
@@ -125,7 +146,7 @@
     }
 
     .chat-block {
-        padding: 30px;
+        padding: 10px;
 
         h6 {
             display: none;

@@ -12,8 +12,8 @@
                     <img src="../../images/picchats.jpg" width="80" alt="">
                 </div>
             </div>
+            <!-- <h5 class="no-chats mt-4">С вами еще никто не связывался</h5> -->
             <div class="chats-container">
-                <!-- <p class="no-chats mt-5">С вами еще никто не связывался</p> -->
                 <div class="chat-block" v-for="index in 3">
                     <div class="user">
                         <img src="../../images/operator.jpg" width="70" alt="">

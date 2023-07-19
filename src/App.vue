@@ -26,7 +26,7 @@ export default {
     },
 
     SellerMenu() {
-      return this.$route.name === 'statistics' || this.$route.name === 'public' || this.$route.name === 'manage' || this.$route.name === 'sellchats'
+      return this.$route.name === 'statistics' || this.$route.name === 'sellrefund' || this.$route.name === 'manage' || this.$route.name === 'sellchats' || this.$route.name === 'sellmessenger'
     }
   }
 }
@@ -70,12 +70,12 @@ export default {
 
   html::-webkit-scrollbar {
     background: rgb(208, 208, 208);
-    width: 12px;
+    width: 10px;
   }
 
   html::-webkit-scrollbar-thumb {
     background: rgb(145, 51, 208);
-    width: 12px;
+    width: 10px;
     height: 35%;
   }
 
@@ -113,9 +113,6 @@ export default {
     background-color: #efefef;
     display: flex;
     justify-content: center;
-    transition-property: top;
-    transition-duration: 1.3s;
-    top: 0;
   }
 
   @media screen and (max-width: 900px) {
@@ -132,7 +129,11 @@ export default {
 
     .opener-sell {
       position: absolute;
-      top: 390px;
+      top: 370px;
+    }
+
+    .router-seller {
+      overflow: hidden;
     }
   }
 </style>

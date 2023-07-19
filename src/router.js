@@ -22,9 +22,10 @@ import OrdersPage from './views/OrdersPage.vue'
 import ReturnPage from './views/ReturnPage.vue'
 import DeliveryPage from './views/DeliveryPage.vue'
 import SellStatistics from './views/SellStatistics.vue'
-import SellCreate from './views/SellCreate.vue'
+import SellRefunds from './views/SellRefunds.vue'
 import SellManage from './views/SellManage.vue'
 import SellChats from './views/SellChats.vue'
+import SellMessenger from './views/SellMessenger.vue'
 
 export default createRouter({
     history: createWebHistory(),
@@ -51,14 +52,23 @@ export default createRouter({
             component: SellChats
         },
         {
-            path: '/seller/public',
-            name: 'public',
-            component: SellCreate
+            path: '/seller/chats/messenger',
+            name: 'sellmessenger',
+            component: SellMessenger
+        },
+        {
+            path: '/seller/refund',
+            name: 'sellrefund',
+            component: SellRefunds
         },
         {
             path: '/seller/statistics',
             name: 'statistics',
             component: SellStatistics
+        },
+        {
+            path: '/seller',
+            redirect: '/seller/statistics'
         },
         {
             path: '/security/login',

@@ -1,0 +1,142 @@
+.wrapper {
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+    margin: 56px 0px 0px 20px;
+    gap: 20px;
+    padding-bottom: 100px;
+}
+
+.container {
+    min-width: 100%;
+}
+
+.container h2 {
+    font-size: 24px;
+}
+
+.container-orders {
+    width: 100%;
+    padding-right: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.sell-order {
+    background-color: #efefef;
+    padding: 5px 20px;
+    margin: 10px;
+    overflow: hidden;
+    box-shadow: 0px 0px 5px 6px lightgrey;
+    border-radius: 15px;
+    height: 240px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 5px 40px;
+    align-items: center;
+    cursor: pointer;
+
+    h2, p {
+        margin: 0;
+    }
+}
+
+.left-side-sell, .right-side-sell {
+    display: flex;
+    align-self: center;
+    flex-direction: column;
+    gap: 25px;
+}
+.change-status {
+    align-self: center;
+    text-align: center;
+    width: 100%;
+
+    .status {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+
+        .prev, .next {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            justify-content: center;
+            border-radius: 5px;
+            color: #fff;
+            padding: 5px 10px;
+            background-color: rgb(145, 51, 208);
+            transition: 0.6s;
+            width: 45%;
+
+            &:hover {
+                opacity: 0.75;
+            }
+        }
+    }
+}
+
+.right-side-sell {
+    gap: 0px;
+
+    .alert {
+        margin-top: 20px;
+        width: 230px;
+        border: 3px solid lightgray;
+        text-align: center;
+        border-radius: 10px;
+    }
+}
+
+.container::-webkit-scrollbar {
+    background: rgb(208, 208, 208);
+    width: 10px;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background: rgb(145, 51, 208);
+    width: 10px;
+    height: 35%;
+}
+
+@media screen and (max-width: 1100px) {
+    .sell-order {
+        padding: 0 20px;
+
+        .right-side-sell .alert:first-of-type {
+            padding: 10px 0px;
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .wrapper {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .container-orders {
+        padding-right: 20px;
+    }
+
+    .container {
+        padding: 0;
+    }
+
+    .sell-order {
+        padding-top: 30px;
+        gap: 50px;
+        flex-direction: column;
+        height: fit-content;
+        padding-bottom: 40px;
+    }
+
+    .right-side-sell .alert:first-of-type {
+        padding: 10px 50px!important;
+        width: 100%;
+    }
+}
