@@ -325,7 +325,8 @@
 
 .write-review1 {
     width: 600px;
-    height: 490px;
+    min-height: 490px;
+    height: fit-content;
 
     button {
         margin-top: 10px;

@@ -1,5 +1,8 @@
 <script>
 
+import axios from 'axios'
+import axiox from 'axios'
+
 export default {
     data() {
         return {
@@ -8,8 +11,13 @@ export default {
                 '../../images/waikiki.jpg',
                 '../../images/apple.jpg'
             ],
-            currentIndex: 1
+            currentIndex: 1,
+            products: []
         }
+    },
+
+    mounted() {
+        this.getProducts()
     },
 
     computed: {
@@ -43,6 +51,21 @@ export default {
         async changeSlideNext() {
             await new Promise(prom => setTimeout(prom, 550))
             this.nextSlide()
+        },
+
+        async getProducts() {
+            let response = await axios.get('/products')
+            this.products = response.data
+        },
+
+        goProduct(evt, item) {
+            evt.preventDefault()
+            this.$router.push({
+                name: 'product',
+                params: {
+                    article: item.article
+                }
+            })
         }
     }
 }
@@ -62,14 +85,14 @@ export default {
             <div class="block-products">
                 <h2><b>Мы рекомендуем вам</b></h2>
                 <div class="content">
-                    <div class="product" v-for="index in 20">
-                        <div class="image-prod" style="background: url('https://basket-09.wb.ru/vol1302/part130277/130277706/images/c246x328/1.jpg') no-repeat center center;">
-                            <button class="btn btn-danger" disabled>-74%</button>
+                    <div class="product" v-for="(item) in  products" @click="goProduct($event, item)" >
+                        <div class="image-prod" :style="'background: url(' + item.picture + ') no-repeat center center;'">
+                            <button v-if="item.discount > 0" class="btn btn-danger" disabled>- {{ item.discount }} %</button>
                         </div>
                         <div class="rub">
-                            <h5><b>1 253</b></h5><i class="fa fa-rub"></i>
+                            <h5><b>{{ item.price }}</b></h5><i class="fa fa-rub"></i>
                         </div>
-                        <p><b>BrandName</b> Наушники</p>
+                        <p><b>{{ item.brand_id.brandName }} /</b> {{ item.title }}</p>
                     </div>
                 </div>
             </div>

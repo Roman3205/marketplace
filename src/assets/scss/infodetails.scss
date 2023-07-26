@@ -94,7 +94,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 300px;
-    height: 290px;
+    min-height: 290px;
+    height: fit-content;
     border-radius: 15px;
     background-color: #efefef;
     padding: 25px;

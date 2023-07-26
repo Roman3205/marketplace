@@ -1,12 +1,18 @@
 <script>
 
+import axios from 'axios'
 import { scrollWin } from './AppFooter.vue'
 
 export default {
     data() {
         return {
-            isOpenMenu: false
+            isOpenMenu: false,
+            userInfo: null
         }
+    },
+
+    mounted() {
+        this.getUser()
     },
 
     methods: {
@@ -38,6 +44,16 @@ export default {
             document.documentElement.style.overflowY = 'scroll'
             document.querySelector('.header').style.pointerEvents = 'all'
             scrollWin()
+        },
+
+        async getUser() {
+            let token = 'Bearer ' + localStorage.getItem('token');
+            let response = await axios.get('/main', {
+                headers: {
+                    Authorization: token
+                }
+            })
+            this.userInfo = response.data
         }
     }
 }
@@ -87,11 +103,19 @@ export default {
                 <label for="search"><i class="fa fa-search"></i></label>
             </div>
             <div class="header__box box">
-                <div class="box__user" @click="goRoute($event, 'login')" >
+                <div v-if="!userInfo" class="box__user" @click="goRoute($event, 'login')" >
                     <i class="fa fa-user-o"></i>
                     <span>Войти</span>
                 </div>
-                <div class="header__cart" @click="goRoute($event, 'cart')" >
+                <div v-if="userInfo" class="box__user" @click="goRoute($event, 'lk')" >
+                    <i class="fa fa-user-o"></i>
+                    <span>{{ userInfo.name }}</span>
+                </div>
+                <div v-if="!userInfo" class="header__cart" @click="goRoute($event, 'login')" >
+                    <i class="fa fa-shopping-cart"></i>
+                    <span>Корзина</span>
+                </div>
+                <div v-if="userInfo" class="header__cart" @click="goRoute($event, 'cart')" >
                     <i class="fa fa-shopping-cart"></i>
                     <span>Корзина</span>
                 </div>

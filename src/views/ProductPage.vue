@@ -1,20 +1,30 @@
 <script>
 
 import { opacityEffectsOff, opacityEffectsOn } from './InfoDetails.vue'
+import axios from 'axios'
+import dayjs from 'dayjs'
 
 export default {
     data() {
         return {
             showReviewBar: false,
             inputValue: '',
-            highlightedStars: 0
+            highlightedStars: 0,
+            product: null,
+            currentDate: new Date(),
+            successCreate: undefined,
+            notCorrect: undefined
         }
     },
 
     computed: {
         emptyValue() {
-            return this.inputValue !== ''
+            return this.inputValue.length >= 30 && this.highlightedStars !== 0
         }
+    },
+
+    mounted() {
+        this.getParamsProduct()
     },
 
     methods: {
@@ -24,8 +34,7 @@ export default {
             opacityEffectsOn()
         },
 
-        closeReviewCreate(evt) {
-            evt.preventDefault()
+        closeReviewCreate() {
             this.showReviewBar = false
             opacityEffectsOff()
         },
@@ -48,8 +57,66 @@ export default {
 
         selectRating(index) {
             this.highlightedStars = index;
-            console.log(this.highlightedStars)
-        }
+        },
+
+        async getParamsProduct() {
+            let response = await axios.get('/product', {
+                params: {
+                    article: this.$route.params.article
+                }
+            })
+
+            this.product = response.data
+        },
+
+        async CreateReview(evt) {
+            evt.preventDefault()
+
+            this.successCreate = false
+            this.notCorrect = false
+
+            let filter = /([a-zA-Zа-яА-Я])\1{1}/;
+            if (!/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputValue) || filter.test(this.inputValue)) {
+                this.notCorrect = true
+            } else {
+                let token = 'Bearer ' + localStorage.getItem('token')
+                await axios.post('/review/create', {
+                    text: this.inputValue,
+                    rating: this.highlightedStars,
+                    article: this.$route.params.article
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+
+                this.successCreate = true
+                await new Promise(prom => setTimeout(prom, 1300))
+                this.getParamsProduct()
+                this.inputValue = ''
+                this.highlightedStars = 0
+                this.closeReviewCreate()
+                this.successCreate = false
+            }
+            
+        },
+
+        getTime(date) {
+            let day = dayjs(date)
+            return day.fromNow(true)
+        },
+
+        getRandomDateDelivery() {
+            let min = 3
+            let max = 5
+            return Math.floor(Math.random() * (max - min) + min)
+        },
+
+        getDeliver(date) {
+            let day = dayjs(date)
+            let deliveryDate = day.add(this.getRandomDateDelivery(), 'day')
+            return deliveryDate.format('D MMMM')
+        } 
     }
 }
 
@@ -60,38 +127,38 @@ export default {
         <div class="wrapper" :class="{
             'opacity': showReviewBar
         }" >
-            <div class="prod-title">
-                <h2><b>BSmarty / Беспроводные наушники Pro</b></h2>
+            <div class="prod-title" v-if="product">
+                <h2><b>{{ product.brand_id.brandName }} / {{ product.title }}</b></h2>
                 <div class="info">
-                    <p class="star"><i class="fa fa-star"></i><span>4.7</span></p>
-                    <p><u>15 оценок</u></p>
-                    <p>Артикул: 24142122</p>
-                    <p>Купили 213 раз</p>
+                    <p v-if="product.averageRating > 0" class="star"><i class="fa fa-star"></i><span>{{ product.averageRating }}</span></p>
+                    <p><u>{{ product.amountReviews }} оценок</u></p>
+                    <p>Артикул: {{ product.article }}</p>
+                    <p>Купили {{ product.amountSold }} раз</p>
                 </div>
             </div>
-            <div class="prod-content">
-                <img src="../../images/test.png" width="450" alt="">
+            <div class="prod-content" v-if="product">
+                <img :src="product.picture" width="450" alt="">
                 <div class="prod-menu">
                     <div class="brand">
-                        <h2>Brand</h2>
+                        <h2>{{ product.brand_id.brandName }}</h2>
                         <div class="brand-info">
                             <div class="sale">
-                                <i class="fa fa-thumbs-up"></i>3422<br>товаров продано
+                                <i class="fa fa-thumbs-up"></i>{{ product.brand_id.sold }}<br>товаров продано
                             </div>
                             <div class="reg">
-                                1 год и 1 месяц<br>на Marketplace
+                                {{ getTime(product.brand_id.createdAt) }}<br>на Marketplace
                             </div>
                         </div>
                     </div>
-                    <div class="prod-description">
+                    <div class="prod-description" v-if="product">
                         <h2><b>О товаре</b></h2>
                         <div class="cat">
                             <h6><b>Категория:</b></h6>
-                            <span>Техника, гарнитура</span>
+                            <span>{{ product.category }}</span>
                         </div>
                         <div class="desc">
                             <h6><b>Описание:</b></h6>
-                            <p>Беспроводные наушники выполнены из высококачественного материала, кейс очень качественно сделан и приятен на ощупь. Наушники Pro обладают современными комплектующими, качество звука не оставит вас равнодушным!</p>
+                            <p>{{ product.description }}</p>
                         </div>
                         <div class="lock">
                             <i class="fa fa-lock"></i><span><u>Качество подтверждено</u></span>
@@ -101,31 +168,32 @@ export default {
                 <div class="to-card">
                     <div class="balance">
                         <div class="rub">
-                            <p><b>1 232</b></p><i class="fa fa-rub"></i>
+                            <p><b>{{ product.price }}</b></p><i class="fa fa-rub"></i>
                         </div>
                         <button class="btn button-buy" :disabled="showReviewBar">Добавить в корзину</button>
                         <!-- <button class="btn button-cart">Перейти в корзину</button> -->
-                        <p><b>11 июля</b> доставка со склада</p>
+                        <p><b>{{ getDeliver(currentDate) }}</b> доставка со склада</p>
                     </div>
                     <!-- <div class=" mt-4 alert alert-success">Товар успешно добавлен в корзину</div> -->
                 </div>
             </div>
-            <div class="reviews">
+            <div class="reviews" v-if="product">
                 <div class="review-title">
                     <div class="main-title">
                         <h2><b>Отзывы</b></h2>
-                        <h5>Средняя оценка: <b>4.7</b></h5>
+                        <h5 v-if="product.averageRating > 0">Средняя оценка: <b>{{ product.averageRating }}</b></h5>
                     </div>
                     <button class="write-active-button" @click="showReviewCreate" >Написать отзыв</button>
                 </div>
-                <div class="box">
+                <h5 class="mt-4" v-if="product.reviews == 0">Отзывов на этот товар нет</h5>
+                <div class="box" v-if="product.reviews">
                     <div class="row ms-lg-1 mt-lg-3 ms-lg-2" ref="reviews">
-                        <div class="review" v-for="index in 50">
+                        <div class="review" v-for="(item) in product.reviews">
                             <div class="rev-user">
-                                <img src="../..//images/user.png" alt="">
+                                <img src="../..//images/user.png">
                                 <div class="time">
                                     <div class="user">
-                                        <b>Оксана</b>
+                                        <b>{{ item.author_id.name }}</b>
                                         <p>09 июня 2023, 16:34</p>
                                     </div>
                                     <div class="stars">
@@ -149,7 +217,7 @@ export default {
         </div>
         <div class="write-review1" v-if="showReviewBar" style="opacity: 1!important; z-index: 999;">
             <i class="fa fa-times" @click="closeReviewCreate" ></i>
-            <div class="content">
+            <form class="content" @submit="CreateReview" >
                 <h2><b>BSmarty / Беспроводные наушники Pro</b></h2>
                 <div class="inp-review1">
                     <span>Оцените товар</span>
@@ -170,7 +238,9 @@ export default {
                 <button class="btn" :disabled="!emptyValue" :class="{
                     'opacity': !emptyValue
                 }" >Отправить</button>
-            </div>
+            </form>
+            <div v-if="notCorrect" class="w-100 mt-4 mb-2 p-2 text-center alert alert-danger">Произошла ошибка в заполнении</div>
+            <div v-if="successCreate" class="w-100 mt-4 mb-2 p-2 text-center alert alert-success">Ваш отзыв успешно создан</div>
         </div>
         <!-- <div class="write-review2" v-if="showReviewBar">
             <i class="fa fa-times" @click="closeReviewCreate" ></i>

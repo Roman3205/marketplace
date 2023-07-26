@@ -1,5 +1,7 @@
 <script>
 
+import axios from 'axios'
+
 const opacityEffectsOn = () => {
     document.documentElement.style.overflowY = 'hidden'
     document.querySelector('.header').style.pointerEvents = 'none'
@@ -31,41 +33,96 @@ export default {
             showChangeMail: false,
             showChangeName : false,
             inputMail: '',
-            inputName: 'Роман'
+            inputName: '',
+            userInfo: null,
+            existUser: undefined,
+            notCorrectName: undefined
         }
+    },
+
+    mounted() {
+        this.getUser()
     },
 
     computed: {
         emptyValue() {
-            return this.inputMail !== '' || this.inputName !== ''
+            return this.inputMail === ''
         }
     },
 
     methods: {
-        showChange(evt) {
-            evt.preventDefault()
+        showChange() {
             this.showChangeMail = true
             scrollMenu()
             opacityEffectsOn()
         },
 
-        closeChange(evt) {
-            evt.preventDefault()
+        closeChange() {
             this.showChangeMail = false
             opacityEffectsOff()
         },
 
-        changeName(evt) {
-            evt.preventDefault()
+        changeName() {
             this.showChangeName = true
             scrollMenu()
             opacityEffectsOn()
         },
 
-        closeName(evt) {
-            evt.preventDefault()
+        closeName() {
             this.showChangeName = false
             opacityEffectsOff()
+        },
+
+        async getUser() {
+            let token = 'Bearer ' + localStorage.getItem('token');
+            let response = await axios.get('/main', {
+                headers: {
+                    Authorization: token
+                }
+            })
+            this.userInfo = response.data
+            this.inputName = this.userInfo.name
+        },
+
+        async ChangeMail(evt) {
+            try {
+                evt.preventDefault()
+                let token = 'Bearer ' + localStorage.getItem('token');
+                await axios.post('/change-mail', {
+                    mail: this.inputMail
+                }, { headers: {
+                        Authorization: token
+                    }}
+                )
+                this.getUser()
+                this.inputMail = ''
+                this.closeChange()
+            } catch (error) {
+                if(error.response && error.response.status === 409) {
+                    this.existUser = true
+                }
+            }
+        },
+
+        async ChangeName(evt) {
+            this.notCorrectName = false
+            evt.preventDefault()
+            
+            let filter = /([a-zA-Zа-яА-Я])\1{1}/;
+            if (this.inputName.length < 3 || this.inputName.length > 11 || !/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputName) || this.inputName.trim() !== this.inputName || filter.test(this.inputName)) {
+                return this.notCorrectName = true
+            }
+            
+            let token = 'Bearer ' + localStorage.getItem('token');
+            await axios.post('/change-name', {
+                name: this.inputName
+            }, { headers: {
+                    Authorization: token
+                }}
+            )
+            this.closeName()
+            this.getUser()
+            window.location.reload()
         }
     }
 }
@@ -79,14 +136,14 @@ export default {
             <div class="username-block">
                 <label for="file"><img src="../../images/user.png" alt="" width="140"></label>
                 <input type="file" class="d-none" id="file">
-                <h2><b>Роман</b></h2>
+                <h2 v-if="userInfo"><b>{{ userInfo.name }}</b></h2>
                 <i class="fa fa-pencil" @click="changeName"></i>
             </div>
             <div class="user-data">
                 <div class="email">
                     <p><b>Email</b></p>
                     <div class="mail">
-                        <p>Не указано</p>
+                        <p v-if="userInfo">{{ userInfo.mail }}</p>
                         <i class="fa fa-pencil" @click="showChange"></i>
                     </div>
                 </div>
@@ -103,34 +160,36 @@ export default {
                 <p>Общая сумма ваших покупок на сайте за последние два года</p>
             </div>
             <div class="rub">
-                <p><b>3 123</b></p><i class="fa fa-rub"></i>
+                <p v-if="userInfo"><b>{{ userInfo.amountRedemption }}</b></p><i class="fa fa-rub"></i>
             </div>
         </div>
         <div class="changemail" v-if="showChangeMail">
             <i class="fa fa-times" @click="closeChange" ></i>
-            <div class="content">
+            <form class="content" @submit="ChangeMail">
                 <h2><b>Изменить email</b></h2>
                 <div class="inp-mail">
                     <span>Новый email</span>
-                    <input v-model="inputMail" type="mail" class="form-control summ">
+                    <input v-model="inputMail" type="email" class="form-control summ">
                 </div>
-                <button class="btn" :disabled="!emptyValue" :class="{
-            'opacity': !emptyValue
+                <button class="btn" :disabled="emptyValue" :class="{
+            'opacity': emptyValue
         }" >Изменить</button>
-            </div>
+            </form>
+            <div v-if="existUser" class="w-100 mt-3 text-center form__info__alert alert alert-danger">Почта уже привязана к другому аккаунту</div>
         </div>
         <div class="changename" v-if="showChangeName">
             <i class="fa fa-times" @click="closeName" ></i>
-            <div class="content">
+            <form class="content" @submit="ChangeName">
                 <h2><b>Изменить имя</b></h2>
                 <div class="inp-mail">
                     <span>Имя</span>
-                    <input v-model="inputName" type="mail" class="form-control summ">
+                    <input v-model="inputName" type="text" class="form-control summ">
                 </div>
-                <button class="btn" :disabled="!emptyValue" :class="{
-            'opacity': !emptyValue
+                <button class="btn" :disabled="!inputName" :class="{
+            'opacity': !inputName
         }" >Сохранить</button>
-            </div>
+            </form>
+            <div v-if="notCorrectName" class="w-100 mt-3 text-center form__info__alert alert alert-danger">Ошибка заполнения</div>
         </div>
     </div>
 </template>

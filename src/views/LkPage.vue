@@ -1,8 +1,19 @@
 <script>
 
+import axios from 'axios'
 import { scrollWin } from '../components/AppFooter.vue';
 
 export default {
+    data() {
+        return {
+            userInfo: null
+        }
+    },
+
+    mounted(){
+        this.getUser()
+    },
+
     methods: {
         goRoute(evt, routeTo) {
             evt.preventDefault()
@@ -10,6 +21,26 @@ export default {
                 name: routeTo
             })
             scrollWin()
+        },
+
+        async getUser() {
+            let token = 'Bearer ' + localStorage.getItem('token');
+            let response = await axios.get('/main', {
+                headers: {
+                    Authorization: token
+                }
+            })
+            this.userInfo = response.data
+        },
+
+        async LogOut(evt) {
+            evt.stopPropagation()
+            this.$router.push({
+                name: 'main'
+            })
+            await axios.post('/logout')
+            localStorage.removeItem('token')
+            window.location.reload()
         }
     }
 }
@@ -23,11 +54,11 @@ export default {
                 <div class="block__content" @click="goRoute($event, 'details')" >
                     <div class="block__content__top">
                         <img src="../../images/user.png" alt="" width="68">
-                        <h2>Роман</h2>
+                        <h2 v-if="userInfo">{{ userInfo.name }}</h2>
                     </div>
                     <div class="user-info">
-                        <p>Почта <b><span class="upper-span">mail@gmail.com</span></b></p>
-                        <button class="btn btn-danger mt-1">Выйти</button>
+                        <p v-if="userInfo">Почта <b><span class="upper-span">{{ userInfo.mail }}</span></b></p>
+                        <button @click="LogOut" class="btn btn-danger mt-1">Выйти</button>
                     </div>
                 </div>
                 <div class="block__content" @click="goRoute($event, 'delivery')" >
@@ -42,7 +73,7 @@ export default {
                         <img src="../../images/otzv.png" alt="" width="70">
                         <h2>Покупки</h2>
                     </div>
-                    <p>Товаров куплено <strong><span class="upper-span">5</span></strong></p>
+                    <p v-if="userInfo">Товаров куплено <strong><span class="upper-span">{{ userInfo.boughtProducts }}</span></strong></p>
                 </div>
             </div>
             <div class="row block__2">
@@ -53,7 +84,7 @@ export default {
                             <h2>Баланс</h2>
                         </div>
                         <div class="rub">
-                            <h4><b>0</b></h4><i class="fa fa-rub"></i>
+                            <h4 v-if="userInfo"><b>{{ userInfo.balance }}</b></h4><i class="fa fa-rub"></i>
                         </div>
                     </div>
                     <p>Узнайте все операции вашего баланса</p>

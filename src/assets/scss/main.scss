@@ -73,9 +73,9 @@
 }
 
 .content {
-    @include flex(row, 35px);
+    @include flex(row, 65px 35px);
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: left;
     padding-left: 35px;
 }
 
@@ -188,7 +188,7 @@
     }
 
     .product {
-        width: 140px;
+        width: 130px;
         height: 250px;
         gap: 5px;
 

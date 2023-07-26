@@ -1,5 +1,7 @@
 <script>
 
+import axios from 'axios'
+
 export default {
     methods: {
         goRoute(evt, routeTo) {
@@ -13,6 +15,16 @@ export default {
             evt.preventDefault()
             document.querySelector('.container').classList.toggle('opener')
             document.documentElement.querySelector('.router-seller').classList.toggle('opener-sell')
+        },
+
+        async LogOut(evt) {
+            evt.preventDefault()
+            this.$router.push({
+                name: 'main'
+            })
+            await axios.post('/logout-seller')
+            localStorage.removeItem('tokenSell')
+            window.location.reload()
         }
     }
 }
@@ -37,7 +49,7 @@ export default {
                 <button class="btn" @click="goRoute($event, 'sellchats')" :class="{
                     active: this.$route.name === 'sellchats'
                 }" >Чаты</button>
-                <button class="btn mt-4">Выйти</button>
+                <button @click="LogOut" class="btn mt-4">Выйти</button>
             </div>
         </div>
     </div>

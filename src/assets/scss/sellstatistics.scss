@@ -126,7 +126,7 @@ textarea {
 }
 
 .image-prod {
-    width: 35%;
+    width: 130px;
     height: 100%;
     background-size: 100% 100%!important;
     display: flex;
@@ -251,9 +251,15 @@ textarea {
     }
 }
 
+.rub b {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .create {
     width: 500px;
-    padding-bottom: 25px;
+    padding-bottom: 5px;
 
     p {
         margin: 0;
@@ -268,7 +274,7 @@ textarea {
 .create .content {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 4px;
 }
 
 .textarea-options {
@@ -277,8 +283,18 @@ textarea {
 }
 
 .create textarea {
-    font-size: 20px;
+    font-size: 16px;
     margin: 0;
+}
+
+.price input::-webkit-outer-spin-button,
+.price input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.price input[type=number] {
+  -moz-appearance: textfield;
 }
 
 @media screen and (max-width: 1400px) {
@@ -316,6 +332,11 @@ textarea {
         flex-direction: column;
         justify-content: end;
         align-items: flex-start;
+    }
+
+    .create {
+        overflow-y: scroll!important;
+        height: 100%;
     }
 }
 

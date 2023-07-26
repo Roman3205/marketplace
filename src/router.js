@@ -156,7 +156,7 @@ export default createRouter({
             component: ReviewsPage
         },
         {
-            path: '/catalog', //:article
+            path: '/catalog/:article',
             name: 'product',
             component: ProductPage
         },
