@@ -43,7 +43,8 @@ export default {
                 try {
                     await axios.post('/logout')
                     localStorage.removeItem('token')
-                    let response = await axios.post('/login-seller', {
+                    
+                    let response = await axios.post('/login/seller', {
                         mail: this.mail,
                         password: this.password,
                     }, {

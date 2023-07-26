@@ -22,7 +22,7 @@ export default {
             this.$router.push({
                 name: 'main'
             })
-            await axios.post('/logout-seller')
+            await axios.post('/logout/seller')
             localStorage.removeItem('tokenSell')
             window.location.reload()
         }

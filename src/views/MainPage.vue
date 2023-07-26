@@ -2,6 +2,7 @@
 
 import axios from 'axios'
 import axiox from 'axios'
+import { scrollWin } from '../components/AppFooter.vue'
 
 export default {
     data() {
@@ -66,6 +67,7 @@ export default {
                     article: item.article
                 }
             })
+            scrollWin()
         }
     }
 }

@@ -41,6 +41,9 @@ export default {
                 this.emptyFields = true
             } else {
                 try {
+                    await axios.post('/logout/seller')
+                    localStorage.removeItem('tokenSell')
+
                     let response = await axios.post('/login', {
                         mail: this.mail,
                         password: this.password,

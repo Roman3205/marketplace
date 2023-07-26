@@ -88,7 +88,7 @@ export default {
             try {
                 evt.preventDefault()
                 let token = 'Bearer ' + localStorage.getItem('token');
-                await axios.post('/change-mail', {
+                await axios.post('/mail/change', {
                     mail: this.inputMail
                 }, { headers: {
                         Authorization: token
@@ -114,7 +114,7 @@ export default {
             }
             
             let token = 'Bearer ' + localStorage.getItem('token');
-            await axios.post('/change-name', {
+            await axios.post('/name/change', {
                 name: this.inputName
             }, { headers: {
                     Authorization: token

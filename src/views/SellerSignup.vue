@@ -67,7 +67,7 @@ export default {
                 this.emptySpace = true
             } else {
                 try {
-                    let response = await axios.post('/registration-seller', {
+                    let response = await axios.post('/registration/seller', {
                         brandName: this.brandName,
                         brandCategory: this.brandCategory,
                         name: this.name,

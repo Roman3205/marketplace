@@ -99,7 +99,7 @@ export default {
             } else {
                 try {
                     let token = 'Bearer ' + localStorage.getItem('tokenSell')
-                    await axios.post('/product-create', {
+                    await axios.post('/product/create', {
                         title: this.inputName,
                         description: this.textareaValue,
                         picture: this.photoValue,
@@ -132,7 +132,7 @@ export default {
 
         async getProducts() {
             let token = 'Bearer ' + localStorage.getItem('tokenSell')
-            let response = await axios.get('/products-all', {
+            let response = await axios.get('/products/all', {
                 headers: {
                     Authorization: token
                 }
@@ -145,7 +145,7 @@ export default {
 
             let token = 'Bearer ' + localStorage.getItem('tokenSell')
             
-            await axios.post('/product-remove', {
+            await axios.post('/product/remove', {
                 id: item._id
             }, {
                 headers: {
@@ -162,7 +162,7 @@ export default {
 
             let token = 'Bearer ' + localStorage.getItem('tokenSell')
             
-            await axios.post('/set-discount', {
+            await axios.post('/discount/set', {
                 id: this.discountItem,
                 discount: this.discount
             }, {

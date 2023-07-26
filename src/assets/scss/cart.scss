@@ -84,6 +84,7 @@
     @include flex(row, 40px, none);
     height: 180px;
     width: 100%;
+    cursor: pointer;
 
     img {
         border-radius: 10px;
@@ -129,7 +130,8 @@
 }
 
 .oplata-menu {
-    @include flex(column, 30px, none)
+    @include flex(column, 30px, none);
+    padding-bottom: 10px;
 }
 
 .data-user {
@@ -187,9 +189,18 @@
     .money {
         display: flex;
         gap: 10px;
+        align-items: center;
+        align-self: flex-start;
+
+        h2 {
+            display: flex;
+            align-self: flex-start;
+            gap: 10px;
+
+            .fa-rub {
+                margin-top: 2px;
+            }
         
-        .fa-rub {
-            margin-top: 2px;
         }
     }
 
@@ -286,5 +297,67 @@
             color: #fff;
         }
         
+    }
+}
+
+@media screen and (max-width: 1300px) {
+    .wrapper-mod {
+        flex-direction: column;
+        gap: 100px;
+    }
+
+    .oplata, .data-user {
+        width: 100%;
+    }
+
+    .oplata-menu, .product-container {
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+
+    .product-container {
+        padding-right: 5px;
+        padding-bottom: 5px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .wrapper {
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+
+    .main-content {
+        gap: 0;
+        padding: 10px;
+        overflow: hidden;
+        flex-wrap: wrap;
+        justify-content: none;
+        height: 100%;
+    }
+
+    .user {
+        max-height: fit-content;
+        gap: 15px;
+        flex-direction: column;
+        
+        p, span, b {
+            margin: 0;
+            height: fit-content;
+        }
+    }
+
+    .action-menu {
+        align-self: flex-start;
+    }
+
+    .user {
+        width: 100%;
+    }
+
+    .product {
+        height: 330px;
+        gap: 0;
+        flex-direction: column;
     }
 }

@@ -2,12 +2,22 @@
 
 import { scrollWin } from '../components/AppFooter.vue'
 import { opacityEffectsOff, opacityEffectsOn } from './InfoDetails.vue'
+import axios from 'axios'
+import dayjs from 'dayjs'
 
 export default {
     data() {
         return {
-            showChangeMenu: false
+            showChangeMenu: false,
+            products: [],
+            userInfo: null,
+            cartInfo: null,
+            currentDate: new Date()
         }
+    },
+
+    mounted() {
+        this.loadCart()
     },
 
     methods: {
@@ -29,6 +39,60 @@ export default {
             evt.preventDefault()
             this.showChangeMenu = false
             opacityEffectsOff()
+        },
+
+        async loadCart() {
+            let token = 'Bearer ' + localStorage.getItem('token')
+
+            let response = await axios.get('/cart', {
+                headers: {
+                    Authorization: token
+                }
+            })
+
+            this.userInfo = response.data.customer
+            this.cartInfo = response.data.cart
+            this.products = response.data.cart.products
+        },
+
+        async removeFromCart(evt, item) {
+            evt.stopPropagation()
+            evt.preventDefault()
+
+            console.log(item.article);
+
+            let token = 'Bearer ' + localStorage.getItem('token')
+            await axios.post('/cart/remove', {
+                article: item.article
+            }, {
+                headers: {
+                    Authorization: token
+                }
+            })
+
+            this.loadCart()
+        },
+
+        getRandomDateDelivery() {
+            let min = 5
+            let max = 7
+            return Math.floor(Math.random() * (max - min) + min)
+        },
+
+        getDeliver(date) {
+            let day = dayjs(date)
+            let deliveryDate = day.add(this.getRandomDateDelivery(), 'day')
+            return deliveryDate.format('D MMMM')
+        },
+
+        goProduct(evt, item) {
+            evt.preventDefault()
+            this.$router.push({
+                name: 'product',
+                params: {
+                    article: item.article
+                }
+            })
         }
     }
 }
@@ -37,27 +101,27 @@ export default {
 
 <template>
     <div class="container">
-        <!-- <div class="wrapper-no-content">
+        <div v-if="products.length === 0" class="wrapper-no-content">
             <h2><b>В корзине пока пусто</b></h2>
             <p>Загляните на главную, чтобы выбрать товары или найдите нужное в поиске</p>
             <button class="no-content-button" @click="goRoute($event, 'main')" >Перейти на главную</button>
-        </div> -->
-        <div class="wrapper" :class="{
+        </div>
+        <div v-if="products.length !== 0" class="wrapper" :class="{
             'opacity': showChangeMenu
         }">
             <h2><b>Корзина</b></h2>
             <div class="wrapper-mod">
                 <div class="product-container">
-                    <div class="product" v-for="index in 5">
-                        <img src="https://basket-09.wb.ru/vol1302/part130277/130277706/images/c246x328/1.jpg" width="150" alt="">
+                    <div class="product" v-for="(item) in products" @click="goProduct($event, item)" >
+                        <img :src="item.picture" width="150" alt="">
                         <div class="main-content">
                             <div class="user">
-                                <span class="number-rev"><span>Артикул товара:</span><h5><b>№324213</b></h5></span>
-                                <b class="mt-2">BSmarty / Беспроводные наушники Pro</b>
-                                <p class="pt-4">Доставка со склада продавца</p>
+                                <span class="number-rev"><span>Артикул товара:</span><h5><b>{{ item.article }}</b></h5></span>
+                                <b class="mt-2">{{ item.brand_id.brandName }} / {{ item.title }}</b>
+                                <p class="pt-lg-4">Доставка со склада продавца</p>
                             </div>
                             <div class="action-menu">
-                                <button class="btn btn-danger" :disabled="showChangeMenu"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-danger" :disabled="showChangeMenu" @click="removeFromCart($event, item)" >Удалить<i class="fa fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -65,14 +129,14 @@ export default {
                 <div class="oplata-menu">
                     <div class="oplata">
                         <div class="content">
-                            <span><b>Доставка в пункт выдачи</b></span><span><u>13 июня</u></span>
+                            <span><b>Доставка в пункт выдачи</b></span><span><u>{{ getDeliver(currentDate) }}</u></span>
                             <div class="active-menu mt-4">
-                                <p>Товары, 2 шт</p>
-                                <div class="money"><span>1 391</span><i class="fa fa-rub"></i></div>
+                                <p>Товары, {{ products.length }} шт</p>
+                                <div class="money"><span>{{ cartInfo.totalCost }}</span><i class="fa fa-rub"></i></div>
                             </div>
                             <div class="active-menu">
                                 <h2><b>Итого</b></h2>
-                                <div class="money"><h2><b>1 391</b></h2><h2><b><i class="fa fa-rub"></i></b></h2></div>
+                                <div class="money"><h2><b>{{ cartInfo.totalCost }}</b></h2><h2><b><i class="fa fa-rub"></i></b></h2></div>
                             </div>
                             <button class="btn" :disabled="showChangeMenu">Заказать</button>
                             <div class="check">
@@ -98,7 +162,7 @@ export default {
                             <div class="left-side">
                                 <h2 @click="goRoute($event, 'details')"><b>Мои данные</b></h2>
                                 <div class="way">
-                                    <img src="../../images/user.png" width="25" alt=""><p>Роман +79001234567</p>
+                                    <img :src="'../../images/' + userInfo.profilePicture" width="25" alt=""><p>{{ userInfo.name }}</p>
                                 </div>
                             </div>
                             <div class="right-side">

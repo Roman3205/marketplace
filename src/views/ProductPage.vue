@@ -1,6 +1,7 @@
 <script>
 
 import { opacityEffectsOff, opacityEffectsOn } from './InfoDetails.vue'
+import { scrollWin } from '../components/AppFooter.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
 
@@ -13,7 +14,9 @@ export default {
             product: null,
             currentDate: new Date(),
             successCreate: undefined,
-            notCorrect: undefined
+            notCorrect: undefined,
+            addSuccess: undefined,
+            alreadyInCart: undefined
         }
     },
 
@@ -25,6 +28,7 @@ export default {
 
     mounted() {
         this.getParamsProduct()
+        this.checkInCart()
     },
 
     methods: {
@@ -75,7 +79,7 @@ export default {
             this.successCreate = false
             this.notCorrect = false
 
-            let filter = /([a-zA-Zа-яА-Я])\1{1}/;
+            let filter = /([a-zA-Zа-яА-Я])\1{2}/;
             if (!/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputValue) || filter.test(this.inputValue)) {
                 this.notCorrect = true
             } else {
@@ -98,7 +102,44 @@ export default {
                 this.closeReviewCreate()
                 this.successCreate = false
             }
-            
+        },
+
+        async addToCart(evt) {
+            evt.preventDefault()
+            this.addSuccess = false
+
+            let token = 'Bearer ' + localStorage.getItem('token')
+            await axios.post('/cart/add', {
+                article: this.$route.params.article
+            }, {
+                headers: {
+                    Authorization: token
+                }
+            })
+
+            this.addSuccess = true
+            this.checkInCart()
+        },
+
+        async checkInCart() {
+            this.alreadyInCart = false
+
+            try {
+                let token = 'Bearer ' + localStorage.getItem('token')
+                await axios.get('/product/check', {
+                    params: {
+                        article: this.$route.params.article
+                    },
+
+                    headers: {
+                        Authorization: token
+                    }
+                })
+            } catch (error) {
+                if(error.response && error.response.status === 409) {
+                    this.alreadyInCart = true
+                }
+            }
         },
 
         getTime(date) {
@@ -107,7 +148,7 @@ export default {
         },
 
         getRandomDateDelivery() {
-            let min = 3
+            let min = 2
             let max = 5
             return Math.floor(Math.random() * (max - min) + min)
         },
@@ -116,7 +157,20 @@ export default {
             let day = dayjs(date)
             let deliveryDate = day.add(this.getRandomDateDelivery(), 'day')
             return deliveryDate.format('D MMMM')
-        } 
+        },
+
+        goRoute(evt, routeTo) {
+            evt.preventDefault()
+            this.$router.push({
+                name: routeTo
+            })
+            scrollWin()
+        },
+
+        getTimeReview(date) {
+            let day = dayjs(date)
+            return day.format('D MMMM YYYY, hh:mm')
+        }
     }
 }
 
@@ -170,11 +224,11 @@ export default {
                         <div class="rub">
                             <p><b>{{ product.price }}</b></p><i class="fa fa-rub"></i>
                         </div>
-                        <button class="btn button-buy" :disabled="showReviewBar">Добавить в корзину</button>
-                        <!-- <button class="btn button-cart">Перейти в корзину</button> -->
+                        <button class="btn button-buy" :disabled="showReviewBar" @click="addToCart" v-if="!alreadyInCart" >Добавить в корзину</button>
+                        <button class="btn button-cart" v-if="alreadyInCart" @click="goRoute($event, 'cart')" >Перейти в корзину</button>
                         <p><b>{{ getDeliver(currentDate) }}</b> доставка со склада</p>
                     </div>
-                    <!-- <div class=" mt-4 alert alert-success">Товар успешно добавлен в корзину</div> -->
+                    <div v-if="addSuccess" class="w-100 text-center mt-4 alert alert-success">Товар успешно добавлен в корзину</div>
                 </div>
             </div>
             <div class="reviews" v-if="product">
@@ -185,30 +239,26 @@ export default {
                     </div>
                     <button class="write-active-button" @click="showReviewCreate" >Написать отзыв</button>
                 </div>
-                <h5 class="mt-4" v-if="product.reviews == 0">Отзывов на этот товар нет</h5>
-                <div class="box" v-if="product.reviews">
+                <h5 class="mt-4" v-if="product.reviews.length == 0">Отзывов на этот товар нет</h5>
+                <div class="box" v-if="product.reviews.length > 0">
                     <div class="row ms-lg-1 mt-lg-3 ms-lg-2" ref="reviews">
                         <div class="review" v-for="(item) in product.reviews">
                             <div class="rev-user">
-                                <img src="../..//images/user.png">
+                                <img :src="'../..//images/' + item.author_id.profilePicture">
                                 <div class="time">
                                     <div class="user">
                                         <b>{{ item.author_id.name }}</b>
-                                        <p>09 июня 2023, 16:34</p>
+                                        <p>{{ getTimeReview(item.createdAt) }}</p>
                                     </div>
                                     <div class="stars">
-                                        <i class="fa fa-star star-rev"></i>
-                                        <i class="fa fa-star star-rev"></i>
-                                        <i class="fa fa-star star-rev"></i>
-                                        <i class="fa fa-star star-rev"></i>
-                                        <i class="fa fa-star star-rev"></i>
+                                        <i v-for="index in item.rating" class="me-1 fa fa-star star-rev"></i>
                                     </div>
                                 </div>
                             </div>
-                            <p>Отличный товар, очень понравился!</p>
+                            <p>{{ item.text }}</p>
                         </div>
                     </div>
-                    <div class="buttons mt-4 ms-2">
+                    <div class="buttons mt-4 ms-2" v-if="product.reviews">
                         <button :disabled="showReviewBar" class="scroll-button left" @click="scrollLeft('reviews')">&#8249;</button>
                         <button :disabled="showReviewBar" class="scroll-button right" @click="scrollRight('reviews')">&#8250;</button>
                     </div>
@@ -218,7 +268,7 @@ export default {
         <div class="write-review1" v-if="showReviewBar" style="opacity: 1!important; z-index: 999;">
             <i class="fa fa-times" @click="closeReviewCreate" ></i>
             <form class="content" @submit="CreateReview" >
-                <h2><b>BSmarty / Беспроводные наушники Pro</b></h2>
+                <h2><b>{{ product.brand_id.brandName }} / {{ product.title }}</b></h2>
                 <div class="inp-review1">
                     <span>Оцените товар</span>
                     <div class="stars-review">
