@@ -35,9 +35,18 @@
     display: flex;
     justify-content: center;
     height: auto;
+    align-self: flex-start;
     width: 850px;
-    margin-top: 40px;
+    margin: 60px 0px;
     margin-bottom: 40px;
+
+    .alert:first-of-type {
+        padding-top: 0;
+    }
+
+    .no-history {
+        margin-top: 130px;
+    }
 }
 
 .container h2 {
@@ -180,5 +189,9 @@
             width: 270px;
             text-align: left;
         }
+    }
+
+    .no-history {
+        margin-top: 0px;
     }
 }

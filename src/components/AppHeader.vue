@@ -7,12 +7,22 @@ export default {
     data() {
         return {
             isOpenMenu: false,
-            userInfo: null
+            userInfo: null,
+            products: [],
+            searchInput: '',
+            categoryFilterProducts: []
         }
     },
 
     mounted() {
-        this.getUser()
+        this.getUser();
+    },
+
+    watch: {
+        searchInput: {
+            handler: 'searchProducts',
+            immediate: true
+        }
     },
 
     methods: {
@@ -54,6 +64,24 @@ export default {
                 }
             })
             this.userInfo = response.data
+        },
+
+        async searchProducts() {
+            let response = await axios.get('/products/all')
+            let products = response.data
+            let regex = new RegExp(this.searchInput, 'i')
+            this.products = products.filter((product) => regex.test(product.title))
+            console.log(this.products)
+        },
+
+        async categoryFilter(evt, category) {
+            evt.preventDefault()
+
+            let response = await axios.get('/products/all')
+            let products = response.data
+
+            this.categoryFilterProducts = products.filter((product) => product.category === category)
+            console.log(this.categoryFilterProducts);
         }
     }
 }
@@ -62,25 +90,23 @@ export default {
 <template>
     <div class="appear-menu">
         <div class="categories">
-            <div class="category-item">Мужская верхняя одежда</div>
-            <div class="category-item">Женская верхняя одежда</div>
-            <div class="category-item">Мужская обувь</div>
-            <div class="category-item">Женская обувь</div>
-            <div class="category-item">Товары для дома</div>
-            <div class="category-item">Аксессуары</div>
-            <div class="category-item">Электроника</div>
-            <div class="category-item">Игрушки</div>
-            <div class="category-item">Мебель</div>
-            <div class="category-item">Продукты</div>
-            <div class="category-item">Бытовая техника</div>
-            <div class="category-item">Зоотовары</div>
-            <div class="category-item">Спорт</div>
-            <div class="category-item">Автотовары</div>
-            <div class="category-item">Школа</div>
-            <div class="category-item">Книги</div>
-            <div class="category-item">Ювелирные изделия</div>
-            <div class="category-item">Здоровье</div>
-            <div class="category-item">Сад и дача</div>
+            <div class="category-item" @click="categoryFilter($event, 'Верхняя одежда')">Верхняя одежда</div>
+            <div class="category-item" @click="categoryFilter($event, 'Обувь')">Обувь</div>
+            <div class="category-item" @click="categoryFilter($event, 'Товары для дома')">Товары для дома</div>
+            <div class="category-item" @click="categoryFilter($event, 'Аксессуары')">Аксессуары</div>
+            <div class="category-item" @click="categoryFilter($event, 'Электроника')">Электроника</div>
+            <div class="category-item" @click="categoryFilter($event, 'Игрушки')">Игрушки</div>
+            <div class="category-item" @click="categoryFilter($event, 'Мебель')">Мебель</div>
+            <div class="category-item" @click="categoryFilter($event, 'Продукты')">Продукты</div>
+            <div class="category-item" @click="categoryFilter($event, 'Бытовая техника')">Бытовая техника</div>
+            <div class="category-item" @click="categoryFilter($event, 'Зоотовары')">Зоотовары</div>
+            <div class="category-item" @click="categoryFilter($event, 'Спорт')">Спорт</div>
+            <div class="category-item" @click="categoryFilter($event, 'Автотовары')">Автотовары</div>
+            <div class="category-item" @click="categoryFilter($event, 'Школа')">Школа</div>
+            <div class="category-item" @click="categoryFilter($event, 'Книги')">Книги</div>
+            <div class="category-item" @click="categoryFilter($event, 'Ювелирные изделия')">Ювелирные изделия</div>
+            <div class="category-item" @click="categoryFilter($event, 'Здоровье')">Здоровье</div>
+            <div class="category-item" @click="categoryFilter($event, 'Сад и дача')">Сад и дача</div>
         </div>
         <i class="fa fa-times" @click="closeMenu" ></i>
     </div>
@@ -99,7 +125,7 @@ export default {
                 <h1 @click="goRoute($event, 'main')" >MARKETPLACE</h1>
             </div>
             <div class="header__search">
-                <input type="text" placeholder="Я ищу..." id="search" class="form-control">
+                <input type="text" v-model="searchInput" placeholder="Я ищу..." id="search" class="form-control">
                 <label for="search"><i class="fa fa-search"></i></label>
             </div>
             <div class="header__box box">

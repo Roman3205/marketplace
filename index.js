@@ -38,7 +38,8 @@ let orderSchema = new mongoose.Schema({
         type: mongoose.ObjectId,
         ref: 'product'
     },
-    status: String
+    status: String,
+    money: Number
 }, {
     timestamps: true
 })
@@ -46,7 +47,7 @@ let orderSchema = new mongoose.Schema({
 let Order = mongoose.model('order', orderSchema)
 
 let operationSchema = new mongoose.Schema({
-    title: String,
+    name: String,
     money: Number
 }, {
     timestamps: true
@@ -132,6 +133,10 @@ let reviewSchema = new mongoose.Schema({
     author_id: {
         type: mongoose.ObjectId,
         ref: 'customer'
+    },
+    product_id: {
+        type: mongoose.ObjectId,
+        ref: 'product'
     }
 }, {
     timestamps: true
@@ -321,12 +326,6 @@ app.post('/login', async (req,res) => {
     }
 
     let token = jwt.sign({_id: customer._id}, 'user')
-    
-    res.cookie('jwt', token, {
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'none'
-    })
 
     res.send(token)
 })
@@ -384,7 +383,7 @@ app.post('/name/change', VerifyTokenUser, async (req, res) => {
     return res.status(200).json({ message: 'Имя успешно изменено' })
 })
 
-app.get('/products', async (req, res) => {
+app.get('/products/all', async (req, res) => {
     let products = await Product.find().populate('brand_id')
 
     res.send(products)
@@ -408,10 +407,8 @@ app.get('/product', async (req, res) => {
     res.send(product)
 })
 
-app.post('/review/create', VerifyTokenUser, async (req, res) => {
-    let article = req.body.article
-    let text = req.body.text
-    let rating = req.body.rating
+app.post('/balance/topup', VerifyTokenUser, async (req, res) => {
+    let money = req.body.money
 
     let customer = await Customer.findOne({_id: req.userId})
 
@@ -421,17 +418,72 @@ app.post('/review/create', VerifyTokenUser, async (req, res) => {
         })
     }
 
-    let review = new Review({
-        text: text,
-        rating: rating,
-        author_id: customer._id
+    customer.balance += money
+
+    customer.operations.push({
+        name: 'replenishment',
+        money: money
     })
 
-    await review.save()
-
-    customer.reviews.push(review._id)
-
     await customer.save()
+
+    res.sendStatus(200)
+})
+
+app.get('/balance/operations', VerifyTokenUser, async (req, res) => {
+    let customer = await Customer.findOne({_id: req.userId}).populate('operations')
+
+    if(!customer) {
+        return res.status(401).send({
+            message: 'Вы не авторизованы'
+        })
+    }
+
+    customer.operations.sort((a, b) => b.createdAt - a.createdAt)
+
+    res.send(customer)
+})
+
+app.get('/reviews/all', VerifyTokenUser, async (req, res) => {
+    let customer = await Customer.findOne({_id: req.userId}).populate({
+        path: 'reviews',
+        populate: [
+            {path: 'author_id'},
+            {
+                path: 'product_id',
+                populate: 'brand_id'
+            }
+        ]
+    })
+
+    customer.reviews.sort((a, b) => b.createdAt - a.createdAt)
+
+    if(!customer) {
+        return res.status(401).send({
+            message: 'Вы не авторизованы'
+        })
+    }
+
+    res.send(customer)
+})
+
+app.post('/review/remove', VerifyTokenUser, async (req, res) => {
+    let article = req.body.article
+    let id = req.body.id
+
+    let customer = await Customer.findOne({_id: req.userId}).populate('reviews')
+
+    if(!customer) {
+        return res.status(401).send({
+            message: 'Вы не авторизованы'
+        })
+    }
+
+    await Review.deleteOne({_id: id})
+
+    customer.reviews.pull(id)
+
+    await customer.save()   
 
     let product = await Product.findOne({article: article}).populate('reviews')
 
@@ -440,15 +492,77 @@ app.post('/review/create', VerifyTokenUser, async (req, res) => {
         averageCount += product.reviews[i].rating
     }
 
-    if (!isNaN(averageCount) && product.reviews.length > 1) {
+    if (product.reviews.length >= 1) {
         product.averageRating = (averageCount / product.reviews.length).toFixed(1)
+    } else {
+        product.averageRating = 0
+    }
+
+    product.amountReviews--
+    product.reviews.pull(id)
+
+    await product.save()
+
+    res.sendStatus(200)
+})
+
+app.post('/review/create', VerifyTokenUser, async (req, res) => {
+    let article = req.body.article
+    let text = req.body.text
+    let rating = req.body.rating
+
+    let customer = await Customer.findOne({_id: req.userId}).populate({
+        path: 'reviews',
+        populate: {
+            path: 'product_id'
+        }
+    })
+
+    if(!customer) {
+        return res.status(401).send({
+            message: 'Вы не авторизованы'
+        })
+    }
+
+    let product = await Product.findOne({article: article}).populate('reviews')
+
+    let check = customer.reviews.some(review => {
+        return review.product_id.article == article
+    })
+
+    if(check) {
+        return res.status(409).send({
+            message: 'Отзыв на данный товар уже оставлен вами'
+        })
+    }
+
+    let review = new Review({
+        text: text,
+        rating: rating,
+        author_id: customer._id,
+        product_id: product._id
+    })
+
+    await review.save()
+
+    customer.reviews.push(review._id)
+
+    await customer.save()
+
+    let averageCount = 0
+    for(let i = 0; i < product.reviews.length; i++) {
+        averageCount += product.reviews[i].rating
+    }
+
+    if (product.reviews.length >= 1) {
+        product.averageRating = ((averageCount + rating) / (product.reviews.length + 1)).toFixed(1)
     } else {
         product.averageRating = 0
     }
 
     product.amountReviews++
     product.reviews.push(review._id)
-        
+    
     await product.save()
 
     res.sendStatus(200)
@@ -491,13 +605,13 @@ app.post('/cart/remove', VerifyTokenUser, async (req, res) => {
     let product = await Product.findOne({article: article})
 
     let cart = await Cart.findOne({_id: customer.cart_id})
-        
-    cart.products.splice(product._id, 1)
+
+    cart.products.pull(product._id)
     cart.totalCost -= product.price
 
     await cart.save()
 
-    res.send({product, cart})
+    res.sendStatus(200)
 })
 
 app.get('/product/check', VerifyTokenUser, async (req, res) => {
@@ -516,7 +630,7 @@ app.get('/product/check', VerifyTokenUser, async (req, res) => {
     let check = cart.products.includes(product._id)
 
     if(check) {
-        return res.sendStatus(409)
+        return res.status(409).send('Товар уже в вашей корзине')
     }
     
     res.sendStatus(200)
@@ -536,12 +650,69 @@ app.get('/cart', VerifyTokenUser, async (req, res) => {
         },
         options: {
             sort: {
-                createdAt: 1
+                updatedAt: 1
             }
         }
     })
 
     res.send({customer, cart})
+})
+
+app.post('/order/create', VerifyTokenUser, async (req, res) => {
+    let products = req.body.products
+
+    let customer = await Customer.findOne({ _id: req.userId })
+
+    if(!customer) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    let cart = await Cart.findOne({_id: customer.cart_id})
+
+    customer.balance = customer.balance - cart.totalCost
+
+    if(customer.balance < 0) {
+        return res.status(409).send('Недостаточно средств')
+    }
+
+    let orders = products.map((product) => ({
+        product_id: product._id,
+        status: 'Создан',
+        money: product.price
+    }))
+
+    let createdOrders = await Order.insertMany(orders)
+
+    let getOrder = createdOrders.map((order) => order._id)
+
+    customer.orders.push(...getOrder)
+
+    customer.operations.push({
+        name: 'withdrawals',
+        money: cart.totalCost
+    })
+
+    await customer.save()
+
+    cart.products = []
+    cart.totalCost = 0
+
+    await cart.save()
+
+    res.sendStatus(200)
+})
+
+app.get('/orders/all', VerifyTokenUser, async (req, res) => {
+    let customer = await Customer.findOne({ _id: req.userId }).populate({
+        path: 'orders',
+        populate: 'product_id'
+    })
+
+    if(!customer) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    res.send(customer)
 })
 
 
@@ -550,8 +721,12 @@ app.get('/cart', VerifyTokenUser, async (req, res) => {
 
 
 
-app.post('/logout', async (req,res) => {
-    res.cookie('user-jwt', '', {maxAge: 0})
+app.post('/logout', async (req, res) => {
+    res.clearCookie('user-jwt', {
+        httpOnly: true,
+        maxAge: 0,
+        sameSite: 'none'
+    });
 
     res.sendStatus(200)
 })
@@ -612,12 +787,6 @@ app.post('/login/seller', async (req, res) => {
     }
 
     let token = jwt.sign({_id: seller._id}, 'seller')
-
-    res.cookie('seller-jwt', token, {
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'none'
-    })
 
     res.send(token)
 })
@@ -700,9 +869,9 @@ app.post('/product/remove', VerifyTokenSeller, async (req, res) => {
         })
     }
 
-    let product = await Product.deleteOne({_id: id})
+    await Product.deleteOne({_id: id})
 
-    seller.products.splice(product._id, 1)
+    seller.products.pull(id)
 
     await seller.save()
 
@@ -723,6 +892,7 @@ app.post('/discount/set', VerifyTokenSeller, async (req, res) => {
 
     let product = await Product.findOne({_id: id})
     product.discount = discount
+    product.price = Number(product.price - (product.price / 100 * discount).toFixed(0))
 
     await product.save()
 
@@ -736,7 +906,11 @@ app.post('/discount/set', VerifyTokenSeller, async (req, res) => {
 
 
 app.post('/logout/seller', async (req, res) => {
-    res.cookie('seller-jwt', '', {maxAge: 0})
+    res.clearCookie('user-jwt', {
+        httpOnly: true,
+        maxAge: 0,
+        sameSite: 'none'
+    });
 
     res.sendStatus(200)
 })

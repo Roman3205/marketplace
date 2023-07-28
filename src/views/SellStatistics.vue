@@ -153,6 +153,8 @@ export default {
                 }
             })
 
+            await new Promise(prom => setTimeout(prom, 1300))
+
             this.getProducts()
         },
 
@@ -235,7 +237,7 @@ export default {
                 </div>
                 <div class="container-blocks">
                     <h5 class="mt-4" v-if="products.length == 0">У вас нет опубликованных товаров</h5>
-                    <div class="products-card" v-for="(item) in products.products">
+                    <div class="products-card" v-for="(item) in products">
                         <div class="info-prod p-2">
                             <div class="image-prod" :style="'background: url(' + item.picture + ') no-repeat center center; border: 2px solid gray;'">
                                 <button v-if="item.discount > 0" class="btn btn-danger" disabled>- {{ item.discount }} %</button>

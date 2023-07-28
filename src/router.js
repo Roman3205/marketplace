@@ -25,9 +25,8 @@ import SellStatistics from './views/SellStatistics.vue'
 import SellRefunds from './views/SellRefunds.vue'
 import SellManage from './views/SellManage.vue'
 import SellChats from './views/SellChats.vue'
-import SellMessenger from './views/SellMessenger.vue'
 
-export default createRouter({
+let router = createRouter({
     history: createWebHistory(),
 
     routes: [
@@ -54,7 +53,7 @@ export default createRouter({
         {
             path: '/seller/chats/messenger',
             name: 'sellmessenger',
-            component: SellMessenger
+            component: MessengerPage
         },
         {
             path: '/seller/refund',
@@ -172,3 +171,47 @@ export default createRouter({
         }
     ]
 })
+
+router.beforeEach((from, to, next) => {
+    if (
+        !localStorage.getItem('token') && from.name === 'lk' ||
+        !localStorage.getItem('token') && from.name === 'cart' ||
+        !localStorage.getItem('token') && from.name === 'reviews' ||
+        !localStorage.getItem('token') && from.name === 'messenger' ||
+        !localStorage.getItem('token') && from.name === 'chats' ||
+        !localStorage.getItem('token') && from.name === 'refund' ||
+        !localStorage.getItem('token') && from.name === 'delivery' ||
+        !localStorage.getItem('token') && from.name === 'orders' ||
+        !localStorage.getItem('token') && from.name === 'details' ||
+        !localStorage.getItem('token') && from.name === 'balance' ||
+        localStorage.getItem('tokenSell') && from.name === 'lk' ||
+        localStorage.getItem('tokenSell') && from.name === 'cart' ||
+        localStorage.getItem('tokenSell') && from.name === 'reviews' ||
+        localStorage.getItem('tokenSell') && from.name === 'messenger' ||
+        localStorage.getItem('tokenSell') && from.name === 'chats' ||
+        localStorage.getItem('tokenSell') && from.name === 'refund' ||
+        localStorage.getItem('tokenSell') && from.name === 'delivery' ||
+        localStorage.getItem('tokenSell') && from.name === 'orders' ||
+        localStorage.getItem('tokenSell') && from.name === 'details' ||
+        localStorage.getItem('tokenSell') && from.name === 'balance'
+    ) {
+        router.push('/security/login')
+    } else if (
+        !localStorage.getItem('token') && !localStorage.getItem('tokenSell') && from.name === 'statistics' ||
+        !localStorage.getItem('token') && !localStorage.getItem('tokenSell') && from.name === 'sellrefund' ||
+        !localStorage.getItem('token') && !localStorage.getItem('tokenSell') && from.name === 'sellchats' ||
+        !localStorage.getItem('token') && !localStorage.getItem('tokenSell') && from.name === 'sellmessenger' ||
+        !localStorage.getItem('token') && !localStorage.getItem('tokenSell') && from.name === 'manage' ||
+        localStorage.getItem('token') && from.name === 'statistics' ||
+        localStorage.getItem('token') && from.name === 'sellrefund' ||
+        localStorage.getItem('token') && from.name === 'sellchats' ||
+        localStorage.getItem('token') && from.name === 'sellmessenger' ||
+        localStorage.getItem('token') && from.name === 'manage'
+    ) {
+        router.push('/seller/login')
+    } else {
+        next()
+    }
+})
+
+export default router

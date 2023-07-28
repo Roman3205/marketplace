@@ -16,7 +16,8 @@ export default {
             successCreate: undefined,
             notCorrect: undefined,
             addSuccess: undefined,
-            alreadyInCart: undefined
+            alreadyInCart: undefined,
+            alreadyWritten: undefined
         }
     },
 
@@ -77,30 +78,38 @@ export default {
             evt.preventDefault()
 
             this.successCreate = false
+            this.alreadyWritten = false
             this.notCorrect = false
 
             let filter = /([a-zA-Zа-яА-Я])\1{2}/;
             if (!/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputValue) || filter.test(this.inputValue)) {
                 this.notCorrect = true
             } else {
-                let token = 'Bearer ' + localStorage.getItem('token')
-                await axios.post('/review/create', {
-                    text: this.inputValue,
-                    rating: this.highlightedStars,
-                    article: this.$route.params.article
-                }, {
-                    headers: {
-                        Authorization: token
-                    }
-                })
+                try {
+                    let token = 'Bearer ' + localStorage.getItem('token')
+                    await axios.post('/review/create', {
+                        text: this.inputValue,
+                        rating: this.highlightedStars,
+                        article: this.$route.params.article
+                    }, {
+                        headers: {
+                            Authorization: token
+                        }
+                    })
 
-                this.successCreate = true
-                await new Promise(prom => setTimeout(prom, 1300))
-                this.getParamsProduct()
-                this.inputValue = ''
-                this.highlightedStars = 0
-                this.closeReviewCreate()
-                this.successCreate = false
+                    this.successCreate = true
+                    await new Promise(prom => setTimeout(prom, 1300))
+                    this.getParamsProduct()
+                    this.inputValue = ''
+                    this.highlightedStars = 0
+                    this.closeReviewCreate()
+                    this.successCreate = false
+
+                } catch (error) {
+                    if(error.response && error.response.status === 409) {
+                        this.alreadyWritten = true
+                    }
+                }
             }
         },
 
@@ -169,7 +178,7 @@ export default {
 
         getTimeReview(date) {
             let day = dayjs(date)
-            return day.format('D MMMM YYYY, hh:mm')
+            return day.format('D MMMM YYYY, HH:mm')
         }
     }
 }
@@ -291,6 +300,7 @@ export default {
             </form>
             <div v-if="notCorrect" class="w-100 mt-4 mb-2 p-2 text-center alert alert-danger">Произошла ошибка в заполнении</div>
             <div v-if="successCreate" class="w-100 mt-4 mb-2 p-2 text-center alert alert-success">Ваш отзыв успешно создан</div>
+            <div v-if="alreadyWritten" class="w-100 mt-4 mb-2 p-2 text-center alert alert-danger">Вы уже оставляли отзыв на этот товар</div>
         </div>
         <!-- <div class="write-review2" v-if="showReviewBar">
             <i class="fa fa-times" @click="closeReviewCreate" ></i>

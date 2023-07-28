@@ -13,6 +13,10 @@
     font-size: 24px;
 }
 
+.fa-star {
+    color: rgb(235, 199, 0);
+}
+
 .wrapper {
     margin: 60px 70px 80px 70px;
     width: 1400px;
@@ -33,10 +37,6 @@
     }
 }
 
-.number-rev {
-    @include flex(row, 10px, none);
-}
-
 .feedbacks-container {
     @include flex(column, 30px, none);
     flex-wrap: wrap;
@@ -45,6 +45,15 @@
 
 .time, .user {
     @include flex(column, 0px, none);
+}
+
+.user b {
+    cursor: pointer;
+    transition: 0.6s;
+
+    &:hover {
+        opacity: 0.75;
+    }
 }
 
 .stars {
@@ -75,11 +84,22 @@
         border-radius: 10px;
         width: 160px;
         height: 100%;
+        cursor: pointer;
+        transition: 0.6s;
+
+        &:hover {
+            opacity: 0.75;
+        }
     }
 }
 
 .opacity {
     opacity: 0.4
+}
+
+.text {
+    align-self: flex-start;
+    margin-top: 10px
 }
 
 .main-content {
@@ -96,6 +116,8 @@
         background-color: #fff;
         width: 330px;
         overflow-y: auto;
+        height: fit-content;
+        max-height: 140px;
     }
 }
 
@@ -116,68 +138,6 @@
     .btn-edit {
         background-color: rgb(145, 51, 208);
         color: #fff;
-    }
-}
-
-.edit-menu {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 305px;
-    min-height: 305px;
-    border-radius: 15px;
-    background-color: #efefef;
-    padding: 25px;
-    overflow: hidden;
-    box-shadow: 5px 5px 5px lightgrey;
-    padding: 20px;
-
-    i {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        font-size: 22px;
-        cursor: pointer;
-    }
-
-    .content {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        margin-top: 25px;
-    }
-
-    .inp-edit {
-        @include flex(column, 10px, none);
-
-        .options-edit {
-            @include flex(row, 0px, space-between);
-        }
-
-        textarea {
-            resize: none;
-            border: 2px solid lightgray;
-            padding: 5px;
-            border-radius: 10px;
-            height: 160px;
-        }
-    }
-
-    button {
-        width: 100%;
-        transition: 0.6s;
-        margin: 15px 0px;
-        color: rgb(145, 51, 208);
-        border: 3px solid rgb(145, 51, 208);
-        background-color: #fff;
-
-        &:hover {
-            background-color: rgb(145, 51, 208);
-            opacity: 0.8!important;
-            color: #fff;
-        }
-        
     }
 }
 

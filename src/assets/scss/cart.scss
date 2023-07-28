@@ -81,7 +81,7 @@
 .product {
     background-color: #efefef;
     border-radius: 15px;
-    @include flex(row, 40px, none);
+    @include flex(row, 40px, space-between);
     height: 180px;
     width: 100%;
     cursor: pointer;

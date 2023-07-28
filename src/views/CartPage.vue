@@ -12,7 +12,9 @@ export default {
             products: [],
             userInfo: null,
             cartInfo: null,
-            currentDate: new Date()
+            currentDate: new Date(),
+            successCreate: undefined,
+            notEnoughMoney: undefined
         }
     },
 
@@ -59,8 +61,6 @@ export default {
             evt.stopPropagation()
             evt.preventDefault()
 
-            console.log(item.article);
-
             let token = 'Bearer ' + localStorage.getItem('token')
             await axios.post('/cart/remove', {
                 article: item.article
@@ -69,6 +69,8 @@ export default {
                     Authorization: token
                 }
             })
+
+            await new Promise(prom => setTimeout(prom, 1300))
 
             this.loadCart()
         },
@@ -93,6 +95,42 @@ export default {
                     article: item.article
                 }
             })
+            scrollWin()
+        },
+
+        async createOrders(evt) {
+            evt.preventDefault()
+
+            this.successCreate = false
+            this.notEnoughMoney = false
+
+            try {
+                let token = 'Bearer ' + localStorage.getItem('token')
+                await axios.post('/order/create', {
+                    products: this.products
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+
+                this.successCreate = true
+
+                await new Promise(prom => setTimeout(prom, 2000))
+
+                this.loadCart()
+
+                await new Promise(prom => setTimeout(prom, 1000))
+
+                this.$router.push({
+                    name: 'delivery'
+                })
+
+            } catch (error) {
+                if(error.response && error.response.status === 409) {
+                    this.notEnoughMoney = true
+                }
+            }
         }
     }
 }
@@ -129,7 +167,7 @@ export default {
                 <div class="oplata-menu">
                     <div class="oplata">
                         <div class="content">
-                            <span><b>Доставка в пункт выдачи</b></span><span><u>{{ getDeliver(currentDate) }}</u></span>
+                            <span><b>Доставка в пункт выдачи</b></span><span><u>{{ getDeliver(currentDate) }}</u> <span>(дата доставки может измениться)</span></span>
                             <div class="active-menu mt-4">
                                 <p>Товары, {{ products.length }} шт</p>
                                 <div class="money"><span>{{ cartInfo.totalCost }}</span><i class="fa fa-rub"></i></div>
@@ -138,7 +176,9 @@ export default {
                                 <h2><b>Итого</b></h2>
                                 <div class="money"><h2><b>{{ cartInfo.totalCost }}</b></h2><h2><b><i class="fa fa-rub"></i></b></h2></div>
                             </div>
-                            <button class="btn" :disabled="showChangeMenu">Заказать</button>
+                            <button class="btn" :disabled="showChangeMenu" @click="createOrders" >Заказать</button>
+                            <div v-if="successCreate" class="alert w-100 mt-2 text-center alert-success">Заказ прошел успешно и оплачен</div>
+                            <div v-if="notEnoughMoney" class="alert w-100 mt-2 text-center alert-danger">У вас недостаточно средств для оплаты</div>
                             <div class="check">
                                 <i class="fa fa-check"></i> <p>Соглашаюсь с <b @click="goRoute($event, 'pravilapol')">правилами пользования<br> торговой площадкой</b> и <b @click="goRoute($event, 'vozvrat')">возврата</b></p>
                             </div>

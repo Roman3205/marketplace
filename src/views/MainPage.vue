@@ -1,7 +1,6 @@
 <script>
 
 import axios from 'axios'
-import axiox from 'axios'
 import { scrollWin } from '../components/AppFooter.vue'
 
 export default {
@@ -13,7 +12,8 @@ export default {
                 '../../images/apple.jpg'
             ],
             currentIndex: 1,
-            products: []
+            productsMain: [],
+            filteredProducts: []
         }
     },
 
@@ -55,8 +55,8 @@ export default {
         },
 
         async getProducts() {
-            let response = await axios.get('/products')
-            this.products = response.data
+            let response = await axios.get('/products/all')
+            this.productsMain = response.data
         },
 
         goProduct(evt, item) {
@@ -87,12 +87,17 @@ export default {
             <div class="block-products">
                 <h2><b>Мы рекомендуем вам</b></h2>
                 <div class="content">
-                    <div class="product" v-for="(item) in  products" @click="goProduct($event, item)" >
+                    <div class="product" v-for="(item) in  productsMain" @click="goProduct($event, item)" >
                         <div class="image-prod" :style="'background: url(' + item.picture + ') no-repeat center center;'">
                             <button v-if="item.discount > 0" class="btn btn-danger" disabled>- {{ item.discount }} %</button>
                         </div>
                         <div class="rub">
-                            <h5><b>{{ item.price }}</b></h5><i class="fa fa-rub"></i>
+                            <h5><b>{{ item.price }}</b></h5>
+                            <i class="fa fa-rub"></i>
+                            <h5 v-if="item.discount > 0" :style="item.discount > 0 ? {textDecoration: 'line-through', color: 'dimgray', transform: 'scale(0.89)'} : {}">
+                                <b>{{ Number(item.price + (item.price / 100 * item.discount)).toFixed(0) }}</b>
+                            </h5>
+                            <i v-if="item.discount > 0" :style="item.discount > 0 ? {color: 'gray', transform: 'scale(0.77)', marginLeft: '-8px'} : {}" class="fa fa-rub"></i>
                         </div>
                         <p><b>{{ item.brand_id.brandName }} /</b> {{ item.title }}</p>
                     </div>

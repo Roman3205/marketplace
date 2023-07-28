@@ -35,6 +35,7 @@ export default {
 
         async LogOut(evt) {
             evt.stopPropagation()
+            await new Promise(prom => setTimeout(prom, 1300))
             this.$router.push({
                 name: 'main'
             })

@@ -26,10 +26,6 @@ export default {
         }
     },
 
-    mounted() {
-        this.checkPhone();
-    },
-
     methods: {
         toggle(evt) {
             evt.preventDefault()
