@@ -49,7 +49,7 @@
     }
 
     .content-product {
-        height: 150px;
+        height: 175px;
         transition: 0.35s;
         overflow: hidden;
     }
@@ -59,7 +59,7 @@
     }
 
     &:hover > .content-product {
-        height: 270px;
+        height: 300px;
     }
 
     p {
@@ -179,6 +179,14 @@
 
     .product {
         width: 280px;
+
+        .content-product {
+            height: 150px;
+        }
+    
+        &:hover > .content-product {
+            height: 280px;
+        }
     }
 }
 

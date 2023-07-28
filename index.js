@@ -39,7 +39,11 @@ let orderSchema = new mongoose.Schema({
         ref: 'product'
     },
     status: String,
-    money: Number
+    money: Number,
+    customer_id: {
+        type: mongoose.ObjectId,
+        ref: 'customer'
+    }
 }, {
     timestamps: true
 })
@@ -331,7 +335,7 @@ app.post('/login', async (req,res) => {
 })
 
 app.get('/main', VerifyTokenUser, async (req, res) => {
-    let customer = await Customer.findOne({ _id: req.userId })
+    let customer = await Customer.findOne({_id: req.userId})
     
     if(!customer) {
         return res.status(401).send({
@@ -516,6 +520,9 @@ app.post('/review/create', VerifyTokenUser, async (req, res) => {
         populate: {
             path: 'product_id'
         }
+    }).populate({
+        path: 'orders',
+        populate: 'product_id'
     })
 
     if(!customer) {
@@ -533,6 +540,14 @@ app.post('/review/create', VerifyTokenUser, async (req, res) => {
     if(check) {
         return res.status(409).send({
             message: 'Отзыв на данный товар уже оставлен вами'
+        })
+    }
+
+    let orders = await Order.findOne({product_id: product._id, customer_id: customer._id, status: 'Получен'})
+
+    if(!orders) {
+        return res.status(403).send({
+            message: 'Отзыв можно оставить только после покупки'
         })
     }
 
@@ -678,12 +693,14 @@ app.post('/order/create', VerifyTokenUser, async (req, res) => {
     let orders = products.map((product) => ({
         product_id: product._id,
         status: 'Создан',
-        money: product.price
+        money: product.price,
+        customer_id: customer._id
     }))
 
     let createdOrders = await Order.insertMany(orders)
 
     let getOrder = createdOrders.map((order) => order._id)
+    let amountRedemption = createdOrders.reduce((total, order) => total + order.money, 0)
 
     customer.orders.push(...getOrder)
 
@@ -691,6 +708,8 @@ app.post('/order/create', VerifyTokenUser, async (req, res) => {
         name: 'withdrawals',
         money: cart.totalCost
     })
+
+    customer.amountRedemption += amountRedemption
 
     await customer.save()
 
@@ -705,7 +724,72 @@ app.post('/order/create', VerifyTokenUser, async (req, res) => {
 app.get('/orders/all', VerifyTokenUser, async (req, res) => {
     let customer = await Customer.findOne({ _id: req.userId }).populate({
         path: 'orders',
-        populate: 'product_id'
+        populate: 'product_id',
+        match: {status: {$ne: 'Получен'}}
+    })
+
+    if(!customer) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    customer.orders.sort((a, b) => b.createdAt - a.createdAt)
+
+    res.send(customer)
+})
+
+app.post('/order/recieved', VerifyTokenUser, async(req, res) => {
+    let id = req.body.id
+
+    let customer = await Customer.findOne({ _id: req.userId })
+
+    if(!customer) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    let order = await Order.findOne({_id: id}).populate({
+        path: 'product_id',
+        populate: 'brand_id'
+    })
+
+    let changedStatus
+
+    if(order.status === 'Готов к получению') {
+        changedStatus = 'Получен'
+    } else {
+        return
+    }
+
+    order.status = changedStatus
+
+    await order.save()
+
+    order.product_id.brand_id.balance += order.money
+    order.product_id.brand_id.sold++
+    order.product_id.brand_id.activeOrders--
+
+    await order.product_id.brand_id.save()
+
+    let product = await Product.findOne({_id: order.product_id})
+
+    product.amountSold++
+
+    await product.save()
+
+    customer.boughtProducts++
+    
+    await customer.save()
+
+    res.sendStatus(200)
+})
+
+app.get('/purchases', VerifyTokenUser, async (req, res) => {
+    let customer = await Customer.findOne({ _id: req.userId }).populate({
+        path: 'orders',
+        match: {status: 'Получен'},
+        populate: {
+            path: 'product_id',
+            populate: 'brand_id'
+        }
     })
 
     if(!customer) {
@@ -714,7 +798,6 @@ app.get('/orders/all', VerifyTokenUser, async (req, res) => {
 
     res.send(customer)
 })
-
 
 
 
@@ -791,7 +874,7 @@ app.post('/login/seller', async (req, res) => {
     res.send(token)
 })
 
-app.get('/main-seller', VerifyTokenSeller, async (req, res) => {
+app.get('/seller/main', VerifyTokenSeller, async (req, res) => {
     let seller = await Seller.findOne({_id: req.sellerId})
 
     if(!seller) {
@@ -844,8 +927,8 @@ app.post('/product/create', VerifyTokenSeller, async (req, res) => {
     res.sendStatus(200)
 })
 
-app.get('/products/all', VerifyTokenSeller, async (req, res) => {
-    let seller = await Seller.findOne({_id: req.sellerId})
+app.get('/seller/products/all', VerifyTokenSeller, async (req, res) => {
+    let seller = await Seller.findOne({_id: req.sellerId}).populate('products')
 
     if(!seller) {
         return res.status(401).send({
@@ -853,9 +936,7 @@ app.get('/products/all', VerifyTokenSeller, async (req, res) => {
         })
     }
 
-    let products = await seller.populate('products')
-
-    res.send(products)
+    res.send(seller)
 })
 
 app.post('/product/remove', VerifyTokenSeller, async (req, res) => {
@@ -869,6 +950,12 @@ app.post('/product/remove', VerifyTokenSeller, async (req, res) => {
         })
     }
 
+    let check = await Order.find({product_id: id})
+
+    if(check.length > 0) {
+        return res.status(409).send('Нельзя удалить товар пока он находится в заказах у пользователей')
+    }
+
     await Product.deleteOne({_id: id})
 
     seller.products.pull(id)
@@ -876,6 +963,25 @@ app.post('/product/remove', VerifyTokenSeller, async (req, res) => {
     await seller.save()
 
     res.sendStatus(200)
+})
+
+app.get('/seller/orders/all', VerifyTokenSeller, async (req, res) => {
+    let seller = await Seller.findOne({_id: req.sellerId})
+
+    if(!seller) {
+        return res.status(401).send({
+            message: 'Вы не авторизованы'
+        })
+    }
+
+    let ordersIds = seller.products.map((product) => product._id)
+
+    let orders = await Order.find({product_id: {$in: ordersIds}, status: {$ne: 'Получен'}}).sort({createdAt: -1}).populate({
+        path: 'product_id',
+        populate: 'brand_id'
+    }).populate('customer_id')
+
+    res.send(orders)    
 })
 
 app.post('/discount/set', VerifyTokenSeller, async (req, res) => {
@@ -891,6 +997,7 @@ app.post('/discount/set', VerifyTokenSeller, async (req, res) => {
     }
 
     let product = await Product.findOne({_id: id})
+    
     product.discount = discount
     product.price = Number(product.price - (product.price / 100 * discount).toFixed(0))
 
@@ -899,7 +1006,46 @@ app.post('/discount/set', VerifyTokenSeller, async (req, res) => {
     res.sendStatus(200)
 })
 
+app.post('/seller/order/change', VerifyTokenSeller, async (req, res) => {
+    let status = req.body.status
+    let id = req.body.id
 
+    let seller = await Seller.findOne({_id: req.sellerId})
+
+    if(!seller) {
+        return res.status(401).send({
+            message: 'Вы не авторизованы'
+        })
+    }
+
+    let order = await Order.findOne({_id: id})
+
+    let changedStatus
+
+    if(status === 'Создан') {
+        changedStatus = 'Отправлен на сборку'
+        seller.activeOrders++
+        seller.orders.push(order._id)
+
+        await seller.save()
+    } else if(status === 'Отправлен на сборку') {
+        changedStatus = 'Собран'
+    } else if(status === 'Собран') {
+        changedStatus = 'Отсортирован'
+    } else if(status === 'Отсортирован') {
+        changedStatus = 'Передан в доставку'
+    } else if(status === 'Передан в доставку') {
+        changedStatus = 'Готов к получению'
+    } else {
+        return
+    }
+
+    order.status = changedStatus
+
+    await order.save()
+
+    res.sendStatus(200)
+})
 
 
 

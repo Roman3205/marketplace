@@ -34,7 +34,9 @@ export default {
             notCorrect: undefined,
             existProd: undefined,
             products: [],
-            discountSuccess: undefined
+            discountSuccess: undefined,
+            notificationTrue: undefined,
+            deleteProd: undefined
         }
     },
 
@@ -79,7 +81,7 @@ export default {
 
         async getSeller() {
             let token = 'Bearer ' + localStorage.getItem('tokenSell')
-            let response = await axios.get('/main-seller', {
+            let response = await axios.get('/seller/main', {
                 headers: {
                     Authorization: token
                 }
@@ -132,7 +134,7 @@ export default {
 
         async getProducts() {
             let token = 'Bearer ' + localStorage.getItem('tokenSell')
-            let response = await axios.get('/products/all', {
+            let response = await axios.get('/seller/products/all', {
                 headers: {
                     Authorization: token
                 }
@@ -142,20 +144,31 @@ export default {
 
         async deleteProduct(evt, item) {
             evt.preventDefault()
+            this.notificationTrue = false
+            this.deleteProd = false
 
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            try {
+                let token = 'Bearer ' + localStorage.getItem('tokenSell')
             
-            await axios.post('/product/remove', {
-                id: item._id
-            }, {
-                headers: {
-                    Authorization: token
+                await axios.post('/product/remove', {
+                    id: item._id
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+
+                this.deleteProd = true
+
+                await new Promise(prom => setTimeout(prom, 1300))
+
+                this.getProducts()
+
+            } catch (error) {
+                if(error.response && error.response.status === 409) {
+                    this.notificationTrue = true
                 }
-            })
-
-            await new Promise(prom => setTimeout(prom, 1300))
-
-            this.getProducts()
+            }
         },
 
         async setDiscount(evt) {
@@ -192,6 +205,12 @@ export default {
 
 <template>
     <div class="container" id="container-stat">
+        <div class="notification" v-if="notificationTrue">
+            <div class="alert alert-danger w-100 text-center">Нельзя удалить товар пока он находится в заказах у пользователей</div>
+        </div>
+        <div class="notification" v-if="deleteProd">
+            <div class="alert alert-success w-100 text-center">Товар удален с сайта</div>
+        </div>
         <div class="wrapper" :class="{
             'opacity': showSaleMenu || showPublicMenu
         }" >
@@ -213,7 +232,7 @@ export default {
                     <div class="statistics">
                         <h2 class="mb-4"><b>Статистика</b></h2>
                         <div class="wrapper-statistics">
-                            <h5 v-if="sellerInfo">Товаров продано: {{ sellerInfo.sold }}<b></b></h5>
+                            <h5 v-if="sellerInfo">Товаров продано: <b>{{ sellerInfo.sold }}</b></h5>
                             <h5 v-if="sellerInfo">Активных заказов: <b>{{ sellerInfo.activeOrders }}</b></h5>
                             <h5 v-if="sellerInfo">Возвратов: <b>{{ sellerInfo.returns }}</b></h5>
                             <h5 v-if="sellerInfo">Активных возвратов: <b>{{ sellerInfo.activeReturns }}</b></h5>
@@ -236,8 +255,8 @@ export default {
                     <button class="btn" @click="showPublic" ><b>Опубликовать новый товар</b></button>
                 </div>
                 <div class="container-blocks">
-                    <h5 class="mt-4" v-if="products.length == 0">У вас нет опубликованных товаров</h5>
-                    <div class="products-card" v-for="(item) in products">
+                    <h5 class="mt-4" v-if="products.products == 0">У вас нет опубликованных товаров</h5>
+                    <div class="products-card" v-for="(item) in products.products" v-if="products.products != 0">
                         <div class="info-prod p-2">
                             <div class="image-prod" :style="'background: url(' + item.picture + ') no-repeat center center; border: 2px solid gray;'">
                                 <button v-if="item.discount > 0" class="btn btn-danger" disabled>- {{ item.discount }} %</button>
@@ -259,7 +278,7 @@ export default {
         <div class="changesale" v-if="showSaleMenu">
             <i class="fa fa-times" @click="closeSale" ></i>
             <form class="content" @submit="setDiscount">
-                <h2><b>Скидка</b></h2>
+                <span class="w-100"><h2><b>Скидка</b></h2>(от текущей цены)</span>
                 <p><b>Введите только число<br> (от 5 до 90)</b></p>
                 <div class="input d-flex price">
                     <input v-model="discount" type="number" class="form-control" min="5" max="90">%

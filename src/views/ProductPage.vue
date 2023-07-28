@@ -17,7 +17,8 @@ export default {
             notCorrect: undefined,
             addSuccess: undefined,
             alreadyInCart: undefined,
-            alreadyWritten: undefined
+            alreadyWritten: undefined,
+            prodRecieved: undefined
         }
     },
 
@@ -35,12 +36,24 @@ export default {
     methods: {
         showReviewCreate(evt) {
             evt.preventDefault()
+
+            if(!localStorage.getItem('token')) {
+                this.$router.push({
+                    name: 'login'
+                })
+            }
+
             this.showReviewBar = true
             opacityEffectsOn()
         },
 
         closeReviewCreate() {
             this.showReviewBar = false
+            opacityEffectsOff()
+        },
+
+        closeMenu() {
+            this.prodRecieved = false
             opacityEffectsOff()
         },
 
@@ -77,9 +90,16 @@ export default {
         async CreateReview(evt) {
             evt.preventDefault()
 
+            if(!localStorage.getItem('token')) {
+                this.$router.push({
+                    name: 'login'
+                })
+            }
+
             this.successCreate = false
             this.alreadyWritten = false
             this.notCorrect = false
+            this.prodRecieved = false
 
             let filter = /([a-zA-Zа-яА-Я])\1{2}/;
             if (!/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputValue) || filter.test(this.inputValue)) {
@@ -108,6 +128,10 @@ export default {
                 } catch (error) {
                     if(error.response && error.response.status === 409) {
                         this.alreadyWritten = true
+                    } else if (error.response && error.response.status === 403) {
+                        this.closeReviewCreate()
+                        this.prodRecieved = true
+                        opacityEffectsOn()
                     }
                 }
             }
@@ -118,6 +142,13 @@ export default {
             this.addSuccess = false
 
             let token = 'Bearer ' + localStorage.getItem('token')
+
+            if(!localStorage.getItem('token')) {
+                this.$router.push({
+                    name: 'login'
+                })
+            }
+            
             await axios.post('/cart/add', {
                 article: this.$route.params.article
             }, {
@@ -188,7 +219,7 @@ export default {
 <template>
     <div class="container">
         <div class="wrapper" :class="{
-            'opacity': showReviewBar
+            'opacity': showReviewBar || prodRecieved
         }" >
             <div class="prod-title" v-if="product">
                 <h2><b>{{ product.brand_id.brandName }} / {{ product.title }}</b></h2>
@@ -302,16 +333,16 @@ export default {
             <div v-if="successCreate" class="w-100 mt-4 mb-2 p-2 text-center alert alert-success">Ваш отзыв успешно создан</div>
             <div v-if="alreadyWritten" class="w-100 mt-4 mb-2 p-2 text-center alert alert-danger">Вы уже оставляли отзыв на этот товар</div>
         </div>
-        <!-- <div class="write-review2" v-if="showReviewBar">
-            <i class="fa fa-times" @click="closeReviewCreate" ></i>
+        <div class="write-review2" v-if="prodRecieved">
+            <i class="fa fa-times" @click="closeMenu" ></i>
             <div class="content">
                 <h2><b>Отзыв не оставить</b></h2>
                 <div class="inp-review">
                     <p>Поделиться мнением о товаре можно только после его получения</p>
                 </div>
-                <button class="btn"  @click="closeReviewCreate" >Понятно, спасибо</button>
+                <button class="btn" @click="closeMenu" >Понятно, спасибо</button>
             </div>
-        </div> -->
+        </div>
     </div>
 </template>
 

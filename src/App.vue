@@ -79,6 +79,44 @@ export default {
     height: 35%;
   }
 
+    .notification {
+      position: fixed;
+      top: 50px;
+      right: 50px;
+      animation-name: notification;
+      animation-duration: 7.5s;
+      transform: translateX(50px);
+      opacity: 0;
+      visibility: hidden;
+  }
+
+  @keyframes notification {
+      0% {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      25% {
+          transform: translateX(-50px);
+          transition: opacity 0.2s ease, visibility 0.2s ease;
+          opacity: 1;
+          visibility: visible;
+      }
+
+      95% {
+          transform: translateX(200px);
+          transition: opacity 0.2s ease, visibility 1s ease;
+          opacity: 0;
+          visibility: hidden;
+      }
+
+      100% {
+          transform: translateX(50px);
+          opacity: 0;
+          visibility: hidden;
+      }
+  }
+
   .content-app {
     min-height: calc(100vh - 735px);
   }

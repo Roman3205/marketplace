@@ -10,7 +10,8 @@ export default {
             showDonateBar: false,
             inputValue: '',
             userInfo: null,
-            operations: []
+            operations: [],
+            successTopUp: undefined
         }
     },
 
@@ -56,6 +57,7 @@ export default {
 
         async balanceTopUp(evt) {
             evt.preventDefault()
+            this.successTopUp = false
 
             let token = 'Bearer ' + localStorage.getItem('token')
             await axios.post('/balance/topup', {
@@ -66,11 +68,14 @@ export default {
                 }
             })
 
+            this.successTopUp = true
+
             await new Promise(prom => setTimeout(prom, 1300))
             this.getUser()
             this.getOperations()
             this.inputValue = ''
             this.closeDon()
+            this.successTopUp = false
         },
 
         async getOperations() {
@@ -147,6 +152,7 @@ export default {
             'opacity': !emptyValue
         }" >Оплатить</button>
             </form>
+            <div v-if="successTopUp" class="alert mt-1 alert-success w-100 text-center">Баланс успешно пополнен</div>
         </div>
     </div>
 </template>

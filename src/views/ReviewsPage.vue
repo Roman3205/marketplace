@@ -8,7 +8,8 @@ export default {
     data() {
         return {
             inputValue: '',
-            reviews: []
+            reviews: [],
+            notificationTrue: undefined
         }
     },
 
@@ -46,6 +47,7 @@ export default {
         async deleteReview(evt, review) {
             evt.stopPropagation()
             evt.preventDefault()
+            this.notificationTrue = false
 
             let token = 'Bearer ' + localStorage.getItem('token')
             
@@ -58,7 +60,9 @@ export default {
                 }
             })
 
-            await new Promise(prom => setTimeout(prom, 1300))
+            this.notificationTrue = true
+
+            await new Promise(prom => setTimeout(prom, 1000))
 
             this.loadReviews()
         },
@@ -71,7 +75,6 @@ export default {
                     article: review.article
                 }
             })
-            scrollWin()
         },
 
         getTimeReview(date) {
@@ -85,6 +88,9 @@ export default {
 
 <template>
     <div class="container">
+        <div class="notification" v-if="notificationTrue">
+            <div class="alert alert-success w-100 text-center">Отзыв успешно удален</div>
+        </div>
         <div class="wrapper">
             <h2><b>Отзывы</b></h2>
             <div class="no-feedbacks"  v-if="reviews.reviews == 0">

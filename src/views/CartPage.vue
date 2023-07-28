@@ -14,7 +14,8 @@ export default {
             cartInfo: null,
             currentDate: new Date(),
             successCreate: undefined,
-            notEnoughMoney: undefined
+            notEnoughMoney: undefined,
+            notificationTrue: undefined
         }
     },
 
@@ -60,6 +61,7 @@ export default {
         async removeFromCart(evt, item) {
             evt.stopPropagation()
             evt.preventDefault()
+            this.notificationTrue = false
 
             let token = 'Bearer ' + localStorage.getItem('token')
             await axios.post('/cart/remove', {
@@ -70,7 +72,9 @@ export default {
                 }
             })
 
-            await new Promise(prom => setTimeout(prom, 1300))
+            this.notificationTrue = true
+
+            await new Promise(prom => setTimeout(prom, 1000))
 
             this.loadCart()
         },
@@ -139,6 +143,9 @@ export default {
 
 <template>
     <div class="container">
+        <div class="notification" v-if="notificationTrue">
+            <div class="alert alert-danger w-100 text-center">Товар успешно удален из корзины</div>
+        </div>
         <div v-if="products.length === 0" class="wrapper-no-content">
             <h2><b>В корзине пока пусто</b></h2>
             <p>Загляните на главную, чтобы выбрать товары или найдите нужное в поиске</p>

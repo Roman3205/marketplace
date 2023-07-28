@@ -36,7 +36,9 @@ export default {
             inputName: '',
             userInfo: null,
             existUser: undefined,
-            notCorrectName: undefined
+            notCorrectName: undefined,
+            successMail: undefined,
+            successName: undefined
         }
     },
 
@@ -85,6 +87,8 @@ export default {
         },
 
         async ChangeMail(evt) {
+            this.successMail = false
+
             try {
                 evt.preventDefault()
                 let token = 'Bearer ' + localStorage.getItem('token');
@@ -94,9 +98,15 @@ export default {
                         Authorization: token
                     }}
                 )
-                this.getUser()
+
+                this.successMail = true
+
+                await new Promise(prom => setTimeout(prom, 1300))
                 this.inputMail = ''
                 this.closeChange()
+                this.getUser()
+                this.successMail = false
+
             } catch (error) {
                 if(error.response && error.response.status === 409) {
                     this.existUser = true
@@ -106,6 +116,7 @@ export default {
 
         async ChangeName(evt) {
             this.notCorrectName = false
+            this.successName = false
             evt.preventDefault()
             
             let filter = /([a-zA-Zа-яА-Я])\1{1}/;
@@ -120,6 +131,10 @@ export default {
                     Authorization: token
                 }}
             )
+
+            this.successName = true
+
+            await new Promise(prom => setTimeout(prom, 1300))
             this.closeName()
             this.getUser()
             window.location.reload()
@@ -176,6 +191,7 @@ export default {
         }" >Изменить</button>
             </form>
             <div v-if="existUser" class="w-100 mt-3 text-center form__info__alert alert alert-danger">Почта уже привязана к другому аккаунту</div>
+            <div v-if="successMail" class="w-100 mt-3 text-center form__info__alert alert alert-success">Почта успешно изменена</div>
         </div>
         <div class="changename" v-if="showChangeName">
             <i class="fa fa-times" @click="closeName" ></i>
@@ -190,6 +206,7 @@ export default {
         }" >Сохранить</button>
             </form>
             <div v-if="notCorrectName" class="w-100 mt-3 text-center form__info__alert alert alert-danger">Ошибка заполнения</div>
+            <div v-if="successName" class="w-100 mt-3 text-center form__info__alert alert alert-success">Имя успешно изменено</div>
         </div>
     </div>
 </template>

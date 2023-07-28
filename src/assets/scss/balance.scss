@@ -100,8 +100,9 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 300px;
-    height: 320px;
+    width: 350px;
+    min-height: 320px;
+    height: fit-content;
     border-radius: 15px;
     background-color: #efefef;
     padding: 25px;
@@ -134,6 +135,13 @@
             border-radius: 5px;
             cursor: pointer;
         }
+    }
+
+    .alert-success {
+        padding: 20px 30px;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
     }
 
     input {
