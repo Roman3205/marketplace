@@ -1,8 +1,9 @@
 @import './sellmanage.scss';
 
 .sell-order {
-    height: 420px;
+    height: fit-content;
     padding-top: 20px;
+    padding-bottom: 35px;
 }
 
 .left-side-sell .name {
@@ -23,9 +24,13 @@
     align-items: center;
 }
 
+.left-side-sell {
+    max-width: 300px;
+}
+
 .textarea {
     align-self: flex-start;
-    width: 250px;
+    width: 280px;
 }
 
 .textarea .text {
@@ -34,8 +39,7 @@
     resize: none;
     word-wrap: break-word;
     font-size: 20px;
-    height: fit-content;
-    max-height: 297px;
+    height: 330px;
     overflow-y: auto;
     width: 100%;
     display: block;

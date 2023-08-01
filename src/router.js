@@ -25,6 +25,8 @@ import SellStatistics from './views/SellStatistics.vue'
 import SellRefunds from './views/SellRefunds.vue'
 import SellManage from './views/SellManage.vue'
 import SellChats from './views/SellChats.vue'
+import SellMessenger from './views/SellMessenger.vue'
+import CreateOrderManual from './views/CreateOrderManual.vue'
 
 let router = createRouter({
     history: createWebHistory(),
@@ -51,9 +53,9 @@ let router = createRouter({
             component: SellChats
         },
         {
-            path: '/seller/chats/messenger',
+            path: '/seller/chats/messenger/:id',
             name: 'sellmessenger',
-            component: MessengerPage
+            component: SellMessenger
         },
         {
             path: '/seller/refund',
@@ -93,6 +95,11 @@ let router = createRouter({
             path: '/services/vozvrat-tovara',
             name: 'vozvrat',
             component: VozvratPage
+        },
+        {
+            path: '/services/kak-sdelat-zakaz',
+            name: 'create-manual',
+            component: CreateOrderManual
         },
         {
             path: '/services/pravila-polzovaniya-torgovoy-ploshchadkoy',
@@ -145,7 +152,7 @@ let router = createRouter({
             component: ChatsPage
         },
         {
-            path: '/lk/chats/messenger', //:id
+            path: '/lk/chats/messenger/:id',
             name: 'messenger',
             component: MessengerPage
         },

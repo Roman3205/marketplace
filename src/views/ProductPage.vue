@@ -30,7 +30,6 @@ export default {
 
     mounted() {
         this.getParamsProduct()
-        this.checkInCart()
     },
 
     methods: {
@@ -78,13 +77,22 @@ export default {
         },
 
         async getParamsProduct() {
-            let response = await axios.get('/product', {
-                params: {
-                    article: this.$route.params.article
-                }
-            })
+            try {
+                let response = await axios.get('/product', {
+                    params: {
+                        article: this.$route.params.article
+                    }
+                })
 
-            this.product = response.data
+                this.product = response.data
+
+                this.checkInCart()
+
+            } catch (error) {
+                if(error.response && error.response.status === 404) {
+                    this.$router.push('/not-found')
+                }
+            }
         },
 
         async CreateReview(evt) {
@@ -264,8 +272,9 @@ export default {
                         <div class="rub">
                             <p><b>{{ product.price }}</b></p><i class="fa fa-rub"></i>
                         </div>
-                        <button class="btn button-buy" :disabled="showReviewBar" @click="addToCart" v-if="!alreadyInCart" >Добавить в корзину</button>
-                        <button class="btn button-cart" v-if="alreadyInCart" @click="goRoute($event, 'cart')" >Перейти в корзину</button>
+                        <button class="btn button-buy" :disabled="showReviewBar" @click="addToCart" v-if="!alreadyInCart && product.runOut == false" >Добавить в корзину</button>
+                        <button class="btn button-buy" disabled v-if="product.runOut == true" >Товар закончился на складе</button>
+                        <button class="btn button-cart" v-if="alreadyInCart && product.runOut == false" @click="goRoute($event, 'cart')" >Перейти в корзину</button>
                         <p><b>{{ getDeliver(currentDate) }}</b> доставка со склада</p>
                     </div>
                     <div v-if="addSuccess" class="w-100 text-center mt-4 alert alert-success">Товар успешно добавлен в корзину</div>

@@ -89,7 +89,7 @@ export default {
 <template>
     <div class="container">
         <div class="notification" v-if="notificationTrue">
-            <div class="alert alert-success w-100 text-center">Отзыв успешно удален</div>
+            <div class="alert alert-info w-100 text-center">Отзыв успешно удален</div>
         </div>
         <div class="wrapper">
             <h2><b>Отзывы</b></h2>

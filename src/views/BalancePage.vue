@@ -99,6 +99,8 @@ export default {
                 return 'Баланс пополнен на ' + item.money + ' (пополнение)'
             } else if(item.name === 'withdrawals') {
                 return 'С баланаса списано ' + item.money + ' (оплата заказа)'
+            } else if(item.name === 'refund') {
+                return 'Баланс пополнен на ' + item.money + ' (возврат товара)'
             } else {
                 return ''
             }
@@ -124,15 +126,16 @@ export default {
                 </div>
             </div>
             <div class="history">
-                <div class="no-history" v-if="operations.operations == 0">
+                <div class="no-history" v-if="operations.length == 0">
                     <p>Операций по балансу пока нет</p>
                     <p>После совершения первой операции, покажем ее здесь</p>
                 </div>
-                <div class="transactions" v-if="operations.operations != 0">
+                <div class="transactions" v-if="operations.length != 0">
                     <div class="alert"><span><h2><b>Дата</b></h2></span><span><h2><b>Операция</b></h2></span></div>
-                    <div v-for="(item) in operations.operations" class="alert" :class="{
+                    <div v-for="(item) in operations" class="alert" :class="{
                         'alert-success': item.name === 'replenishment',
-                        'alert-danger': item.name === 'withdrawals'
+                        'alert-danger': item.name === 'withdrawals',
+                        'alert-primary': item.name === 'refund'
                     }"><span class="no-wrap">{{ getTime(item.createdAt) }}</span><span>{{ operationValue(item) }}</span></div>
                 </div>
             </div>

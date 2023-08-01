@@ -35,8 +35,8 @@ export default {
             existProd: undefined,
             products: [],
             discountSuccess: undefined,
-            notificationTrue: undefined,
-            deleteProd: undefined
+            deleteProd: undefined,
+            recycleProd: undefined
         }
     },
 
@@ -86,6 +86,7 @@ export default {
                     Authorization: token
                 }
             })
+
             this.sellerInfo = response.data
         },
 
@@ -144,31 +145,44 @@ export default {
 
         async deleteProduct(evt, item) {
             evt.preventDefault()
-            this.notificationTrue = false
             this.deleteProd = false
 
-            try {
-                let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            let token = 'Bearer ' + localStorage.getItem('tokenSell')
             
-                await axios.post('/product/remove', {
-                    id: item._id
-                }, {
-                    headers: {
-                        Authorization: token
-                    }
-                })
-
-                this.deleteProd = true
-
-                await new Promise(prom => setTimeout(prom, 1300))
-
-                this.getProducts()
-
-            } catch (error) {
-                if(error.response && error.response.status === 409) {
-                    this.notificationTrue = true
+            await axios.post('/product/remove', {
+                id: item._id
+            }, {
+                headers: {
+                    Authorization: token
                 }
-            }
+            })
+
+            this.deleteProd = true
+
+            await new Promise(prom => setTimeout(prom, 1300))
+
+            this.getProducts()
+        },
+
+        async returnCurrentProduct(evt, item) {
+            evt.preventDefault()
+            this.recycleProd = false
+
+            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            
+            await axios.post('/product/return/sell', {
+                id: item._id
+            }, {
+                headers: {
+                    Authorization: token
+                }
+            })
+
+            this.recycleProd = true
+
+            await new Promise(prom => setTimeout(prom, 1300))
+
+            this.getProducts()
         },
 
         async setDiscount(evt) {
@@ -205,11 +219,11 @@ export default {
 
 <template>
     <div class="container" id="container-stat">
-        <div class="notification" v-if="notificationTrue">
-            <div class="alert alert-danger w-100 text-center">Нельзя удалить товар пока он находится в заказах у пользователей</div>
-        </div>
         <div class="notification" v-if="deleteProd">
-            <div class="alert alert-success w-100 text-center">Товар удален с сайта</div>
+            <div class="alert alert-info w-100 text-center">Товар теперь имеет статус "Закончился на складе", продажи оставновлены</div>
+        </div>
+        <div class="notification" v-if="recycleProd">
+            <div class="alert alert-info w-100 text-center">Продажи вашего товара возобновлены</div>
         </div>
         <div class="wrapper" :class="{
             'opacity': showSaleMenu || showPublicMenu
@@ -269,7 +283,8 @@ export default {
                         </div>
                         <div class="manage-prod">
                             <button class="btn btn-outline-success" @click="showSale($event, item)" ><b>Повесить скидку</b></button>
-                            <button class="btn btn-outline-danger" @click="deleteProduct($event, item)"><b>Удалить<i class="fa fa-trash"></i></b></button>
+                            <button v-if="item.runOut == false" class="btn btn-outline-danger" @click="deleteProduct($event, item)"><b>Товар закончился<i class="fa fa-trash"></i></b></button>
+                            <button v-if="item.runOut == true" class="btn btn-outline-primary" @click="returnCurrentProduct($event, item)"><b>Возобновить продажу<i class="fa fa-recycle"></i></b></button>
                         </div>
                     </div>
                 </div>

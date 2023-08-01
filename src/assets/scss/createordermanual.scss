@@ -1,0 +1,23 @@
+@import './oplata.scss';
+
+img {
+    width: 100%;
+    border: 3px solid lightgray;
+}
+
+.wrapper, .blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding-bottom: 50px;
+}
+
+.blocks {
+    gap: 100px;
+    padding-bottom: 0;
+
+    p {
+        margin-bottom: 0;
+        line-height: 50px;
+    }
+}

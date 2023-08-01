@@ -26,7 +26,7 @@ export default {
 
   methods: {
     handleScroll() {
-      const position = document.documentElement.scrollTop
+      let position = document.documentElement.scrollTop
 
       if (position > 400) {
         this.showScroll = true
@@ -61,7 +61,7 @@ export default {
         <div class="footer-col">
           <h2>Покупателям</h2>
           <ul>
-            <li>Как сделать заказ</li>
+            <li @click="goRoute($event, 'create-manual')">Как сделать заказ</li>
             <li @click="goRoute($event, 'sposob')" >Способы оплаты</li>
             <li @click="goRoute($event, 'vozvrat')" >Возврат товара</li>
             <li @click="goRoute($event, 'pravilapol')" >Правила пользования<br> торговой площадкой</li>

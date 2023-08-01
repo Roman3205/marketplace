@@ -1,7 +1,7 @@
 <script>
 
-import axios from 'axios'
-import dayjs from 'dayjs'
+import axios from 'axios';
+import dayjs from 'dayjs';
 
 export default {
     data() {
@@ -26,34 +26,25 @@ export default {
 
     methods: {
         async loadInfo() {
-            try {
-                let token = 'Bearer ' + localStorage.getItem('token')
+            let token = 'Bearer ' + localStorage.getItem('tokenSell')
 
-                let response = await axios.get('/user/chat', {
-                    params: {
-                        id: this.$route.params.id
-                    },
-                        
-                    headers: {
-                        Authorization: token
-                    }
-                })
-
-                this.information = response.data.chat
-                this.messages = response.data.messages
-                this.to = this.information[0].people[0]._id
-
-                this.$nextTick(() => {
-                    this.scrollToBottom()
-                })
-            } catch (error) {
-                if(error.response && error.response.status === 404) {
-                    this.$router.push('/not-found')
+            let response = await axios.get('/seller/chat', {
+                params: {
+                    id: this.$route.params.id
+                },
                     
-                } else if(error.response && error.response.status === 409) {
-                    this.$router.push('/not-found')
+                headers: {
+                    Authorization: token
                 }
-            }
+            })
+
+            this.information = response.data.chat
+            this.messages = response.data.messages
+            this.to = this.information[0].people[0]._id
+
+            this.$nextTick(() => {
+                this.scrollToBottom()
+            })
         },
 
         scrollToBottom() {
@@ -64,10 +55,10 @@ export default {
         async sendMessage(evt) {
             evt.preventDefault()
 
-            let token = 'Bearer ' + localStorage.getItem('token')
+            let token = 'Bearer ' + localStorage.getItem('tokenSell')
 
             if(this.text !== '') {
-                await axios.post('/user/message/send', {
+                await axios.post('/seller/message/send', {
                     text: this.text,
                     to: this.to,
                     id: this.$route.params.id
@@ -98,7 +89,7 @@ export default {
             <div class="block-box">
                 <div class="info-user">
                     <div class="user-chat" v-if="information">
-                        <b>{{ information[0].people[0].brandName }}</b>
+                        <b>{{ information[0].people[0].name }}</b>
                     </div>
                 </div>
                 <div class="messages-container">

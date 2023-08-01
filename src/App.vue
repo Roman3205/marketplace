@@ -84,10 +84,11 @@ export default {
       top: 50px;
       right: 50px;
       animation-name: notification;
-      animation-duration: 7.5s;
+      animation-duration: 8s;
       transform: translateX(50px);
       opacity: 0;
       visibility: hidden;
+      cursor: pointer;
   }
 
   @keyframes notification {
@@ -96,22 +97,16 @@ export default {
         visibility: hidden;
       }
 
-      25% {
+      50% {
           transform: translateX(-50px);
           transition: opacity 0.2s ease, visibility 0.2s ease;
           opacity: 1;
           visibility: visible;
       }
 
-      95% {
+      70% {
           transform: translateX(200px);
           transition: opacity 0.2s ease, visibility 1s ease;
-          opacity: 0;
-          visibility: hidden;
-      }
-
-      100% {
-          transform: translateX(50px);
           opacity: 0;
           visibility: hidden;
       }

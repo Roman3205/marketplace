@@ -22,6 +22,7 @@ export default {
                     Authorization: token
                 }
             })
+            
             this.orders = response.data
         },
 

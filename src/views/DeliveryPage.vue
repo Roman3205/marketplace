@@ -37,6 +37,8 @@ export default {
             })
 
             this.orders = response.data
+
+            this.totalPrice = 0
             
             for(let i = 0; i < this.orders.orders.length; i++) {
                 this.totalPrice += this.orders.orders[i].money

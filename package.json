@@ -1,5 +1,5 @@
 {
-  "name": "sneakers-app",
+  "name": "marketplace",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -19,7 +19,8 @@
     "mongoose": "^7.3.1",
     "nodemon": "^2.0.22",
     "vue": "^3.3.2",
-    "vue-router": "^4.2.2"
+    "vue-router": "^4.2.2",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

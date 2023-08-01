@@ -2,6 +2,7 @@
 
 import axios from 'axios'
 import { scrollWin } from '../components/AppFooter.vue'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -13,7 +14,7 @@ export default {
             ],
             currentIndex: 1,
             productsMain: [],
-            filteredProducts: []
+            productsTrend: []
         }
     },
 
@@ -24,7 +25,12 @@ export default {
     computed: {
         currentImage() {
             return this.images[this.currentIndex]
-        }
+        },
+
+        ...mapGetters(['filteredProducts']),
+        ...mapGetters(['inputValueState']),
+        ...mapGetters(['categoryState']),
+        ...mapGetters(['categoryFilteredProducts'])
     },
 
     methods: {
@@ -45,18 +51,20 @@ export default {
         },
 
         async changeSlidePrev() {
-            await new Promise(prom => setTimeout(prom, 550))
+            await new Promise(prom => setTimeout(prom, 450))
             this.prevSlide()
         },
 
         async changeSlideNext() {
-            await new Promise(prom => setTimeout(prom, 550))
+            await new Promise(prom => setTimeout(prom, 450))
             this.nextSlide()
         },
 
         async getProducts() {
             let response = await axios.get('/products/all')
             this.productsMain = response.data
+
+            this.productsTrend = this.productsMain.filter(product => product.amountSold > 10)
         },
 
         goProduct(evt, item) {
@@ -68,6 +76,28 @@ export default {
                 }
             })
             scrollWin()
+        },
+
+        productsText() {
+            let count = this.filteredProducts.length
+            if (count === 1) {
+                return 'товар'
+            } else if (count > 1 && count <= 4) {
+                return 'товара'
+            } else {
+                return 'товаров'
+            }
+        },
+
+        categoryProducts() {
+            let count = this.categoryFilteredProducts.length
+            if (count === 1) {
+                return 'товар'
+            } else if (count > 1 && count <= 4) {
+                return 'товара'
+            } else {
+                return 'товаров'
+            }
         }
     }
 }
@@ -77,14 +107,60 @@ export default {
 <template>
     <div class="container">
         <div class="wrapper">
-            <div class="slider">
+            <div class="results" v-if="categoryState && categoryFilteredProducts.length == 0">
+                <h2><b>{{ categoryState }}</b></h2>
+                <p class="ms-5 mt-5">Ничего не найдено</p>
+            </div>
+            <div class="search-result" v-if="categoryState && categoryFilteredProducts.length != 0">
+                <h2><b>{{ categoryState }}</b> <span style="font-size: 19px;">{{ categoryFilteredProducts.length }} {{ categoryProducts() }}</span></h2>
+                <div class="content mt-4">
+                    <div class="product" v-for="(item) in  categoryFilteredProducts" @click="goProduct($event, item)" >
+                        <div class="image-prod" :style="'background: url(' + item.picture + ') no-repeat center center;'">
+                            <button v-if="item.discount > 0" class="btn btn-danger" disabled>- {{ item.discount }} %</button>
+                        </div>
+                        <div class="rub">
+                            <h5><b>{{ item.price }}</b></h5>
+                            <i class="fa fa-rub"></i>
+                            <h5 v-if="item.discount > 0" :style="item.discount > 0 ? {textDecoration: 'line-through', color: 'dimgray', transform: 'scale(0.89)'} : {}">
+                                <b>{{ Number(item.price + (item.price / 100 * item.discount)).toFixed(0) }}</b>
+                            </h5>
+                            <i v-if="item.discount > 0" :style="item.discount > 0 ? {color: 'gray', transform: 'scale(0.77)', marginLeft: '-8px'} : {}" class="fa fa-rub"></i>
+                        </div>
+                        <p><b>{{ item.brand_id.brandName }} /</b> {{ item.title }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="results" v-if="inputValueState && filteredProducts.length == 0">
+                <h2><b>Результаты поиска</b></h2>
+                <p class="ms-5 mt-5">Ничего не найдено</p>
+            </div>
+            <div class="search-result" v-if="inputValueState && filteredProducts.length != 0">
+                <h2><b>По вашему запросу "{{ inputValueState }}" найдено</b><span class="ms-4" style="font-size: 19px;">{{ filteredProducts.length }} {{ productsText() }}</span></h2>
+                <div class="content mt-4">
+                    <div class="product" v-for="(item) in  filteredProducts" @click="goProduct($event, item)" >
+                        <div class="image-prod" :style="'background: url(' + item.picture + ') no-repeat center center;'">
+                            <button v-if="item.discount > 0" class="btn btn-danger" disabled>- {{ item.discount }} %</button>
+                        </div>
+                        <div class="rub">
+                            <h5><b>{{ item.price }}</b></h5>
+                            <i class="fa fa-rub"></i>
+                            <h5 v-if="item.discount > 0" :style="item.discount > 0 ? {textDecoration: 'line-through', color: 'dimgray', transform: 'scale(0.89)'} : {}">
+                                <b>{{ Number(item.price + (item.price / 100 * item.discount)).toFixed(0) }}</b>
+                            </h5>
+                            <i v-if="item.discount > 0" :style="item.discount > 0 ? {color: 'gray', transform: 'scale(0.77)', marginLeft: '-8px'} : {}" class="fa fa-rub"></i>
+                        </div>
+                        <p><b>{{ item.brand_id.brandName }} /</b> {{ item.title }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slider" v-if="inputValueState === '' && categoryState === ''">
                 <button class="slider-button" @click="changeSlidePrev"><i class="fa fa-arrow-left"></i></button>
                 <div v-if="images.length">
                     <img :src="currentImage"/>
                 </div>
                 <button class="slider-button" @click="changeSlideNext"><i class="fa fa-arrow-right"></i></button>
             </div>
-            <div class="block-products">
+            <div class="block-products" v-if="inputValueState === '' && categoryState === ''">
                 <h2><b>Мы рекомендуем вам</b></h2>
                 <div class="content">
                     <div class="product" v-for="(item) in  productsMain" @click="goProduct($event, item)" >
@@ -103,17 +179,22 @@ export default {
                     </div>
                 </div>
             </div>
-            <div class="block-products">
+            <div class="block-products" v-if="inputValueState === '' && categoryState === ''">
                 <h2><b>Хиты продаж</b></h2>
                 <div class="content">
-                    <div class="product" v-for="index in 10">
-                        <div class="image-prod" style="background: url('https://basket-09.wb.ru/vol1302/part130277/130277706/images/c246x328/1.jpg') no-repeat center center;">
-                            <button class="btn btn-danger" disabled>-74%</button>
+                    <div class="product" v-for="(item) in  productsTrend" @click="goProduct($event, item)" >
+                        <div class="image-prod" :style="'background: url(' + item.picture + ') no-repeat center center;'">
+                            <button v-if="item.discount > 0" class="btn btn-danger" disabled>- {{ item.discount }} %</button>
                         </div>
                         <div class="rub">
-                            <h5><b>1 253</b></h5><i class="fa fa-rub"></i>
+                            <h5><b>{{ item.price }}</b></h5>
+                            <i class="fa fa-rub"></i>
+                            <h5 v-if="item.discount > 0" :style="item.discount > 0 ? {textDecoration: 'line-through', color: 'dimgray', transform: 'scale(0.89)'} : {}">
+                                <b>{{ Number(item.price + (item.price / 100 * item.discount)).toFixed(0) }}</b>
+                            </h5>
+                            <i v-if="item.discount > 0" :style="item.discount > 0 ? {color: 'gray', transform: 'scale(0.77)', marginLeft: '-8px'} : {}" class="fa fa-rub"></i>
                         </div>
-                        <p><b>BrandName</b> Наушники</p>
+                        <p><b>{{ item.brand_id.brandName }} /</b> {{ item.title }}</p>
                     </div>
                 </div>
             </div>

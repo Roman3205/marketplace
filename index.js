@@ -157,6 +157,11 @@ let refundSchema = new mongoose.Schema({
     },
     albumLink: String,
     text: String,
+    returnMoney: Boolean,
+    order_id: {
+        type: mongoose.ObjectId,
+        ref: 'order'
+    },
     author_id: {
         type: mongoose.ObjectId,
         ref: 'customer'
@@ -178,6 +183,7 @@ let productSchema = new mongoose.Schema({
     amountSold: Number,
     discount: Number,
     picture: String,
+    runOut: Boolean,
     brand_id: {
         type: mongoose.ObjectId,
         ref: 'seller'
@@ -203,7 +209,8 @@ let chatSchema = new mongoose.Schema ({
     messages: [{
         type: mongoose.ObjectId,
         ref: 'message'
-    }]
+    }],
+    uniqueId: Number
 }, {
     timestamps: true
 })
@@ -241,12 +248,12 @@ let VerifyTokenSeller = (req, res, next) => {
     const token = req.headers.authorization
 
     if(!token) {
-        return res.status(401).json('Вы не авторизованы')
+        return res.status(401).send('Вы не авторизованы')
     }
 
     jwt.verify(token.replace('Bearer ', ''), 'seller', (error, decoded) => {
         if(error) {
-            return res.status(401).json('Вы не авторизованы')
+            return res.status(401).send('Вы не авторизованы')
         }
 
         req.sellerId = decoded._id
@@ -266,6 +273,26 @@ let CreateArticle = async () => {
         let existArticle = await Product.findOne({article: article})
         if(!existArticle) {
             return article
+        }
+    }
+}
+
+let CreateUniqueChatId = async () => {
+    while(true) {
+        let chatId = getRandomArticle()
+        let existId = await Chat.findOne({uniqueId: chatId})
+        if(!existId) {
+            return chatId
+        }
+    }
+}
+
+let CreateUniqueRefundId = async () => {
+    while(true) {
+        let refundId = getRandomArticle()
+        let existRefundId = await Refund.findOne({uniqueNumber: refundId})
+        if(!existRefundId) {
+            return refundId
         }
     }
 }
@@ -316,17 +343,13 @@ app.post('/login', async (req,res) => {
     let customer = await Customer.findOne({mail: mail})
 
     if(!customer) {
-        return res.status(404).send({
-            message: 'Аккаунт пользователя не найден'
-        })
+        return res.status(404).send('Аккаунт пользователя не найден')
     }
 
     let passwordCheck = await bcrypt.compare(password, customer.password)
 
     if(!passwordCheck) {
-        return res.status(400).send({
-            message: 'Неверные данные'
-        }) 
+        return res.status(400).send('Неверные данные') 
     }
 
     let token = jwt.sign({_id: customer._id}, 'user')
@@ -335,12 +358,10 @@ app.post('/login', async (req,res) => {
 })
 
 app.get('/main', VerifyTokenUser, async (req, res) => {
-    let customer = await Customer.findOne({_id: req.userId})
-    
+    let customer = await Customer.findOne({ _id: req.userId })
+
     if(!customer) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
     
     res.send(customer)
@@ -357,16 +378,14 @@ app.post('/mail/change', VerifyTokenUser, async (req, res) => {
     let customer = await Customer.findOne({ _id: req.userId })
 
     if(!customer) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     customer.mail = mail
 
     await customer.save()
 
-    return res.status(200).json({ message: 'Почта успешно изменена' })
+    return res.status(200).send('Почта успешно изменена')
 })
 
 app.post('/name/change', VerifyTokenUser, async (req, res) => {
@@ -375,16 +394,14 @@ app.post('/name/change', VerifyTokenUser, async (req, res) => {
     let customer = await Customer.findOne({ _id: req.userId })
 
     if(!customer) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     customer.name = name
 
     await customer.save()
 
-    return res.status(200).json({ message: 'Имя успешно изменено' })
+    res.sendStatus(200)
 })
 
 app.get('/products/all', async (req, res) => {
@@ -408,6 +425,10 @@ app.get('/product', async (req, res) => {
         }
     }).populate('brand_id')
 
+    if(!product) {
+        return res.status(404).send('Такого товара не найдено')
+    }
+
     res.send(product)
 })
 
@@ -417,9 +438,7 @@ app.post('/balance/topup', VerifyTokenUser, async (req, res) => {
     let customer = await Customer.findOne({_id: req.userId})
 
     if(!customer) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     customer.balance += money
@@ -438,14 +457,12 @@ app.get('/balance/operations', VerifyTokenUser, async (req, res) => {
     let customer = await Customer.findOne({_id: req.userId}).populate('operations')
 
     if(!customer) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
-    customer.operations.sort((a, b) => b.createdAt - a.createdAt)
+    let data = customer.operations.sort((a, b) => b.createdAt - a.createdAt)
 
-    res.send(customer)
+    res.send(data)
 })
 
 app.get('/reviews/all', VerifyTokenUser, async (req, res) => {
@@ -463,24 +480,19 @@ app.get('/reviews/all', VerifyTokenUser, async (req, res) => {
     customer.reviews.sort((a, b) => b.createdAt - a.createdAt)
 
     if(!customer) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     res.send(customer)
 })
 
 app.post('/review/remove', VerifyTokenUser, async (req, res) => {
-    let article = req.body.article
-    let id = req.body.id
+    let { article, id } = req.body
 
     let customer = await Customer.findOne({_id: req.userId}).populate('reviews')
 
     if(!customer) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     await Review.deleteOne({_id: id})
@@ -511,9 +523,7 @@ app.post('/review/remove', VerifyTokenUser, async (req, res) => {
 })
 
 app.post('/review/create', VerifyTokenUser, async (req, res) => {
-    let article = req.body.article
-    let text = req.body.text
-    let rating = req.body.rating
+    let { article, text, rating } = req.body
 
     let customer = await Customer.findOne({_id: req.userId}).populate({
         path: 'reviews',
@@ -526,9 +536,7 @@ app.post('/review/create', VerifyTokenUser, async (req, res) => {
     })
 
     if(!customer) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     let product = await Product.findOne({article: article}).populate('reviews')
@@ -538,17 +546,13 @@ app.post('/review/create', VerifyTokenUser, async (req, res) => {
     })
 
     if(check) {
-        return res.status(409).send({
-            message: 'Отзыв на данный товар уже оставлен вами'
-        })
+        return res.status(409).send('Отзыв на данный товар уже оставлен вами')
     }
 
     let orders = await Order.findOne({product_id: product._id, customer_id: customer._id, status: 'Получен'})
 
     if(!orders) {
-        return res.status(403).send({
-            message: 'Отзыв можно оставить только после покупки'
-        })
+        return res.status(403).send('Отзыв можно оставить только после покупки')
     }
 
     let review = new Review({
@@ -589,9 +593,7 @@ app.post('/cart/add', VerifyTokenUser, async (req, res) => {
     let customer = await Customer.findOne({ _id: req.userId }).populate('cart_id')
 
     if(!customer) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
         
     let product = await Product.findOne({article: article})
@@ -612,9 +614,7 @@ app.post('/cart/remove', VerifyTokenUser, async (req, res) => {
     let customer = await Customer.findOne({_id: req.userId}).populate('cart_id')
 
     if(!customer) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     let product = await Product.findOne({article: article})
@@ -682,7 +682,19 @@ app.post('/order/create', VerifyTokenUser, async (req, res) => {
         return res.status(401).send('Вы не авторизованы')
     }
 
-    let cart = await Cart.findOne({_id: customer.cart_id})
+    let cart = await Cart.findOne({_id: customer.cart_id}).populate('products')
+
+    let check = cart.products.some(product => {
+        return product.runOut == true
+    })
+
+    if(check) {
+        let runOutProducts = cart.products.filter(product => product.runOut == true)
+        return res.status(400).send({
+            message: 'Товар в корзине закончился',
+            data: runOutProducts
+        })
+    }
 
     customer.balance = customer.balance - cart.totalCost
 
@@ -796,13 +808,321 @@ app.get('/purchases', VerifyTokenUser, async (req, res) => {
         return res.status(401).send('Вы не авторизованы')
     }
 
+    customer.orders.sort((a, b) => b.createdAt - a.createdAt)
+
     res.send(customer)
 })
 
+app.post('/chat/create', VerifyTokenUser, async (req, res) => {
+    let id = req.body.id
 
+    let customer = await Customer.findOne({_id: req.userId})
 
+    if(!customer) {
+        return res.status(401).send('Вы не авторизованы')
+    }
 
+    let check = await Chat.findOne({people: {$all: [id, customer._id]}})
 
+    if(check) {
+        return res.status(409).send('Чат уже создан')
+    }
+
+    let chat = new Chat({
+        people: [id, customer._id,],
+        messages: [],
+        uniqueId: await CreateUniqueChatId()
+    })
+
+    await chat.save()
+
+    customer.chats.push(chat._id)
+
+    await customer.save()
+
+    let seller = await Seller.findOne({_id: id})
+
+    seller.chats.push(chat._id)
+
+    await seller.save()
+
+    res.sendStatus(200)
+})
+
+app.get('/chats/all', VerifyTokenUser, async (req, res) => {
+    let customer = await Customer.findOne({_id: req.userId})
+
+    if(!customer) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    let chats = await Chat.aggregate([
+        {
+            $match: {people: customer._id}
+        },
+
+        {
+            $lookup: {
+                from: 'sellers',
+                localField: 'people',
+                foreignField: '_id',
+                as: 'seller'
+            }
+        },
+
+        {
+            $unwind: '$seller'
+        },
+
+        {
+            $replaceRoot: {
+                newRoot: {
+                    _id: '$_id',
+                    people: [
+                        {
+                            _id: '$seller._id',
+                            brandName: '$seller.brandName'
+                        }
+                    ],
+                    messages: '$messages',
+                    uniqueId: '$uniqueId',
+                    createdAt: '$createdAt',
+                    updatedAt: '$updatedAt'
+                }
+            }
+        },
+    ])
+
+    res.send(chats)
+})
+
+app.get('/user/chat', VerifyTokenUser, async (req, res) => {
+    let id = req.query.id
+
+    let customer = await Customer.findOne({_id: req.userId})
+
+    if(!customer) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    let messages = await Chat.findOne({uniqueId: id}).populate('messages')
+
+    let chat = await Chat.aggregate([
+        {
+            $match: {
+                $and: [
+                    { people: customer._id },
+                    { uniqueId: Number(id) }
+                ]
+            }
+        },
+
+        {
+            $lookup: {
+                from: 'sellers',
+                localField: 'people',
+                foreignField: '_id',
+                as: 'seller'
+            }
+        },
+
+        {
+            $unwind: '$seller'
+        },
+
+        {
+            $replaceRoot: {
+                newRoot: {
+                    _id: '$_id',
+                    people: [
+                        {
+                            _id: '$seller._id',
+                            brandName: '$seller.brandName'
+                        }
+                    ],
+                    messages: '$messages',
+                    uniqueId: '$uniqueId',
+                    createdAt: '$createdAt',
+                    updatedAt: '$updatedAt'
+                }
+            }
+        },
+    ])
+
+    if(chat.length == 0) {
+        return res.status(404).send('Чат не найден')
+    }
+
+    let check = await Customer.findOne({_id: customer._id, chats: {$in: messages._id}})
+
+    if(!check) {
+        return res.status(409).send('Вы не являетесь участником данного чата')
+    }
+
+    res.send({chat, messages})
+})
+
+app.post('/user/message/send', VerifyTokenUser, async (req, res) => {
+    let { text, to, id } = req.body
+
+    let customer = await Customer.findOne({ _id: req.userId })
+
+    if(!customer) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    let message = new Message({
+        from: customer._id,
+        to: to,
+        text: text
+    })
+
+    await message.save()
+
+    let chat = await Chat.findOne({uniqueId: id})
+
+    chat.messages.push(message._id)
+
+    await chat.save()
+
+    res.sendStatus(200)
+})
+
+app.post('/refund/create', VerifyTokenUser, async (req, res) => {
+    let productId = req.body.productId
+    let sellerId = req.body.sellerId
+    let orderId = req.body.orderId
+
+    let customer = await Customer.findOne({_id: req.userId})
+
+    if(!customer) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    let check = await Refund.findOne({order_id: orderId})
+
+    if(check) {
+        return res.status(409).send('Возврат на этот заказ уже создан')
+    }
+
+    let refund = new Refund({
+        status: 'Ожидает заполнения',
+        uniqueNumber: await CreateUniqueRefundId(),
+        product_id: productId,
+        order_id: orderId,
+        albumLink: '',
+        text: '',
+        returnMoney: false,
+        author_id: customer._id
+    })
+
+    await refund.save()
+
+    customer.refunds.push(refund._id)
+
+    await customer.save()
+
+    let seller = await Seller.findOne({_id: sellerId})
+
+    seller.refunds.push(refund._id)
+
+    await seller.save()
+
+    res.sendStatus(200)
+})
+
+app.get('/refund/all', VerifyTokenUser, async (req, res) => {
+    let customer = await Customer.findOne({_id: req.userId}).populate({
+        path: 'refunds',
+        match: {status: {$ne: 'Завершен'}}
+    })
+
+    if(!customer) {
+        res.status(401).send('Вы не авторизованы')
+    }
+
+    let data = customer.refunds.sort((a, b) => b.createdAt - a.createdAt)
+
+    res.send(data)
+})
+
+app.get('/refund', VerifyTokenUser, async (req, res) => {
+    let id = req.query.id
+
+    let customer = await Customer.findOne({_id: req.userId}).populate('refunds')
+
+    if(!customer) {
+        res.status(401).send('Вы не авторизованы')
+    }
+
+    let refund = await Refund.findOne({_id: id}).populate({
+        path: 'product_id',
+        populate: 'brand_id'
+    })
+
+    res.send(refund)
+})
+
+app.post('/refund/fill', VerifyTokenUser, async (req, res) => {
+    let { id, albumLink, text } = req.body
+
+    let customer = await Customer.findOne({_id: req.userId}).populate('refunds')
+
+    if(!customer) {
+        res.status(401).send('Вы не авторизованы')
+    }
+
+    let refund = await Refund.findOne({_id: id})
+
+    refund.albumLink = albumLink
+    refund.text = text
+    refund.status = 'Ожидает подтверждения'
+
+    await refund.save()
+
+    res.sendStatus(200)
+})
+
+app.post('/refund/return/money', VerifyTokenUser, async (req, res) => {
+    let id = req.body.id
+
+    let customer = await Customer.findOne({_id: req.userId})
+
+    if(!customer) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    let refund = await Refund.findOne({_id: id}).populate({
+        path: 'product_id',
+        populate: 'brand_id'
+    })
+
+    if(refund.returnMoney) {
+        return res.status(409).send('Средства уже возвращены')
+    }
+
+    refund.returnMoney = true
+
+    await refund.save()
+
+    let seller = await Seller.findOne({_id: refund.product_id.brand_id._id})
+
+    seller.balance -= refund.product_id.price
+    seller.returns++
+    seller.activeReturns--
+
+    await seller.save()
+
+    customer.balance += refund.product_id.price
+    customer.operations.push({
+        name: 'refund',
+        money: refund.product_id.price
+    })
+
+    await customer.save()
+
+    res.sendStatus(200)
+})
 
 app.post('/logout', async (req, res) => {
     res.clearCookie('user-jwt', {
@@ -856,17 +1176,13 @@ app.post('/login/seller', async (req, res) => {
     let seller = await Seller.findOne({mail: mail})
 
     if(!seller) {
-        return res.status(404).send({
-            message: 'Аккаунт продавца не найден'
-        })
+        return res.status(404).send('Аккаунт продавца не найден')
     }
 
     let passwordCheck = await bcrypt.compare(password, seller.password)
 
     if(!passwordCheck) {
-        return res.status(400).send({
-            message: 'Неверные данные'
-        }) 
+        return res.status(400).send('Неверные данные') 
     }
 
     let token = jwt.sign({_id: seller._id}, 'seller')
@@ -878,9 +1194,7 @@ app.get('/seller/main', VerifyTokenSeller, async (req, res) => {
     let seller = await Seller.findOne({_id: req.sellerId})
 
     if(!seller) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     res.send(seller)
@@ -892,9 +1206,7 @@ app.post('/product/create', VerifyTokenSeller, async (req, res) => {
     let seller = await Seller.findOne({_id: req.sellerId})
 
     if(!seller) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     let check = await Product.findOne({$or: [{description: description}, {picture: picture}]})
@@ -913,6 +1225,7 @@ app.post('/product/create', VerifyTokenSeller, async (req, res) => {
         article: await CreateArticle(),
         amountSold: 0,
         discount: 0,
+        runOut: false,
         picture: picture,
         brand_id: seller._id,
         reviews: []
@@ -931,9 +1244,7 @@ app.get('/seller/products/all', VerifyTokenSeller, async (req, res) => {
     let seller = await Seller.findOne({_id: req.sellerId}).populate('products')
 
     if(!seller) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     res.send(seller)
@@ -945,22 +1256,30 @@ app.post('/product/remove', VerifyTokenSeller, async (req, res) => {
     let seller = await Seller.findOne({_id: req.sellerId})
 
     if(!seller) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
-    let check = await Order.find({product_id: id})
+    let product = await Product.findOne({_id: id})
+    product.runOut = true
 
-    if(check.length > 0) {
-        return res.status(409).send('Нельзя удалить товар пока он находится в заказах у пользователей')
+    await product.save()
+
+    res.sendStatus(200)
+})
+
+app.post('/product/return/sell', VerifyTokenSeller, async (req, res) => {
+    let id = req.body.id
+
+    let seller = await Seller.findOne({_id: req.sellerId})
+
+    if(!seller) {
+        return res.status(401).send('Вы не авторизованы')
     }
 
-    await Product.deleteOne({_id: id})
+    let product = await Product.findOne({_id: id})
+    product.runOut = false
 
-    seller.products.pull(id)
-
-    await seller.save()
+    await product.save()
 
     res.sendStatus(200)
 })
@@ -969,9 +1288,7 @@ app.get('/seller/orders/all', VerifyTokenSeller, async (req, res) => {
     let seller = await Seller.findOne({_id: req.sellerId})
 
     if(!seller) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     let ordersIds = seller.products.map((product) => product._id)
@@ -985,15 +1302,12 @@ app.get('/seller/orders/all', VerifyTokenSeller, async (req, res) => {
 })
 
 app.post('/discount/set', VerifyTokenSeller, async (req, res) => {
-    let id = req.body.id
-    let discount = req.body.discount
+    let { id, discount } = req.body
 
     let seller = await Seller.findOne({_id: req.sellerId})
 
     if(!seller) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     let product = await Product.findOne({_id: id})
@@ -1007,15 +1321,12 @@ app.post('/discount/set', VerifyTokenSeller, async (req, res) => {
 })
 
 app.post('/seller/order/change', VerifyTokenSeller, async (req, res) => {
-    let status = req.body.status
-    let id = req.body.id
+    let { status, id } = req.body
 
     let seller = await Seller.findOne({_id: req.sellerId})
 
     if(!seller) {
-        return res.status(401).send({
-            message: 'Вы не авторизованы'
-        })
+        return res.status(401).send('Вы не авторизованы')
     }
 
     let order = await Order.findOne({_id: id})
@@ -1047,9 +1358,204 @@ app.post('/seller/order/change', VerifyTokenSeller, async (req, res) => {
     res.sendStatus(200)
 })
 
+app.get('/seller/refunds/all', VerifyTokenSeller, async (req, res) => {
+    let seller = await Seller.findOne({_id: req.sellerId}).populate({
+        path: 'refunds',
+        populate: [
+            {
+                path: 'product_id'
+            },
+            {
+                path: 'author_id'
+            }
+        ],
+        match: {status: {$not: {$in: ['Завершен', 'Ожидает заполнения']}}}
+    })
 
+    if(!seller) {
+        return res.status(401).send('Вы не авторизованы')
+    }
 
+    let data = seller.refunds.sort((a, b) => b.createdAt - a.createdAt)
 
+    res.send(data)    
+})
+
+app.post('/seller/refund/change', VerifyTokenSeller, async (req, res) => {
+    let { status, id } = req.body
+
+    let seller = await Seller.findOne({_id: req.sellerId})
+
+    if(!seller) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    let refund = await Refund.findOne({_id: id})
+
+    let changedStatus
+
+    if(status === 'Ожидает подтверждения') {
+        changedStatus = 'В рассмотрении'
+        seller.activeReturns++
+
+        await seller.save()
+    } else if(status === 'Одобрен') {
+        changedStatus = 'Одобрен'
+    } else if(status === 'Отказан') {
+        changedStatus = 'Отказан'
+        seller.returns++
+        seller.activeReturns--
+    
+        await seller.save()
+    } else {
+        return
+    }
+
+    refund.status = changedStatus
+
+    await refund.save()
+
+    res.sendStatus(200)
+})
+
+app.get('/seller/chats/all', VerifyTokenSeller, async (req, res) => {
+    let seller = await Seller.findOne({_id: req.sellerId})
+
+    if(!seller) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    let chats = await Chat.aggregate([
+        {
+            $match: {people: seller._id}
+        },
+
+        {
+            $lookup: {
+                from: 'customers',
+                localField: 'people',
+                foreignField: '_id',
+                as: 'customer'
+            }
+        },
+
+        {
+            $unwind: "$customer"
+        },
+
+        {
+            $replaceRoot: {
+                newRoot: {
+                    _id: "$_id",
+                    people: [
+                        {
+                            _id: "$customer._id",
+                            name: "$customer.name"
+                        }
+                    ],
+                    messages: '$messages',
+                    uniqueId: '$uniqueId',
+                    createdAt: "$createdAt",
+                    updatedAt: "$updatedAt"
+                }
+            }
+        }
+    ])
+
+    res.send(chats)
+})
+
+app.get('/seller/chat', VerifyTokenSeller, async (req, res) => {
+    let id = req.query.id
+
+    let seller = await Seller.findOne({_id: req.sellerId})
+
+    if(!seller) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    let messages = await Chat.findOne({uniqueId: id}).populate('messages')
+
+    let chat = await Chat.aggregate([
+        {
+            $match: {
+                $and: [
+                    { people: seller._id },
+                    { uniqueId: Number(id) }
+                ]
+            }
+        },
+
+        {
+            $lookup: {
+                from: 'customers',
+                localField: 'people',
+                foreignField: '_id',
+                as: 'customer'
+            }
+        },
+
+        {
+            $unwind: '$customer'
+        },
+
+        {
+            $replaceRoot: {
+                newRoot: {
+                    _id: '$_id',
+                    people: [
+                        {
+                            _id: '$customer._id',
+                            name: '$customer.name'
+                        }
+                    ],
+                    messages: '$messages',
+                    uniqueId: '$uniqueId',
+                    createdAt: '$createdAt',
+                    updatedAt: '$updatedAt'
+                }
+            }
+        },
+    ])
+
+    if(!chat) {
+        return res.status(404).send('Чат не найден')
+    }
+
+    let check = await Seller.findOne({_id: seller._id, chats: {$in: messages._id}})
+
+    if(!check) {
+        return res.status(409).send('Вы не являетесь участником данного чата')
+    }
+
+    res.send({chat, messages})
+})
+
+app.post('/seller/message/send', VerifyTokenSeller, async (req, res) => {
+    let { text, to, id } = req.body
+
+    let seller = await Seller.findOne({ _id: req.sellerId })
+
+    if(!seller) {
+        return res.status(401).send('Вы не авторизованы')
+    }
+
+    let message = new Message({
+        from: seller._id,
+        to: to,
+        text: text
+    })
+
+    await message.save()
+
+    let chat = await Chat.findOne({uniqueId: id})
+
+    chat.messages.push(message._id)
+
+    await chat.save()
+
+    res.sendStatus(200)
+})
 
 app.post('/logout/seller', async (req, res) => {
     res.clearCookie('user-jwt', {

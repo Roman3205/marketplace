@@ -24,14 +24,14 @@
 }
 
 .chats-container {
-    margin-top: 50px;
+    margin-top: 62px;
     display: flex;
     flex-direction: column;
     gap: 15px;
     text-align: center;
     height: auto;
     width: 1100px;
-    align-self: center;
+    justify-content: flex-start;
     padding: 0px 5px 5px 0px;
 }
 
@@ -53,6 +53,7 @@
     justify-content: space-between;
     padding: 5px 40px;
     align-items: center;
+
     cursor: pointer;
 
     h5, h6 {
@@ -74,7 +75,7 @@
     display: none;
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 1500px) {
     .wrapper {
         flex-direction: column;
     }
@@ -98,12 +99,12 @@
     }
 
     .chats-container {
-        padding-left: 40px;
-        padding-right: 40px;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
     .chat-block {
-        padding: 30px;
+        padding: 30px 5px;
 
         h6 {
             display: none;

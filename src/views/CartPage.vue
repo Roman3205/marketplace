@@ -1,7 +1,7 @@
 <script>
 
 import { scrollWin } from '../components/AppFooter.vue'
-import { opacityEffectsOff, opacityEffectsOn } from './InfoDetails.vue'
+import { opacityEffectsOn, opacityEffectsOff } from './InfoDetails.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
 
@@ -15,7 +15,9 @@ export default {
             currentDate: new Date(),
             successCreate: undefined,
             notEnoughMoney: undefined,
-            notificationTrue: undefined
+            notificationTrue: undefined,
+            runOutProd: undefined,
+            titleRunOut: null
         }
     },
 
@@ -107,6 +109,7 @@ export default {
 
             this.successCreate = false
             this.notEnoughMoney = false
+            this.runOutProd = false
 
             try {
                 let token = 'Bearer ' + localStorage.getItem('token')
@@ -133,6 +136,11 @@ export default {
             } catch (error) {
                 if(error.response && error.response.status === 409) {
                     this.notEnoughMoney = true
+                } else if(error.response && error.response.status === 400) {
+                    this.runOutProd = true
+                    this.titleRunOut = error.response.data.data.map(product => (
+                        'Товар ' + "'" + product.title + "'" + ' в вашей корзине закончился'
+                    )).join(', ')
                 }
             }
         }
@@ -144,7 +152,10 @@ export default {
 <template>
     <div class="container">
         <div class="notification" v-if="notificationTrue">
-            <div class="alert alert-danger w-100 text-center">Товар успешно удален из корзины</div>
+            <div class="alert alert-info w-100 text-center">Товар успешно удален из корзины</div>
+        </div>
+        <div class="notification" v-if="runOutProd">
+            <div v-if="titleRunOut" class="alert alert-info w-100 text-center">{{ titleRunOut }}</div>
         </div>
         <div v-if="products.length === 0" class="wrapper-no-content">
             <h2><b>В корзине пока пусто</b></h2>

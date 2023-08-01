@@ -9,7 +9,11 @@ export default {
         return {
             purchases: [],
             searchInput: '',
-            searchPurchases: []
+            searchPurchases: [],
+            notificationTrue: undefined,
+            existChat: undefined,
+            notificationRefundTrue: undefined,
+            existRefund: undefined
         }
     },
 
@@ -43,7 +47,6 @@ export default {
             let purchases = response.data
             let regex = new RegExp(this.searchInput, 'i')
             this.searchPurchases = purchases.orders.filter((order) => regex.test(order.product_id.title) || regex.test(order.product_id.article))
-            console.log(this.searchPurchases);
         },
 
         async loadPurchases() {
@@ -55,6 +58,60 @@ export default {
             })
 
             this.purchases = response.data
+        },
+
+        async createChat(evt, item) {
+            evt.preventDefault()
+            evt.stopPropagation()
+            this.notificationTrue = false
+            this.existChat = false
+
+            try {
+                let token = 'Bearer ' + localStorage.getItem('token')
+                
+                await axios.post('/chat/create', {
+                    id: item.product_id.brand_id
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+
+                this.notificationTrue = true
+
+            } catch (error) {
+                if(error.response && error.response.status === 409) {
+                    this.existChat = true
+                }
+            }
+        },
+
+        async createRefund(evt, item) {
+            evt.preventDefault()
+            evt.stopPropagation()
+            this.notificationRefundTrue = false
+            this.existRefund = false
+
+            try {
+                let token = 'Bearer ' + localStorage.getItem('token')
+
+                await axios.post('/refund/create', {
+                    productId: item.product_id._id,
+                    sellerId: item.product_id.brand_id._id,
+                    orderId: item._id
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+
+                this.notificationRefundTrue = true
+
+            } catch (error) {
+                if(error.response && error.response.status === 409) {
+                    this.existRefund = true
+                }
+            }
         },
 
         goProduct(evt, item) {
@@ -79,6 +136,18 @@ export default {
 
 <template>
     <div class="container">
+        <div class="notification" v-if="existRefund">
+            <div class="alert alert-danger w-100 text-center">Возврат на данный заказ уже создан</div>
+        </div>
+        <div class="notification" v-if="notificationRefundTrue">
+            <div class="alert alert-success w-100 text-center">Возврат данного заказа создан</div>
+        </div>
+        <div class="notification" v-if="existChat">
+            <div class="alert alert-danger w-100 text-center">Чат с продавцом данного товара уже создан</div>
+        </div>
+        <div class="notification" v-if="notificationTrue">
+            <div class="alert alert-success w-100 text-center">Чат с продавцом создан</div>
+        </div>
         <div class="wrapper">
             <h2><b>Покупки</b></h2>
             <div class="orders">
@@ -92,8 +161,8 @@ export default {
                 <div class="results" v-if="searchInput && searchPurchases.length != 0">
                     <h2 class="ms-5"><b>Результаты поиска</b></h2>
                     <div class="content mt-4">
-                        <div class="product" v-for="(item) in searchPurchases" @click="goProduct($event, item)" >
-                            <div class="image-prod" :style="'background: url(' + item.product_id.picture + ') no-repeat center center;'">
+                        <div class="product" v-for="(item) in searchPurchases">
+                            <div class="image-prod" @click="goProduct($event, item)" :style="'background: url(' + item.product_id.picture + ') no-repeat center center;'">
                             </div>
                             <div class="content-product">
                                 <div class="rub">
@@ -103,18 +172,16 @@ export default {
                                 <div class="active">
                                     <p>Заказан: {{ getTime(item.createdAt) }}</p>
                                     <p>Получен: {{ getTime(item.updatedAt) }}</p>
-                                    <!-- <button class="create-chat hover">Создать чат с продавцом</button>
-                                    <button class="create-chat hover mt-4">Оформить возврат</button> -->
-                                    <button class="create-chat" disabled style="pointer-events: none;">Чат создан</button>
-                                    <button class="create-chat mt-4" disabled style="pointer-events: none;">Возврат создан</button>
+                                    <button class="create-chat hover" @click="createChat($event, item)" >Чат с продавцом</button>
+                                    <button class="create-chat hover mt-4">Возврат</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="content" v-if="!searchInput">
-                    <div class="product" v-for="(item) in purchases.orders" @click="goProduct($event, item)" >
-                        <div class="image-prod" :style="'background: url(' + item.product_id.picture + ') no-repeat center center;'">
+                    <div class="product" v-for="(item) in purchases.orders">
+                        <div class="image-prod" @click="goProduct($event, item)" :style="'background: url(' + item.product_id.picture + ') no-repeat center center;'">
                         </div>
                         <div class="content-product">
                             <div class="rub">
@@ -124,10 +191,8 @@ export default {
                             <div class="active">
                                 <p>Заказан: {{ getTime(item.createdAt) }}</p>
                                 <p>Получен: {{ getTime(item.updatedAt) }}</p>
-                                <!-- <button class="create-chat hover">Создать чат с продавцом</button>
-                                <button class="create-chat hover mt-4">Оформить возврат</button> -->
-                                <button class="create-chat" disabled style="pointer-events: none;">Чат создан</button>
-                                <button class="create-chat mt-4" disabled style="pointer-events: none;">Возврат создан</button>
+                                <button class="create-chat hover" @click="createChat($event, item)" >Чат с продавцом</button>
+                                <button class="create-chat hover mt-4" @click="createRefund($event, item)">Возврат</button>
                             </div>
                         </div>
                     </div>

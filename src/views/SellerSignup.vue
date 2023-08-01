@@ -173,4 +173,5 @@ export default {
 
 <style scoped lang="scss">
     @import '../assets/scss/sellsignup.scss';
+    
 </style>

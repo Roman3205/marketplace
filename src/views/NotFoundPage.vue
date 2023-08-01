@@ -4,7 +4,7 @@ export default {
     methods: {
         goMain(evt) {
             evt.preventDefault()
-            this.$router.go(-1)
+            this.$router.push('/')
         }
     }
 }

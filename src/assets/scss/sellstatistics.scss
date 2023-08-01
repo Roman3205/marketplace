@@ -167,7 +167,8 @@ textarea {
         }
     }
 
-    .btn-outline-danger b {
+    .btn-outline-danger b,
+    .btn-outline-primary b {
         display: flex;
         justify-content: center;
         align-items: center;

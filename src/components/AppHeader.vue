@@ -2,40 +2,52 @@
 
 import axios from 'axios'
 import { scrollWin } from './AppFooter.vue'
+import { mapActions } from 'vuex'
 
 export default {
     data() {
         return {
             isOpenMenu: false,
             userInfo: null,
-            products: [],
             searchInput: '',
-            categoryFilterProducts: []
+            categoryFilterProducts: [],
+            products: []
         }
     },
 
     mounted() {
-        this.getUser();
+        this.getUser()
+        this.getProductsAll()
     },
 
     watch: {
         searchInput: {
-            handler: 'searchProducts',
-            immediate: true
+            handler: 'searchProducts'
         }
     },
 
     methods: {
         goRoute(evt, routeTo) {
-            evt.preventDefault()
-            this.$router.push({
-                name: routeTo
-            })
-            scrollWin()
+            if(routeTo === 'main') {
+                this.searchProductsFunction([])
+                this.saveInputValue('')
+                this.setFilteredCategory([])
+                this.getCategory('')
+                evt.preventDefault()
+                this.$router.push({
+                    name: 'main'
+                })
+                scrollWin()
+            } else {
+                evt.preventDefault()
+                this.$router.push({
+                    name: routeTo
+                })
+                scrollWin()
+            }
         },
 
-        openMenu(evt) {
-            evt.preventDefault()
+        openMenu() {
             this.isOpenMenu = true
             document.documentElement.querySelector('.appear-menu').classList.add('open-menu')
             document.documentElement.querySelector('.content-app').style.opacity = '0.4'
@@ -45,8 +57,7 @@ export default {
             scrollWin()
         },
 
-        closeMenu(evt) {
-            evt.preventDefault()
+        closeMenu() {
             this.isOpenMenu = false
             document.documentElement.querySelector('.appear-menu').classList.remove('open-menu')
             document.documentElement.querySelector('.content-app').style.opacity = '1'
@@ -57,32 +68,56 @@ export default {
         },
 
         async getUser() {
-            let token = 'Bearer ' + localStorage.getItem('token');
-            let response = await axios.get('/main', {
-                headers: {
-                    Authorization: token
-                }
-            })
-            this.userInfo = response.data
+            if(!localStorage.getItem('tokenSell')) {
+                let token = 'Bearer ' + localStorage.getItem('token')
+                let response = await axios.get('/main', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+                
+                this.userInfo = response.data
+            }
+        },
+
+        async getProductsAll() {
+            if(!localStorage.getItem('tokenSell')) {
+                let response = await axios.get('/products/all')
+                this.products = response.data
+            }
         },
 
         async searchProducts() {
-            let response = await axios.get('/products/all')
-            let products = response.data
-            let regex = new RegExp(this.searchInput, 'i')
-            this.products = products.filter((product) => regex.test(product.title))
-            console.log(this.products)
+            if(this.searchInput !== '') {
+                this.$router.push('/')
+                this.setFilteredCategory([])
+                this.getCategory('')
+                let regex = new RegExp(this.searchInput, 'i')
+                let filterProducts = this.products.filter((product) => regex.test(product.title))
+                this.searchProductsFunction(filterProducts)
+                this.saveInputValue(this.searchInput)
+            }
         },
 
         async categoryFilter(evt, category) {
             evt.preventDefault()
+            this.$router.push('/')
+            this.searchInput = ''
+            this.searchProductsFunction([])
+            this.saveInputValue('')
+            this.categoryFilterProducts = this.products.filter((product) => product.category === category)
+            this.setFilteredCategory(this.categoryFilterProducts)
+            this.getCategory(category)
 
-            let response = await axios.get('/products/all')
-            let products = response.data
+            await new Promise(prom => setTimeout(prom, 100))
 
-            this.categoryFilterProducts = products.filter((product) => product.category === category)
-            console.log(this.categoryFilterProducts);
-        }
+            this.closeMenu()
+        },
+
+        ...mapActions(['searchProductsFunction']),
+        ...mapActions(['saveInputValue']),
+        ...mapActions(['setFilteredCategory']),
+        ...mapActions(['getCategory'])
     }
 }
 

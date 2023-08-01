@@ -1,6 +1,48 @@
 <script>
+
+import { scrollWin } from '../components/AppFooter.vue';
+import dayjs from 'dayjs'
+import axios from 'axios'
+
 export default {
-    
+    data() {
+        return {
+            chats: []
+        }
+    },
+
+    mounted() {
+        this.loadChats()
+    },
+
+    methods: {
+        async loadChats() {
+            let token = 'Bearer ' + localStorage.getItem('token')
+
+            let response = await axios.get('/chats/all', {
+                headers: {
+                    Authorization: token
+                }
+            })
+
+            this.chats = response.data
+        },
+
+        getTime(date) {
+            let day = dayjs(date)
+            return day.format('HH:mm')
+        },
+
+        goChat(evt, item) {
+            evt.preventDefault()
+            this.$router.push({
+                name: 'messenger',
+                params: {
+                    id: item.uniqueId
+                }
+            })
+        }
+    }
 }
 
 </script>
@@ -15,31 +57,15 @@ export default {
                     <img src="../../images/picchats.jpg" width="200" alt="">
                 </div>
             </div>
-            <div class="chats-container">
-                <!-- <p>Пока у вас нет никаких чатов</p> -->
-                <div class="chat-block">
+            <p v-if="chats.length == 0">Пока у вас нет никаких чатов</p>
+            <div class="chats-container" v-if="chats.length != 0">
+                <div class="chat-block" v-for="(item) in chats" @click="goChat($event, item)" >
                     <div class="user">
                         <img src="../../images/operator.jpg" width="70" alt="">
-                        <h2><b>Ozon</b></h2>
+                        <h2><b>{{ item.people[0].brandName }}</b></h2>
                     </div>
                     <h6>Нажмите на чат, чтобы войти в переписку</h6>
-                    <h5><b>11:05</b></h5>
-                </div>
-                <div class="chat-block">
-                    <div class="user">
-                        <img src="../../images/operator.jpg" width="70" alt="">
-                        <h2><b>Ozon</b></h2>
-                    </div>
-                    <h6>Нажмите на чат, чтобы войти в переписку</h6>
-                    <h5><b>11:05</b></h5>
-                </div>
-                <div class="chat-block">
-                    <div class="user">
-                        <img src="../../images/operator.jpg" width="70" alt="">
-                        <h2><b>Ozon</b></h2>
-                    </div>
-                    <h6>Нажмите на чат, чтобы войти в переписку</h6>
-                    <h5><b>11:05</b></h5>
+                    <h5><b>{{ getTime(item.updatedAt) }}</b></h5>
                 </div>
             </div>
             <h6 class="disnone">Нажмите на чат, чтобы войти в переписку</h6>
