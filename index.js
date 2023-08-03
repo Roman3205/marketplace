@@ -354,6 +354,11 @@ app.post('/login', async (req,res) => {
 
     let token = jwt.sign({_id: customer._id}, 'user')
 
+    // res.cookie('tokenUser', token, {
+    //     httpOnly: true,
+    //     maxAge: 24 * 60 * 60 * 1000
+    // })
+
     res.send(token)
 })
 
@@ -1125,11 +1130,11 @@ app.post('/refund/return/money', VerifyTokenUser, async (req, res) => {
 })
 
 app.post('/logout', async (req, res) => {
-    res.clearCookie('user-jwt', {
+    res.clearCookie('tokenUser', {
         httpOnly: true,
         maxAge: 0,
         sameSite: 'none'
-    });
+    })
 
     res.sendStatus(200)
 })
