@@ -1,4 +1,5 @@
 <script>
+console.log(document.cookie);
 import { RouterView } from 'vue-router';
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
@@ -107,7 +108,7 @@ export default {
           visibility: visible;
       }
 
-      70% {
+      80% {
           transform: translateX(200px);
           transition: opacity 0.2s ease, visibility 1s ease;
           opacity: 0;

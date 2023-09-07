@@ -1,6 +1,7 @@
 import axios from 'axios'
 // заменить переменными окружения
 axios.defaults.baseURL = 'http://' + 'localhost' + ':' + 3333
+axios.defaults.withCredentials = true
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'

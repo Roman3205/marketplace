@@ -106,6 +106,9 @@ export default {
 <template>
     <div class="container">
         <div class="wrapper">
+            <div class="notification">
+            <div class="alert alert-info w-100 text-center">Товар успешно удален из корзины</div>
+        </div>
             <div class="results" v-if="categoryState && categoryFilteredProducts.length == 0">
                 <h2><b>{{ categoryState }}</b></h2>
                 <p class="ms-5 mt-5">Ничего не найдено</p>

@@ -361,10 +361,10 @@ app.post('/login', async (req,res) => {
 
     let token = jwt.sign({_id: customer._id}, 'user')
 
-    // res.cookie('tokenUser', token, {
-    //     httpOnly: true,
-    //     maxAge: 24 * 60 * 60 * 1000
-    // })
+    res.cookie('tokenUser', token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000
+    })
 
     res.send(token)
 })
