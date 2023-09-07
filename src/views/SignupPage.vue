@@ -58,7 +58,7 @@ export default {
             this.successReg = false
             this.existMail = false
 
-            let filter = /([a-zA-Zа-яА-Я])\1{1}/;
+            let filter = /([a-zA-Zа-яА-Я])\1{2}/;
 
             if (this.name === '' || this.mail === '' || this.password === '' || this.confirmPassword === '') {
                 this.emptyFields = true
@@ -66,7 +66,7 @@ export default {
                 this.notCorrectName = true
             } else if (!/^[А-Яа-я\s,'-.!" "?]+$/.test(this.name)) {
                 this.notCorrectLetters = true
-            } else if (this.mail.length < 13 || this.mail.length > 35 || filter.test(this.mail)) {
+            } else if (this.mail.length < 13 || this.mail.length > 50 || filter.test(this.mail)) {
                 this.notCorrectMail = true
             } else if (this.password.length < 7) {
                 this.notCorrectPassword = true
@@ -132,6 +132,7 @@ export default {
 				<button class="form__submit submit-button" type="submit">Зарегистрироваться</button>
                 <div class="form__info">
                     <a @click="goLogin" href="">Уже есть аккаунт?</a>
+                    <!-- заменить-->
                     <div v-if="emptyFields" class="w-100 text-center form__info__alert alert alert-danger">Заполните все поля</div>
                     <div v-if="notCorrectName" class="w-100 text-center form__info__alert alert alert-danger">Введите корректно свое имя</div>
                     <div v-if="notCorrectMail" class="w-100 text-center form__info__alert alert alert-danger">Введите корректно свою почту</div>

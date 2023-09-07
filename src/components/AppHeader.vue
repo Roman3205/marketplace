@@ -11,7 +11,26 @@ export default {
             userInfo: null,
             searchInput: '',
             categoryFilterProducts: [],
-            products: []
+            products: [],
+            categoriesArray: [
+                'Верхняя одежда',
+                'Обувь',
+                'Товары для дома',
+                'Аксессуары',
+                'Электроника',
+                'Игрушки',
+                'Мебель',
+                'Продукты',
+                'Бытовая техника',
+                'Зоотовары',
+                'Спорт',
+                'Автотовары',
+                'Школа',
+                'Книги',
+                'Ювелирные изделия',
+                'Здоровье',
+                'Сад и дача'
+            ]
         }
     },
 
@@ -120,28 +139,11 @@ export default {
         ...mapActions(['getCategory'])
     }
 }
-
 </script>
 <template>
     <div class="appear-menu">
         <div class="categories">
-            <div class="category-item" @click="categoryFilter($event, 'Верхняя одежда')">Верхняя одежда</div>
-            <div class="category-item" @click="categoryFilter($event, 'Обувь')">Обувь</div>
-            <div class="category-item" @click="categoryFilter($event, 'Товары для дома')">Товары для дома</div>
-            <div class="category-item" @click="categoryFilter($event, 'Аксессуары')">Аксессуары</div>
-            <div class="category-item" @click="categoryFilter($event, 'Электроника')">Электроника</div>
-            <div class="category-item" @click="categoryFilter($event, 'Игрушки')">Игрушки</div>
-            <div class="category-item" @click="categoryFilter($event, 'Мебель')">Мебель</div>
-            <div class="category-item" @click="categoryFilter($event, 'Продукты')">Продукты</div>
-            <div class="category-item" @click="categoryFilter($event, 'Бытовая техника')">Бытовая техника</div>
-            <div class="category-item" @click="categoryFilter($event, 'Зоотовары')">Зоотовары</div>
-            <div class="category-item" @click="categoryFilter($event, 'Спорт')">Спорт</div>
-            <div class="category-item" @click="categoryFilter($event, 'Автотовары')">Автотовары</div>
-            <div class="category-item" @click="categoryFilter($event, 'Школа')">Школа</div>
-            <div class="category-item" @click="categoryFilter($event, 'Книги')">Книги</div>
-            <div class="category-item" @click="categoryFilter($event, 'Ювелирные изделия')">Ювелирные изделия</div>
-            <div class="category-item" @click="categoryFilter($event, 'Здоровье')">Здоровье</div>
-            <div class="category-item" @click="categoryFilter($event, 'Сад и дача')">Сад и дача</div>
+            <div class="category-item" v-for="item in categoriesArray" @click="categoryFilter($event, item)">{{ item }}</div>
         </div>
         <i class="fa fa-times" @click="closeMenu" ></i>
     </div>

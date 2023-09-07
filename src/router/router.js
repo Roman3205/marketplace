@@ -1,32 +1,32 @@
 import { createRouter, createWebHistory } from "vue-router";
-import SignupPage from './views/SignupPage.vue'
-import LoginPage from  './views/LoginPage.vue'
-import MainPage from './views/MainPage.vue'
-import OplataPage from './views/OplataPage.vue'
-import VozvratPage from './views/VozvratPage.vue'
-import PravilaPol from './views/PravilaPol.vue'
-import PravilaPr from './views/PravilaPr.vue'
-import SellLogin from './views/SellerLog.vue'
-import SellSignup from  './views/SellerSignup.vue'
-import NotFoundPage from './views/NotFoundPage.vue'
-import LkPage from './views/LkPage.vue'
-import BalancePage from './views/BalancePage.vue'
-import AboutUs from './views/AboutUs.vue'
-import InfoDetails from './views/InfoDetails.vue'
-import ChatsPage from './views/ChatsPage.vue'
-import MessengerPage from './views/MessengerPage.vue'
-import ProductPage from './views/ProductPage.vue'
-import CartPage from './views/CartPage.vue'
-import ReviewsPage from './views/ReviewsPage.vue'
-import OrdersPage from './views/OrdersPage.vue'
-import ReturnPage from './views/ReturnPage.vue'
-import DeliveryPage from './views/DeliveryPage.vue'
-import SellStatistics from './views/SellStatistics.vue'
-import SellRefunds from './views/SellRefunds.vue'
-import SellManage from './views/SellManage.vue'
-import SellChats from './views/SellChats.vue'
-import SellMessenger from './views/SellMessenger.vue'
-import CreateOrderManual from './views/CreateOrderManual.vue'
+import SignupPage from '../views/SignupPage.vue'
+import LoginPage from  '../views/LoginPage.vue'
+import MainPage from '../views/MainPage.vue'
+import OplataPage from '../views/OplataPage.vue'
+import VozvratPage from '../views/VozvratPage.vue'
+import PravilaPol from '../views/PravilaPol.vue'
+import PravilaPr from '../views/PravilaPr.vue'
+import SellLogin from '../views/SellerLog.vue'
+import SellSignup from  '../views/SellerSignup.vue'
+import NotFoundPage from '../views/NotFoundPage.vue'
+import LkPage from '../views/LkPage.vue'
+import BalancePage from '../views/BalancePage.vue'
+import AboutUs from '../views/AboutUs.vue'
+import InfoDetails from '../views/InfoDetails.vue'
+import ChatsPage from '../views/ChatsPage.vue'
+import MessengerPage from '../views/MessengerPage.vue'
+import ProductPage from '../views/ProductPage.vue'
+import CartPage from '../views/CartPage.vue'
+import ReviewsPage from '../views/ReviewsPage.vue'
+import OrdersPage from '../views/OrdersPage.vue'
+import ReturnPage from '../views/ReturnPage.vue'
+import DeliveryPage from '../views/DeliveryPage.vue'
+import SellStatistics from '../views/SellStatistics.vue'
+import SellRefunds from '../views/SellRefunds.vue'
+import SellManage from '../views/SellManage.vue'
+import SellChats from '../views/SellChats.vue'
+import SellMessenger from '../views/SellMessenger.vue'
+import CreateOrderManual from '../views/CreateOrderManual.vue'
 
 let router = createRouter({
     history: createWebHistory(),
@@ -180,40 +180,38 @@ let router = createRouter({
 })
 
 router.beforeEach((from, to, next) => {
+    let token = localStorage.getItem('token')
+    let tokenSell = localStorage.getItem('tokenSell')
+
+    let securityLogin = [
+        'lk',
+        'cart',
+        'reviews',
+        'messenger',
+        'chats',
+        'refund',
+        'delivery',
+        'orders',
+        'details',
+        'balance'
+    ]
+
+    let securityLoginSeller = [
+        'statistics',
+        'sellrefund',
+        'sellchats',
+        'sellmessenger',
+        'manage'
+    ]
+
     if (
-        !localStorage.getItem('token') && from.name === 'lk' ||
-        !localStorage.getItem('token') && from.name === 'cart' ||
-        !localStorage.getItem('token') && from.name === 'reviews' ||
-        !localStorage.getItem('token') && from.name === 'messenger' ||
-        !localStorage.getItem('token') && from.name === 'chats' ||
-        !localStorage.getItem('token') && from.name === 'refund' ||
-        !localStorage.getItem('token') && from.name === 'delivery' ||
-        !localStorage.getItem('token') && from.name === 'orders' ||
-        !localStorage.getItem('token') && from.name === 'details' ||
-        !localStorage.getItem('token') && from.name === 'balance' ||
-        localStorage.getItem('tokenSell') && from.name === 'lk' ||
-        localStorage.getItem('tokenSell') && from.name === 'cart' ||
-        localStorage.getItem('tokenSell') && from.name === 'reviews' ||
-        localStorage.getItem('tokenSell') && from.name === 'messenger' ||
-        localStorage.getItem('tokenSell') && from.name === 'chats' ||
-        localStorage.getItem('tokenSell') && from.name === 'refund' ||
-        localStorage.getItem('tokenSell') && from.name === 'delivery' ||
-        localStorage.getItem('tokenSell') && from.name === 'orders' ||
-        localStorage.getItem('tokenSell') && from.name === 'details' ||
-        localStorage.getItem('tokenSell') && from.name === 'balance'
+        (!token && securityLogin.includes(from.name)) || 
+        (tokenSell && securityLogin.includes(from.name))
     ) {
         router.push('/security/login')
     } else if (
-        !localStorage.getItem('token') && !localStorage.getItem('tokenSell') && from.name === 'statistics' ||
-        !localStorage.getItem('token') && !localStorage.getItem('tokenSell') && from.name === 'sellrefund' ||
-        !localStorage.getItem('token') && !localStorage.getItem('tokenSell') && from.name === 'sellchats' ||
-        !localStorage.getItem('token') && !localStorage.getItem('tokenSell') && from.name === 'sellmessenger' ||
-        !localStorage.getItem('token') && !localStorage.getItem('tokenSell') && from.name === 'manage' ||
-        localStorage.getItem('token') && from.name === 'statistics' ||
-        localStorage.getItem('token') && from.name === 'sellrefund' ||
-        localStorage.getItem('token') && from.name === 'sellchats' ||
-        localStorage.getItem('token') && from.name === 'sellmessenger' ||
-        localStorage.getItem('token') && from.name === 'manage'
+        (!token && !tokenSell && securityLoginSeller.includes(from.name)) ||
+        (token && securityLoginSeller.includes(from.name))
     ) {
         router.push('/seller/login')
     } else {

@@ -1,5 +1,4 @@
 <script>
-
 import axios from 'axios'
 import { scrollWin } from '../components/AppFooter.vue'
 import { mapGetters } from 'vuex'
@@ -181,7 +180,8 @@ export default {
             </div>
             <div class="block-products" v-if="inputValueState === '' && categoryState === ''">
                 <h2><b>Хиты продаж</b></h2>
-                <div class="content">
+                <h5 class="ms-5 mt-3" v-if="productsTrend.length == 0">Предложений нет</h5>
+                <div class="content" v-if="productsTrend.length != 0">
                     <div class="product" v-for="(item) in  productsTrend" @click="goProduct($event, item)" >
                         <div class="image-prod" :style="'background: url(' + item.picture + ') no-repeat center center;'">
                             <button v-if="item.discount > 0" class="btn btn-danger" disabled>- {{ item.discount }} %</button>

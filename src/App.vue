@@ -14,19 +14,22 @@ export default {
 
   computed: {
     Auth() {
-      return this.$route.name === 'signup' || this.$route.name === 'login'
+      let authRoutes = ['signup', 'login']
+      return authRoutes.includes(this.$route.name)
     },
 
     Seller() {
-      return this.$route.name === 'sellLogin' || this.$route.name === 'sellSignup'
+      let sellerRoutes = ['sellLogin', 'sellSignup']
+      return sellerRoutes.includes(this.$route.name)
     },
 
     NotFound() {
-      return this.$route.name === 'notfound'
+      return this.$route.name === 'notfound';
     },
 
     SellerMenu() {
-      return this.$route.name === 'statistics' || this.$route.name === 'sellrefund' || this.$route.name === 'manage' || this.$route.name === 'sellchats' || this.$route.name === 'sellmessenger'
+      let sellerMenuRoutes = ['statistics', 'sellrefund', 'manage', 'sellchats', 'sellmessenger']
+      return sellerMenuRoutes.includes(this.$route.name)
     }
   }
 }

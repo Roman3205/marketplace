@@ -58,8 +58,8 @@ export default {
                         <h2 v-if="userInfo">{{ userInfo.name }}</h2>
                     </div>
                     <div class="user-info">
-                        <p v-if="userInfo">Почта <b><span class="upper-span">{{ userInfo.mail }}</span></b></p>
-                        <button @click="LogOut" class="btn btn-danger mt-1">Выйти</button>
+                        <p v-if="userInfo">Почта<br><b><span class="upper-span">{{ userInfo.mail }}</span></b></p>
+                        <button @click="LogOut" class="btn btn-danger mt-1" style="width: 100px; text-align: center;">Выйти</button>
                     </div>
                 </div>
                 <div class="block__content" @click="goRoute($event, 'delivery')" >

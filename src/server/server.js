@@ -1,25 +1,32 @@
 let express = require('express')
 let app = express()
-let port = 3003
 let bcrypt = require('bcrypt')
 let jwt = require('jsonwebtoken')
 let cookieParser = require('cookie-parser')
+let path = require('path')
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
+let frontPort = process.env.FRONTEND_PORT
+let frontHost = process.env.FRONTEND_HOST
+let backPort = process.env.BACKEND_PORT
+let backHost = process.env.BACKEND_HOST
 
-app.listen(port, function() {
-    console.log('http://localhost:' + port)
+
+app.listen(backPort, () => {
+    console.log('http://' + backHost + ':' + backPort)
 })
 
 let cors = require('cors')
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:5173'
+    origin: 'http://' + frontHost + ':' + frontPort
 }))
 
 app.use(express.json())
 app.use(cookieParser())
 
 let mongoose = require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/clothes-shop')
+let uri = process.env.MONGODB_HOST
+mongoose.connect(uri)
 
 let cartSchema = new mongoose.Schema({
     products: [{

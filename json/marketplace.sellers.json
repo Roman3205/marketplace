@@ -1,0 +1,35 @@
+[{
+  "_id": {
+    "$oid": "64e512d3987a14854fed6540"
+  },
+  "brandName": "LC Waikiki",
+  "brandCategory": "Верхняя одежда",
+  "name": "Роман Романов",
+  "mail": "test@gmail.com",
+  "tel": "+79610016454",
+  "description": "Крупная фирма брендовой одежды, широкий выбор ассортимента по доступным ценам",
+  "password": "$2b$10$7uKXbOkX4PNz1WxJjCwNPufhmntrKjgeSKW/RvI05ffXlW7.5RvRq",
+  "products": [
+    {
+      "$oid": "64c02cbbaf2330138afd66f1"
+    },
+    {
+      "$oid": "64c030215b618646cc2adb4b"
+    }
+  ],
+  "orders": [],
+  "balance": 0,
+  "sold": 0,
+  "activeOrders": 0,
+  "returns": 0,
+  "activeReturns": 0,
+  "chats": [],
+  "refunds": [],
+  "createdAt": {
+    "$date": "2023-08-22T19:56:03.479Z"
+  },
+  "updatedAt": {
+    "$date": "2023-08-22T19:56:03.479Z"
+  },
+  "__v": 0
+}]

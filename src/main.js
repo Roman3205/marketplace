@@ -1,5 +1,6 @@
 import axios from 'axios'
-axios.defaults.baseURL = 'http://localhost:3003'
+// заменить переменными окружения
+axios.defaults.baseURL = 'http://' + 'localhost' + ':' + 3333
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
@@ -12,7 +13,12 @@ dayjs.extend(relativeTime)
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router.js'
-import store from './store.js'
+import router from './router/router'
+import store from './store/store'
 
-createApp(App).use(router).use(store).mount('#app')
+let app = createApp(App)
+
+app
+    .use(router)
+    .use(store)
+    .mount('#app')
