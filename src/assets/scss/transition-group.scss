@@ -1,0 +1,29 @@
+.common-group-enter-active,
+.common-group-leave-active {
+    transition: all 0.5s ease;
+}
+
+.common-group-enter-from,
+.common-group-leave-to {
+    opacity: 0;
+    transform: translateX(40px);
+}
+
+.common-group-move {
+    transition: transform 0.5s ease;
+}
+
+.group-second-enter-active,
+.group-second-leave-active {
+    transition: all 0.5s ease;
+}
+
+.group-second-enter-from,
+.group-second-leave-to {
+    opacity: 0;
+    transform: translateY(-25px);
+}
+
+.group-second-move {
+    transition: transform 0.5s ease;
+}

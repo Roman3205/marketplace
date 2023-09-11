@@ -35,10 +35,8 @@ export default {
             inputMail: '',
             inputName: '',
             userInfo: null,
-            existUser: undefined,
-            notCorrectName: undefined,
-            successMail: undefined,
-            successName: undefined
+            nameAlertMessage: '',
+            mailAlertMessage: ''
         }
     },
 
@@ -87,8 +85,8 @@ export default {
         },
 
         async ChangeMail(evt) {
-            this.successMail = false
-
+            this.mailAlertMessage = ''
+            
             try {
                 evt.preventDefault()
                 let token = 'Bearer ' + localStorage.getItem('token');
@@ -99,45 +97,48 @@ export default {
                     }}
                 )
 
-                this.successMail = true
+                this.mailAlertMessage = 'Почта успешно изменена'
 
                 await new Promise(prom => setTimeout(prom, 1300))
                 this.inputMail = ''
                 this.closeChange()
                 this.getUser()
-                this.successMail = false
+                this.mailAlertMessage = ''
 
             } catch (error) {
                 if(error.response && error.response.status === 409) {
-                    this.existUser = true
+                    this.mailAlertMessage = 'Почта уже привязана к другому аккаунту'
                 }
             }
         },
 
         async ChangeName(evt) {
-            this.notCorrectName = false
-            this.successName = false
+            this.nameAlertMessage = ''
             evt.preventDefault()
             
             let filter = /([a-zA-Zа-яА-Я])\1{1}/;
             if (this.inputName.length < 3 || this.inputName.length > 11 || !/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputName) || this.inputName.trim() !== this.inputName || filter.test(this.inputName)) {
-                return this.notCorrectName = true
+                this.nameAlertMessage = 'Ошибка заполнения'
+            } else {
+                try {
+                    let token = 'Bearer ' + localStorage.getItem('token');
+                    await axios.post('/name/change', {
+                        name: this.inputName
+                    }, { headers: {
+                            Authorization: token
+                        }}
+                    )
+
+                    this.nameAlertMessage = 'Имя успешно изменено'
+
+                    await new Promise(prom => setTimeout(prom, 1300))
+                    this.closeName()
+                    this.getUser()
+                    window.location.reload()
+                } catch (error) {
+                    
+                }
             }
-            
-            let token = 'Bearer ' + localStorage.getItem('token');
-            await axios.post('/name/change', {
-                name: this.inputName
-            }, { headers: {
-                    Authorization: token
-                }}
-            )
-
-            this.successName = true
-
-            await new Promise(prom => setTimeout(prom, 1300))
-            this.closeName()
-            this.getUser()
-            window.location.reload()
         }
     }
 }
@@ -190,8 +191,7 @@ export default {
             'opacity': emptyValue
         }" >Изменить</button>
             </form>
-            <div v-if="existUser" class="w-100 mt-3 text-center form__info__alert alert alert-danger">Почта уже привязана к другому аккаунту</div>
-            <div v-if="successMail" class="w-100 mt-3 text-center form__info__alert alert alert-success">Почта успешно изменена</div>
+            <div v-if="this.mailAlertMessage !== ''" class="w-100 mt-3 text-center form__info__alert alert" :class="this.mailAlertMessage === 'Почта успешно изменена' ? 'alert-success' : 'alert-danger'">{{ this.mailAlertMessage }}</div>
         </div>
         <div class="changename" v-if="showChangeName">
             <i class="fa fa-times" @click="closeName" ></i>
@@ -205,8 +205,7 @@ export default {
             'opacity': !inputName
         }" >Сохранить</button>
             </form>
-            <div v-if="notCorrectName" class="w-100 mt-3 text-center form__info__alert alert alert-danger">Ошибка заполнения</div>
-            <div v-if="successName" class="w-100 mt-3 text-center form__info__alert alert alert-success">Имя успешно изменено</div>
+            <div v-if="this.nameAlertMessage !== ''" class="w-100 mt-3 text-center form__info__alert alert" :class="this.nameAlertMessage === 'Имя успешно изменено' ? 'alert-success' : 'alert-danger'">{{ this.nameAlertMessage }}</div>
         </div>
     </div>
 </template>

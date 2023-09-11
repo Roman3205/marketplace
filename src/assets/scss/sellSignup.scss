@@ -1,4 +1,4 @@
-@import '../scss/signup.scss';
+@import './signup.scss';
 
 .wrapper {
     background: url('../../images/seller.jpg') no-repeat center center fixed;
@@ -11,6 +11,10 @@
 .wrapper input,
 .wrapper textarea {
     margin-top: 5px;
+}
+
+textarea {
+    width: 230px;
 }
 
 .form__block__toggle {

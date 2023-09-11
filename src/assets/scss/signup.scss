@@ -6,8 +6,8 @@
 .form__block__toggle img {
 	height: 24px;
 	text-align: center;
-	margin-left: -5.5px;
-	margin-top: -5.5px;
+	margin-left: -5.7px;
+	margin-top: -5.7px;
 }
 
 .form__image img {
@@ -18,7 +18,7 @@
 .form__block__toggle {
 	width: 40px;
 	margin-top: 0px;
-	height: 31.8px;
+	height: 32.2px;
 	transition: 0.5s;
 	overflow: hidden;
 
@@ -133,22 +133,12 @@ ul {
 		opacity: 0.8;
 	}
 }
-	
-@media (max-width: 1199px) { 
-	.wrapper {
-		background-position: right;
-	}
-
-	.inner__image {
-		display: none;
-	}
-}
 
 @media (max-width: 768px) {
 	.form {
 		display: block;
 		width: 100%;
-		padding: 30px;
+		padding: 0px;
 
 		.form__image {
 			width: 100%;
@@ -161,5 +151,9 @@ ul {
 	
 	.submit-button {
 		width: 100%;
+	}
+
+	textarea {
+		width: 100%!important;
 	}
 }

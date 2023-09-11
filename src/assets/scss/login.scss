@@ -1,4 +1,4 @@
-@import '../scss/signup.scss';
+@import './signup.scss';
 
 .inner {
     background: none;
@@ -30,7 +30,13 @@
 @media screen and (max-width: 768px) {
     .form {
         width: 100%;
+        padding: 29px;
 	}
+
+    .wrapper {
+        padding-left: 17px;
+        padding-right: 17px;
+    }
 
     .form__submit {
         width: 100%;

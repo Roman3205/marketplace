@@ -1,9 +1,9 @@
 <script>
-console.log(document.cookie);
 import { RouterView } from 'vue-router';
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
 import SellerSideBar from './components/SellerSideBar.vue'
+import { mapActions } from 'vuex';
 
 export default {
   components: {
@@ -32,6 +32,17 @@ export default {
       let sellerMenuRoutes = ['statistics', 'sellrefund', 'manage', 'sellchats', 'sellmessenger']
       return sellerMenuRoutes.includes(this.$route.name)
     }
+  },
+
+  methods: {
+    ...mapActions({
+      loadToken: 'auth/loadToken'
+    })
+  },
+
+  created() {
+    this.loadToken()
+    // this.$store.dispatch('auth/loadToken')
   }
 }
 </script>
@@ -94,6 +105,7 @@ export default {
       visibility: hidden;
       cursor: pointer;
   }
+  
 
   @keyframes notification {
       0% {
@@ -101,14 +113,14 @@ export default {
         visibility: hidden;
       }
 
-      50% {
+      40% {
           transform: translateX(-50px);
           transition: opacity 0.2s ease, visibility 0.2s ease;
           opacity: 1;
           visibility: visible;
       }
 
-      80% {
+      60% {
           transform: translateX(200px);
           transition: opacity 0.2s ease, visibility 1s ease;
           opacity: 0;

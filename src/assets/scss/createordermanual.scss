@@ -1,4 +1,5 @@
 @import './oplata.scss';
+@import './media_component.scss';
 
 img {
     width: 100%;
@@ -9,8 +10,8 @@ img {
     display: flex;
     flex-direction: column;
     gap: 30px;
-    padding-bottom: 50px;
 }
+
 
 .blocks {
     gap: 100px;
@@ -19,5 +20,15 @@ img {
     p {
         margin-bottom: 0;
         line-height: 50px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .blocks {
+        gap: 50px;
+    }
+
+    img {
+        margin-top: 15px;
     }
 }

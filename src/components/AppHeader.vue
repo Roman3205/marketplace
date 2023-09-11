@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import { scrollWin } from './AppFooter.vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
     data() {
@@ -11,26 +11,7 @@ export default {
             userInfo: null,
             searchInput: '',
             categoryFilterProducts: [],
-            products: [],
-            categoriesArray: [
-                'Верхняя одежда',
-                'Обувь',
-                'Товары для дома',
-                'Аксессуары',
-                'Электроника',
-                'Игрушки',
-                'Мебель',
-                'Продукты',
-                'Бытовая техника',
-                'Зоотовары',
-                'Спорт',
-                'Автотовары',
-                'Школа',
-                'Книги',
-                'Ювелирные изделия',
-                'Здоровье',
-                'Сад и дача'
-            ]
+            products: []
         }
     },
 
@@ -43,6 +24,12 @@ export default {
         searchInput: {
             handler: 'searchProducts'
         }
+    },
+
+    computed: {
+        ...mapState({
+            categoriesArray: state => state.categoriesArray
+        })
     },
 
     methods: {
@@ -88,14 +75,18 @@ export default {
 
         async getUser() {
             if(!localStorage.getItem('tokenSell')) {
-                let token = 'Bearer ' + localStorage.getItem('token')
-                let response = await axios.get('/main', {
-                    headers: {
-                        Authorization: token
-                    }
-                })
-                
-                this.userInfo = response.data
+                try {
+                    let token = 'Bearer ' + localStorage.getItem('token')
+                    let response = await axios.get('/main', {
+                        headers: {
+                            Authorization: token
+                        }
+                    })
+                    
+                    this.userInfo = response.data
+                } catch (error) {
+
+                }
             }
         },
 
@@ -189,5 +180,16 @@ export default {
 
 <style scoped lang="scss">
     @import '../assets/scss/header.scss';
-
+    .postList-enter-active,
+    .postList-leave-active {
+        transition: all 0.4s ease;
+    }
+    .postList-enter-from,
+    .postList-leave-to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    .postList-move {
+        transition: transform 0.4s ease;
+    }
 </style>

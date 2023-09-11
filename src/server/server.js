@@ -7,8 +7,8 @@ let path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 let frontPort = process.env.FRONTEND_PORT
 let frontHost = process.env.FRONTEND_HOST
-let backPort = process.env.BACKEND_PORT
-let backHost = process.env.BACKEND_HOST
+let backPort = process.env.VITE_BACKEND_PORT
+let backHost = process.env.VITE_BACKEND_HOST
 
 
 app.listen(backPort, () => {
@@ -611,7 +611,11 @@ app.post('/cart/add', VerifyTokenUser, async (req, res) => {
     let product = await Product.findOne({article: article})
 
     let cart = await Cart.findOne({_id: customer.cart_id})
-        
+
+    if(cart.products.includes(product._id)) {
+        return res.status(409).send('Данный товар уже находится в корзине')
+    }
+
     cart.products.push(product._id)
     cart.totalCost += product.price
 

@@ -67,6 +67,7 @@
 
 .user {
     @include flex(column, 0px, none);
+    width: 400px;
 }
 
 .user {
@@ -93,7 +94,7 @@
 }
 
 .main-content {
-    @include flex(row, 200px, space-between);
+    @include flex(row, 100px, space-between);
     align-items: center;
     padding: 10px 30px 10px 0px;
 

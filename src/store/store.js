@@ -1,11 +1,31 @@
 import { createStore } from "vuex"
+import authModule from "./authModule"
 
 let store = createStore({
     state: {
         products: [],
         value: '',
         categoryFiltered: [],
-        category: ''
+        category: '',
+        categoriesArray: [
+            'Верхняя одежда',
+            'Обувь',
+            'Товары для дома',
+            'Аксессуары',
+            'Электроника',
+            'Игрушки',
+            'Мебель',
+            'Продукты',
+            'Бытовая техника',
+            'Зоотовары',
+            'Спорт',
+            'Автотовары',
+            'Школа',
+            'Книги',
+            'Ювелирные изделия',
+            'Здоровье',
+            'Сад и дача'
+        ]
     },
 
     mutations: {
@@ -60,6 +80,10 @@ let store = createStore({
         categoryState(state) {
             return state.category
         }
+    },
+
+    modules: {
+        auth: authModule
     }
 })
 

@@ -72,7 +72,7 @@ export default {
                             'alert-primary': item.status === 'Передан в доставку',
                             'alert-success': item.status === 'Готов к получению',
                             }">{{ item.status }}</div>
-                        <div class="change-status">
+                        <div class="change-status" v-if="item.status !== 'Готов к получению'">
                             <p>Изменить состояние</p>
                             <div class="status">
                                 <button class="next" @click="statusForward(item)">Изменить статус<i class="fa fa-arrow-right"></i></button>

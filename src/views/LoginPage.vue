@@ -1,6 +1,7 @@
 <script>
 
 import axios from 'axios'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     data() {
@@ -9,14 +10,21 @@ export default {
             image: '../../images/hide.png',
             mail: '',
             password: '',
-            emptyFields: undefined,
-            successLogin: undefined,
-            existUser: undefined,
-            notCorrectData: undefined
+            alertMessage: ''
         }
     },
 
+    computed: {
+        ...mapGetters({
+            getToken: 'auth/getAccessToken'
+        })
+    },
+
     methods: {
+        ...mapActions({
+            updateAccessToken: 'auth/updateAccessToken'
+        }),
+
         goReg(evt) {
             evt.preventDefault()
             this.$router.push({
@@ -32,36 +40,33 @@ export default {
 
         async Login(evt) {
             evt.preventDefault()
-            this.emptyFields = false
-            this.successLogin = false
-            this.existUser = false
-            this.notCorrectData = false
+            this.alertMessage = ''
 
             if (this.mail === "" || this.password === "") {
-                this.emptyFields = true
+                this.alertMessage = 'Заполните все поля'
             } else {
                 try {
+                    // разобраться тут
                     await axios.post('/logout/seller')
                     localStorage.removeItem('tokenSell')
+                    //
 
                     let response = await axios.post('/login', {
                         mail: this.mail,
                         password: this.password,
-                    }, {
-                        withCredentials: true
                     })
 
-                    this.successLogin = true
-                    localStorage.setItem('token', response.data)
+                    this.alertMessage = 'Вход выполнен успешно'
+                    this.updateAccessToken(response.data)
                     await new Promise(prom => setTimeout(prom, 1300))
                     this.$router.push({
                         name: 'main'
                     })
                 } catch (error) {
                     if (error.response && error.response.status === 404) {
-                        this.existUser = true
+                        this.alertMessage = 'Пользователь не найден'
                     } else if (error.response && error.response.status === 400) {
-                        this.notCorrectData = true
+                        this.alertMessage = 'Неверно введены данные'
                     }
                 }
             }
@@ -72,26 +77,24 @@ export default {
 
 <template>
     <div class="wrapper">
-			<form @submit="Login" class="inner__form form">
-				<h3>Вход</h3>
-				<div class="form__block form-wrapper">
-					<input v-model="mail" type="email" placeholder="Почта" class="form-control">
-				</div>
-				<div class="form__block form-wrapper">
-					<input v-model="password" :type="type" placeholder="Пароль" class="form-control">
-                    <button class="form__block__toggle btn btn-outline-secondary" @click="toggle($event)">
-                        <img :src="image"/>
-                    </button>
-				</div>
-				<button class="form__submit submit-button" type="submit">Войти</button>
-                <div class="form__info">
-                    <a @click="goReg" href="">Нет аккаунта?</a>
-                    <div v-if="emptyFields" class="w-100 text-center form__info__alert alert alert-danger">Заполните все поля</div>
-                    <div v-if="existUser" class="w-100 text-center form__info__alert alert alert-danger">Пользователь не найден</div>
-                    <div v-if="notCorrectData" class="w-100 text-center form__info__alert alert alert-danger">Неверно введены данные</div>
-                    <div v-if="successLogin" class="w-100 text-center form__info__alert alert alert-success">Вход выполнен успешно</div>
-                </div>
-			</form>
+		<form @submit="Login" class="inner__form form">
+			<h3>Вход</h3>
+            {{ getToken }}
+			<div class="form__block form-wrapper">
+				<input v-model="mail" type="email" placeholder="Почта" class="form-control">
+			</div>
+			<div class="form__block form-wrapper">
+				<input v-model="password" :type="type" placeholder="Пароль" class="form-control">
+                <button class="form__block__toggle btn btn-outline-secondary" @click="toggle($event)">
+                    <img :src="image"/>
+                </button>
+			</div>
+			<button class="form__submit submit-button" type="submit">Войти</button>
+            <div class="form__info">
+                <a @click="goReg" href="">Нет аккаунта?</a>
+                <div v-if="alertMessage !== ''" class="w-100 text-center form__info__alert alert" :class="this.alertMessage === 'Вход выполнен успешно' ? 'alert-success' : 'alert-danger'">{{ alertMessage }}</div>
+            </div>
+		</form>
 	</div>
 </template>
 

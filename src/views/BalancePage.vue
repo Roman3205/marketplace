@@ -132,11 +132,15 @@ export default {
                 </div>
                 <div class="transactions" v-if="operations.length != 0">
                     <div class="alert"><span><h2><b>Дата</b></h2></span><span><h2><b>Операция</b></h2></span></div>
-                    <div v-for="(item) in operations" class="alert" :class="{
-                        'alert-success': item.name === 'replenishment',
-                        'alert-danger': item.name === 'withdrawals',
-                        'alert-primary': item.name === 'refund'
-                    }"><span class="no-wrap">{{ getTime(item.createdAt) }}</span><span>{{ operationValue(item) }}</span></div>
+                    <transition-group name="common-group">
+                        <div v-for="(item) in operations" class="alert" :class="{
+                            'alert-success': item.name === 'replenishment',
+                            'alert-danger': item.name === 'withdrawals',
+                            'alert-primary': item.name === 'refund'
+                            }" :key="item._id">
+                            <span class="no-wrap">{{ getTime(item.createdAt) }}</span><span>{{ operationValue(item) }}</span>
+                        </div>
+                    </transition-group>
                 </div>
             </div>
         </div>
@@ -161,6 +165,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/balance.scss';
-
+    @import '@/assets/scss/balance.scss';
+    @import '@/assets/scss/transition-group.scss'
 </style>

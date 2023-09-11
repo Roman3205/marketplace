@@ -143,7 +143,8 @@ export default {
         <div class="wrapper" :class="{
             'opacity': showFillMenu
         }" >
-            <div class="no-returns" v-if="refunds.length == 0">
+            <h2><b>Возвраты</b></h2>
+            <div class="no-returns mt-4" v-if="refunds.length == 0">
                 <p><b>Здесь будут ваши возвраты</b></p>
                 <p>В разделе покупки у каждого товара можно<br> создать заявку на его возврат</p>
                 <button @click="goRoute($event, 'orders')" >Перейти к покупкам</button>

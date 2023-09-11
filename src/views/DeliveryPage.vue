@@ -61,7 +61,7 @@ export default {
             })
 
             this.successRecieved = true
-            await new Promise(prom => setTimeout(prom, 1000))
+            await new Promise(prom => setTimeout(prom, 750))
 
             this.loadOrders()
         },
@@ -100,8 +100,8 @@ export default {
         </div>
         <div class="wrapper">
             <h2><b>Доставка</b></h2>
-            <div class="no-delivery" v-if="orders.orders == 0">
-                <p class="mt-4"><b>Пока у вас нет доставок</b></p>
+            <div class="no-delivery mt-4" v-if="orders.orders == 0">
+                <p><b>Пока у вас нет доставок</b></p>
                 <p>Для активной доставки нужно оплатить<br> выбранные товары из корзины</p>
                 <button @click="goRoute($event, 'cart')" >Перейти к корзине</button>
             </div>
@@ -115,23 +115,25 @@ export default {
                         <p class="text-primary"><u>Пункт выдачи работает ежедневно</u></p>
                     </div>
                     <div class="delivery-items">
-                        <div class="item" v-for="(item) in orders.orders" @click="goProduct($event, item)" :style="item.status === 'Готов к получению' ? {maxHeight: '500px!important'} : {}" >
-                            <div class="image-delivery-prod" :style="'background: url('+ item.product_id.picture +') no-repeat center center;'" >
-                                <button class="btn text-success btn-outline-success oplata">Оплачен</button>
+                        <transition-group name="group-second">
+                            <div class="item" v-for="(item) in orders.orders" @click="goProduct($event, item)" :key="item._id" :style="item.status === 'Готов к получению' ? {maxHeight: '500px!important'} : {}" >
+                                <div class="image-delivery-prod" :style="'background: url('+ item.product_id.picture +') no-repeat center center;'" >
+                                    <button class="btn text-success btn-outline-success oplata">Оплачен</button>
+                                </div>
+                                <div class="rub">
+                                    <h6 class="pb-3 ps-lg-2"><span>{{ item.product_id.title }}</span></h6>
+                                </div>
+                                <div class="alert text-center" :class="{
+                                'alert-danger': item.status === 'Создан',
+                                'alert-info': item.status === 'Отправлен на сборку' || item.status === 'Собран',
+                                'alert-warning': item.status === 'Отсортирован', 
+                                'alert-primary': item.status === 'Передан в доставку',
+                                'alert-success': item.status === 'Готов к получению',
+                                }">{{ item.status }}</div>
+                                <div v-if="item.status === 'Готов к получению'" class="get recieve mb-2">Получили заказ? <div class="alert alert-success" @click="setRecieved($event, item)">Да</div></div>
+                                <div v-if="item.status !== 'Готов к получению'" class="get" style="pointer-events: none;"><div class="alert alert-warning">Заказ еще не доставлен</div></div>
                             </div>
-                            <div class="rub">
-                                <h6 class="pb-3 ps-lg-2"><span>{{ item.product_id.title }}</span></h6>
-                            </div>
-                            <div class="alert text-center" :class="{
-                            'alert-danger': item.status === 'Создан',
-                            'alert-info': item.status === 'Отправлен на сборку' || item.status === 'Собран',
-                            'alert-warning': item.status === 'Отсортирован', 
-                            'alert-primary': item.status === 'Передан в доставку',
-                            'alert-success': item.status === 'Готов к получению',
-                            }">{{ item.status }}</div>
-                            <div v-if="item.status === 'Готов к получению'" class="get recieve mb-2">Получили заказ? <div class="alert alert-success" @click="setRecieved($event, item)">Да</div></div>
-                            <div v-if="item.status !== 'Готов к получению'" class="get" style="pointer-events: none;"><div class="alert alert-warning">Заказ еще не доставлен</div></div>
-                        </div>
+                        </transition-group>
                     </div>
                     <div class="delivery-total-amount">
                         <h2><b><span>Итого:</span></b><span class="rub-z"><b>{{ this.totalPrice }}</b><i class="fa fa-rub"></i></span></h2>
@@ -142,6 +144,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/delivery.scss';
+    @import '@/assets/scss/delivery.scss';
+    @import '@/assets/scss/transition-group.scss';
 
 </style>

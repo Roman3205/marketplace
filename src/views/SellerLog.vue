@@ -9,10 +9,7 @@ export default {
             image: '../../images/hide.png',
             mail: '',
             password: '',
-            emptyFields: undefined,
-            successLogin: undefined,
-            existUser: undefined,
-            notCorrectData: undefined
+            alertMessage: ''
         }
     },
 
@@ -32,13 +29,10 @@ export default {
 
         async Login(evt) {
             evt.preventDefault()
-            this.emptyFields = false
-            this.successLogin = false
-            this.existUser = false
-            this.notCorrectData = false
+            this.alertMessage = ''
 
             if (this.mail === "" || this.password === "") {
-                this.emptyFields = true
+                this.alertMessage = 'Заполните все поля'
             } else {
                 try {
                     await axios.post('/logout')
@@ -47,11 +41,9 @@ export default {
                     let response = await axios.post('/login/seller', {
                         mail: this.mail,
                         password: this.password,
-                    }, {
-                        withCredentials: true
                     })
 
-                    this.successLogin = true
+                    this.alertMessage = 'Вход выполнен успешно'
                     localStorage.setItem('tokenSell', response.data)
                     await new Promise(prom => setTimeout(prom, 1300))
                     this.$router.push({
@@ -59,9 +51,9 @@ export default {
                     })
                 } catch (error) {
                     if (error.response && error.response.status === 404) {
-                        this.existUser = true
+                        this.alertMessage = 'Пользователь не найден'
                     } else if (error.response && error.response.status === 400) {
-                        this.notCorrectData = true
+                        this.alertMessage = 'Неверно введены данные'
                     }
                 }
             }
@@ -86,10 +78,7 @@ export default {
 				<button class="form__submit submit-button" type="submit">Войти</button>
                 <div class="form__info">
                     <a @click="goReg" href="">Пройдите регистрацию</a>
-                    <div v-if="emptyFields" class="w-100 text-center form__info__alert alert alert-danger">Заполните все поля</div>
-                    <div v-if="existUser" class="w-100 text-center form__info__alert alert alert-danger">Аккаунт не найден</div>
-                    <div v-if="notCorrectData" class="w-100 text-center form__info__alert alert alert-danger">Неверно введены данные</div>
-                    <div v-if="successLogin" class="w-100 text-center form__info__alert alert alert-success">Вход выполнен успешно</div>
+                    <div v-if="alertMessage !== ''" class="w-100 text-center form__info__alert alert" :class="this.alertMessage === 'Вход выполнен успешно' ? 'alert-success' : 'alert-danger'">{{ this.alertMessage }}</div>
                 </div>
 			</form>
 	</div>

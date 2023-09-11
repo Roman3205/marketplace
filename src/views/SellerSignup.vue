@@ -1,6 +1,6 @@
 <script>
-
 import axios from 'axios'
+import { mapState } from 'vuex'
 
 export default {
     data() {
@@ -14,16 +14,14 @@ export default {
             tel: '',
             description: '',
             password: '',
-            emptyFields: undefined,
-            notCorrectName: undefined,
-            notCorrectDescription: undefined,
-            notCorrectBrandName: undefined,
-            notCorrectMail: undefined,
-            notCorrectPassword: undefined,
-            emptySpace: undefined,
-            successReg: undefined,
-            existMail: undefined
+            alertMessage: ''
         }
+    },
+
+    computed: {
+        ...mapState({
+            categoriesArray: state => state.categoriesArray
+        })
     },
 
     methods: {
@@ -35,32 +33,24 @@ export default {
 
         async Registration(evt) {
             evt.preventDefault()
-            this.emptyFields = false
-            this.notCorrectName = false
-            this.notCorrectDescription = false
-            this.notCorrectBrandName = false
-            this.notCorrectMail = false
-            this.notCorrectPassword = false
-            this.emptySpace = false
-            this.successReg = false
-            this.existMail = false
+            this.alertMessage = ''
 
             let filter = /([a-zA-Zа-яА-Я])\1{1}/;
 
-            if (this.brandName === '' || this.brandCategory === '' || this.name === '' || this.mail === '' || this.tel === '' || this.description === '' || this.password === '') {
-                this.emptyFields = true
+            if (this.brandName === '' || this.brandCategory === '' || this.brandCategory === 'Выберите категорию' || this.name === '' || this.mail === '' || this.tel === '' || this.description === '' || this.password === '') {
+                this.alertMessage = 'Заполните все поля'
             } else if (this.name.length < 3 || filter.test(this.name) || !/^[А-Яа-я\s,'-.!" "?]+$/.test(this.name)) {
-                this.notCorrectName = true
+                this.alertMessage = 'Введите корректно контактное лицо'
             } else if (this.brandName.length < 3 || this.brandName.length > 20 || filter.test(this.brandName)) {
-                this.notCorrectBrandName = true
+                this.alertMessage = 'Название бренда некорректное'
             } else if (this.mail.length < 13 || this.mail.length > 35 || filter.test(this.mail)) {
-                this.notCorrectMail = true
+                this.alertMessage = 'Введите корректно почту'
             } else if (this.description.length < 60 || !/^[А-Яа-я\s,'-.!" "?]+$/.test(this.description)) {
-                this.notCorrectDescription = true
+                this.alertMessage = 'Описание слишком короткое и должно быть на русском языке'
             } else if (this.password.length < 7) {
-                this.notCorrectPassword = true
+                this.alertMessage = 'Слабый пароль'
             } else if (this.brandName.trim() !== this.brandName || this.brandCategory.trim() !== this.brandCategory || this.name.trim() !== this.name || this.mail.trim() !== this.mail || this.tel.trim() !== this.tel || this.description.trim() !== this.description || this.password.trim() !== this.password) {
-                this.emptySpace = true
+                this.alertMessage = 'Уберите все пробелы в полях ввода'
             } else {
                 try {
                     let response = await axios.post('/registration/seller', {
@@ -74,16 +64,17 @@ export default {
                     })
 
                     if (response && response.status === 200) {
-                        this.successReg = true
+                        this.alertMessage = 'Вы успешно зарегистрировались'
                         await new Promise(prom => setTimeout(prom, 1300))
                         this.$router.push({
                             name: 'sellLogin'
                         })
                     }
-                    
                 } catch (error) {
                     if (error.response && error.response.status === 409) {
-                        this.existMail = true
+                        this.alertMessage = 'Аккаунт продавца с введенной почтой уже существует'
+                    } else {
+                        return
                     }
                 }
             }
@@ -105,23 +96,8 @@ export default {
                         <div class="brand-category">
                             <span>Категория товаров</span>
                             <select class="w-100" v-model="brandCategory">
-                                <option class="category-item">Верхняя одежда</option>
-                                <option class="category-item">Обувь</option>
-                                <option class="category-item">Товары для дома</option>
-                                <option class="category-item">Аксессуары</option>
-                                <option class="category-item">Электроника</option>
-                                <option class="category-item">Игрушки</option>
-                                <option class="category-item">Мебель</option>
-                                <option class="category-item">Продукты</option>
-                                <option class="category-item">Бытовая техника</option>
-                                <option class="category-item">Зоотовары</option>
-                                <option class="category-item">Спорт</option>
-                                <option class="category-item">Автотовары</option>
-                                <option class="category-item">Школа</option>
-                                <option class="category-item">Книги</option>
-                                <option class="category-item">Ювелирные изделия</option>
-                                <option class="category-item">Здоровье</option>
-                                <option class="category-item">Сад и дача</option>
+                                <option disabled value="" selected class="category-item">Выберите категорию</option>
+                                <option class="category-item" v-for="category in categoriesArray">{{ category }}</option>
                             </select>
                         </div>
                         <div class="contact">
@@ -157,15 +133,7 @@ export default {
                     </div>
                 </div>
                 <div class="form__info mt-4">
-                    <div v-if="emptyFields" class="w-100 text-center alert alert-danger">Заполните все поля</div>
-                    <div v-if="notCorrectName" class="w-100 text-center alert alert-danger">Введите корректно контактное лицо</div>
-                    <div v-if="notCorrectMail" class="w-100 text-center alert alert-danger">Введите корректно почту</div>
-                    <div v-if="notCorrectPassword" class="w-100 text-center alert alert-danger">Слабый пароль</div>
-                    <div v-if="notCorrectBrandName" class="w-100 text-center alert alert-danger">Название бренда некорректное</div>
-                    <div v-if="notCorrectDescription" class="w-100 text-center alert alert-danger">Описание слишком короткое и должно быть на русском языке</div>
-                    <div v-if="emptySpace" class="w-100 text-center alert alert-danger">Уберите все пробелы в полях ввода</div>
-                    <div v-if="successReg" class="w-100 text-center alert alert-success">Вы успешно зарегистрировались</div>
-                    <div v-if="existMail" class="w-100 text-center alert alert-danger">Аккаунт продавца с введенной почтой уже существует</div>
+                    <div v-if="alertMessage !== ''" class="w-100 text-center alert" :class="this.alertMessage === 'Вы успешно зарегистрировались' ? 'alert-success' : 'alert-danger'">{{ this.alertMessage }}</div>
                 </div>
 			</form>
 	</div>

@@ -13,8 +13,7 @@ export default {
             userInfo: null,
             cartInfo: null,
             currentDate: new Date(),
-            successCreate: undefined,
-            notEnoughMoney: undefined,
+            createAlertMessage: '',
             notificationTrue: undefined,
             runOutProd: undefined,
             titleRunOut: null
@@ -76,7 +75,7 @@ export default {
 
             this.notificationTrue = true
 
-            await new Promise(prom => setTimeout(prom, 1000))
+            await new Promise(prom => setTimeout(prom, 600))
 
             this.loadCart()
         },
@@ -107,8 +106,7 @@ export default {
         async createOrders(evt) {
             evt.preventDefault()
 
-            this.successCreate = false
-            this.notEnoughMoney = false
+            this.createAlertMessage = ''
             this.runOutProd = false
 
             try {
@@ -121,9 +119,9 @@ export default {
                     }
                 })
 
-                this.successCreate = true
+                this.createAlertMessage = 'Заказ прошел успешно и оплачен'
 
-                await new Promise(prom => setTimeout(prom, 2000))
+                await new Promise(prom => setTimeout(prom, 1400))
 
                 this.loadCart()
 
@@ -135,11 +133,11 @@ export default {
 
             } catch (error) {
                 if(error.response && error.response.status === 409) {
-                    this.notEnoughMoney = true
+                    this.createAlertMessage = 'У вас недостаточно средств для оплаты'
                 } else if(error.response && error.response.status === 400) {
                     this.runOutProd = true
                     this.titleRunOut = error.response.data.data.map(product => (
-                        'Товар ' + "'" + product.title + "'" + ' в вашей корзине закончился'
+                        'Товар ' + "'" + product.title + "'" + ' закончился, удалите его из корзины'
                     )).join(', ')
                 }
             }
@@ -168,19 +166,21 @@ export default {
             <h2><b>Корзина</b></h2>
             <div class="wrapper-mod">
                 <div class="product-container">
-                    <div class="product" v-for="(item) in products" @click="goProduct($event, item)" >
-                        <img :src="item.picture" width="150" alt="">
-                        <div class="main-content">
-                            <div class="user">
-                                <span class="number-rev"><span>Артикул товара:</span><h5><b>{{ item.article }}</b></h5></span>
-                                <b class="mt-2">{{ item.brand_id.brandName }} / {{ item.title }}</b>
-                                <p class="pt-lg-4">Доставка со склада продавца</p>
-                            </div>
-                            <div class="action-menu">
-                                <button class="btn btn-danger" :disabled="showChangeMenu" @click="removeFromCart($event, item)" >Удалить<i class="fa fa-trash"></i></button>
+                    <transition-group name="common-group">
+                        <div class="product" v-for="(item) in products" @click="goProduct($event, item)" :key="item._id" >
+                            <img :src="item.picture" width="150" alt="">
+                            <div class="main-content">
+                                <div class="user">
+                                    <span class="number-rev"><span>Артикул товара:</span><h5><b>{{ item.article }}</b></h5></span>
+                                    <b class="mt-2">{{ item.brand_id.brandName }} / {{ item.title }}</b>
+                                    <p class="pt-lg-4">Доставка со склада продавца</p>
+                                </div>
+                                <div class="action-menu">
+                                    <button class="btn btn-danger" :disabled="showChangeMenu" @click="removeFromCart($event, item)" >Удалить<i class="fa fa-trash"></i></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </transition-group>
                 </div>
                 <div class="oplata-menu">
                     <div class="oplata">
@@ -195,8 +195,7 @@ export default {
                                 <div class="money"><h2><b>{{ cartInfo.totalCost }}</b></h2><h2><b><i class="fa fa-rub"></i></b></h2></div>
                             </div>
                             <button class="btn" :disabled="showChangeMenu" @click="createOrders" >Заказать</button>
-                            <div v-if="successCreate" class="alert w-100 mt-2 text-center alert-success">Заказ прошел успешно и оплачен</div>
-                            <div v-if="notEnoughMoney" class="alert w-100 mt-2 text-center alert-danger">У вас недостаточно средств для оплаты</div>
+                            <div v-if="createAlertMessage !== ''" class="alert w-100 mt-2 text-center" :class="this.createAlertMessage === 'Заказ прошел успешно и оплачен' ? 'alert-success' : 'alert-danger'">{{ this.createAlertMessage }}</div>
                             <div class="check">
                                 <i class="fa fa-check"></i> <p>Соглашаюсь с <b @click="goRoute($event, 'pravilapol')">правилами пользования<br> торговой площадкой</b> и <b @click="goRoute($event, 'vozvrat')">возврата</b></p>
                             </div>
@@ -243,6 +242,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/cart.scss';
-
+    @import '@/assets/scss/cart.scss';
+    @import '@/assets/scss/transition-group.scss'
 </style>

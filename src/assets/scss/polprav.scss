@@ -1,9 +1,12 @@
+@import './media_component.scss';
+
 .wrapper {
     margin: 60px 70px;
 }
 
 .wrapper h2 {
     font-size: 24px;
+    margin-bottom: 0;
 }
 
 .wrapper p {
@@ -87,7 +90,7 @@
     }
 
     .wrapper {
-        width: 1380px;
+        width: 1385px;
     }
 
     .blocks-container, .wrapper {
@@ -104,5 +107,9 @@
     .toggle__label {
         margin: 0;
         width: 100%;
+    }
+
+    .blocks-container {
+        margin-top: 35px;
     }
 }

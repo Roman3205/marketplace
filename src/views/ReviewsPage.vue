@@ -99,41 +99,44 @@ export default {
                 <button @click="goRoute($event, 'orders')" >Перейти к покупкам</button>
             </div>
             <div class="feedbacks-container"  v-if="reviews.reviews != 0">
-                <div class="feedback" v-for="(review) in reviews.reviews">
-                    <div class="image-feed">
-                        <img :src="review.product_id.picture" width="150" alt="" @click="goProduct($event, review.product_id)">
-                        <div class="action-menu nothide">
-                            <button @click="deleteReview($event, review)" :disabled="showEditMenu" class="btn btn-danger"><span>Удалить</span><i class="fa fa-trash"></i></button>
-                        </div>
-                    </div>
-                    <div class="main-content">
-                        <div class="time">
-                            <div class="user">
-                                <b @click="goProduct($event, review.product_id)" class="mt-2">{{ review.product_id.brand_id.brandName }} / {{ review.product_id.title }}</b>
-                                <p>Дата написания отзыва: {{ getTimeReview(review.createdAt) }}</p>
+                <transition-group name="common-group">
+                    <div class="feedback" v-for="(review) in reviews.reviews" :key="review._id">
+                        <div class="image-feed">
+                            <img :src="review.product_id.picture" width="150" alt="" @click="goProduct($event, review.product_id)">
+                            <div class="action-menu nothide">
+                                <button @click="deleteReview($event, review)" class="btn btn-danger"><span>Удалить</span><i class="fa fa-trash"></i></button>
                             </div>
-                            <div class="stars">
-                                <span>Ваша оценка:</span>
-                                <div class="items">
-                                    <i class="fa me-1 fa-star star-rev" v-for="index in review.rating"></i>
+                        </div>
+                        <div class="main-content">
+                            <div class="time">
+                                <div class="user">
+                                    <b @click="goProduct($event, review.product_id)" class="mt-2">{{ review.product_id.brand_id.brandName }} / {{ review.product_id.title }}</b>
+                                    <p>Дата написания отзыва: {{ getTimeReview(review.createdAt) }}</p>
+                                </div>
+                                <div class="stars">
+                                    <span>Ваша оценка:</span>
+                                    <div class="items">
+                                        <i class="fa me-1 fa-star star-rev" v-for="index in review.rating"></i>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="text">
-                            <p>Текст вашего отзыва:</p>
-                            <textarea name="" id="" disabled maxlength="150">{{ review.text }}</textarea>
-                        </div>
-                        <div class="action-menu hide">
-                            <button @click="deleteReview($event, review)" :disabled="showEditMenu" class="btn btn-danger"><span>Удалить</span><i class="fa fa-trash"></i></button>
+                            <div class="text">
+                                <p>Текст вашего отзыва:</p>
+                                <textarea name="" id="" disabled maxlength="150">{{ review.text }}</textarea>
+                            </div>
+                            <div class="action-menu hide">
+                                <button @click="deleteReview($event, review)" class="btn btn-danger"><span>Удалить</span><i class="fa fa-trash"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </transition-group>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/reviews.scss';
+    @import '@/assets/scss/reviews.scss';
+    @import '@/assets/scss/transition-group.scss';
 
 </style>

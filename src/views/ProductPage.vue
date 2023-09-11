@@ -13,12 +13,10 @@ export default {
             highlightedStars: 0,
             product: null,
             currentDate: new Date(),
-            successCreate: undefined,
-            notCorrect: undefined,
             addSuccess: undefined,
             alreadyInCart: undefined,
-            alreadyWritten: undefined,
-            prodRecieved: undefined
+            prodRecieved: undefined,
+            reviewAlertMessage: ''
         }
     },
 
@@ -87,7 +85,6 @@ export default {
                 this.product = response.data
 
                 this.checkInCart()
-
             } catch (error) {
                 if(error.response && error.response.status === 404) {
                     this.$router.push('/not-found')
@@ -104,14 +101,12 @@ export default {
                 })
             }
 
-            this.successCreate = false
-            this.alreadyWritten = false
-            this.notCorrect = false
+            this.reviewAlertMessage = ''
             this.prodRecieved = false
 
             let filter = /([a-zA-Zа-яА-Я])\1{2}/;
             if (!/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputValue) || filter.test(this.inputValue)) {
-                this.notCorrect = true
+                this.reviewAlertMessage = 'Произошла ошибка в заполнении'
             } else {
                 try {
                     let token = 'Bearer ' + localStorage.getItem('token')
@@ -125,17 +120,16 @@ export default {
                         }
                     })
 
-                    this.successCreate = true
+                    this.reviewAlertMessage = 'Ваш отзыв успешно создан'
                     await new Promise(prom => setTimeout(prom, 1300))
                     this.getParamsProduct()
                     this.inputValue = ''
                     this.highlightedStars = 0
                     this.closeReviewCreate()
-                    this.successCreate = false
-
+                    this.reviewAlertMessage = ''
                 } catch (error) {
                     if(error.response && error.response.status === 409) {
-                        this.alreadyWritten = true
+                        this.reviewAlertMessage = 'Вы уже оставляли отзыв на этот товар'
                     } else if (error.response && error.response.status === 403) {
                         this.closeReviewCreate()
                         this.prodRecieved = true
@@ -148,6 +142,7 @@ export default {
         async addToCart(evt) {
             evt.preventDefault()
             this.addSuccess = false
+            this.alreadyInCart = false
 
             let token = 'Bearer ' + localStorage.getItem('token')
 
@@ -157,16 +152,20 @@ export default {
                 })
             }
             
-            await axios.post('/cart/add', {
-                article: this.$route.params.article
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+            try {
+                await axios.post('/cart/add', {
+                    article: this.$route.params.article
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.addSuccess = true
-            this.checkInCart()
+                this.addSuccess = true
+                this.checkInCart()
+            } catch (error) {
+                return
+            }
         },
 
         async checkInCart() {
@@ -274,7 +273,7 @@ export default {
                         </div>
                         <button class="btn button-buy" :disabled="showReviewBar" @click="addToCart" v-if="!alreadyInCart && product.runOut == false" >Добавить в корзину</button>
                         <button class="btn button-buy" disabled v-if="product.runOut == true" >Товар закончился на складе</button>
-                        <button class="btn button-cart" v-if="alreadyInCart && product.runOut == false" @click="goRoute($event, 'cart')" >Перейти в корзину</button>
+                        <button class="btn button-cart" v-if="alreadyInCart && product.runOut == false" @click="goRoute($event, 'cart')">Перейти в корзину</button>
                         <p><b>{{ getDeliver(currentDate) }}</b> доставка со склада</p>
                     </div>
                     <div v-if="addSuccess" class="w-100 text-center mt-4 alert alert-success">Товар успешно добавлен в корзину</div>
@@ -338,9 +337,7 @@ export default {
                     'opacity': !emptyValue
                 }" >Отправить</button>
             </form>
-            <div v-if="notCorrect" class="w-100 mt-4 mb-2 p-2 text-center alert alert-danger">Произошла ошибка в заполнении</div>
-            <div v-if="successCreate" class="w-100 mt-4 mb-2 p-2 text-center alert alert-success">Ваш отзыв успешно создан</div>
-            <div v-if="alreadyWritten" class="w-100 mt-4 mb-2 p-2 text-center alert alert-danger">Вы уже оставляли отзыв на этот товар</div>
+            <div v-if="reviewAlertMessage !== ''" class="w-100 mt-4 mb-2 p-2 text-center alert" :class="this.reviewAlertMessage === 'Ваш отзыв успешно создан' ? 'alert-success' : 'alert-danger'">{{ this.reviewAlertMessage }}</div>
         </div>
         <div class="write-review2" v-if="prodRecieved">
             <i class="fa fa-times" @click="closeMenu" ></i>
@@ -356,5 +353,5 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/product.scss';
+    @import '@/assets/scss/product.scss';
 </style>

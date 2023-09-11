@@ -5,7 +5,7 @@
 <template>
     <div class="container">
         <div class="wrapper">
-            <h1 class="wrapper__h1"><b>Покупайте на Marketplace</b></h1>
+            <h2><b>Покупайте на Marketplace</b></h2>
             <div class="blocks">
                 <div class="block__content1 box">
                     <div class="inner">
@@ -13,7 +13,7 @@
                         <img src="../../images/picdostavka.png" alt="" width="200">
                     </div>
                     <div class="content">
-                        <h1>Более 80%</h1>
+                        <h2>Более 80%</h2>
                         <p>доставляется на <br>следующий день</p>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                         <img src="../../images/picsale.png" alt="" width="140">
                     </div>
                     <div class="content">
-                        <h1>до 90%</h1>
+                        <h2>до 90%</h2>
                         <p>скидка постоянным <br>покупателям</p>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                         <img src="../../images/picsamov.png" alt="" width="125">
                     </div>
                     <div class="content">
-                        <h1>28 тыс+</h1>
+                        <h2>28 тыс+</h2>
                         <p>пунктов выдачи заказа</p>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                         <img src="../../images/picprod.png" alt="" width="200">
                     </div>
                     <div class="content">
-                        <h1>10 млн+</h1>
+                        <h2>10 млн+</h2>
                         <p>ежедневно отправляемых <br>товаров со складов</p>
                     </div>
                 </div>

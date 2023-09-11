@@ -73,10 +73,11 @@ export default {
                             name: 'login'
                         })
                     }
-                    
                 } catch (error) {
                     if (error.response && error.response.status === 409) {
                         this.alertMessage = 'Аккаунт с введенной почтой уже существует'
+                    } else {
+                        return
                     }
                 }
             }

@@ -1,5 +1,6 @@
 <script>
 
+import { mapState } from 'vuex'
 import dayjs from 'dayjs'
 import axios from 'axios'
 
@@ -30,9 +31,7 @@ export default {
             selectValue: '',
             priceValue: '',
             sellerInfo: null,
-            successCreate: undefined,
-            notCorrect: undefined,
-            existProd: undefined,
+            createAlertMessage: '',
             products: [],
             discountSuccess: undefined,
             deleteProd: undefined,
@@ -46,6 +45,9 @@ export default {
     },
 
     computed: {
+        ...mapState({
+            categoriesArray: state => state.categoriesArray
+        }),
         emptyValue() {
             return this.discount >= 5 && this.discount <= 90
         },
@@ -92,13 +94,11 @@ export default {
 
         async CreateProd(evt) {
             evt.preventDefault()
-            this.successCreate = false
-            this.notCorrect = false
-            this.existProd = false
+            this.createAlertMessage = ''
 
             let filter = /([a-zA-Zа-яА-Я])\1{1}/;
             if (filter.test(this.inputName) || !/^[А-Яа-я\s,'-.!" "?]+$/.test(this.textareaValue) || /^[А-Яа-я\s,'-.!" "?]+$/.test(this.photoValue) || !filter.test(this.textareaValue)) {
-                this.notCorrect = true
+                this.createAlertMessage = 'Произошла ошибка в заполнении'
             } else {
                 try {
                     let token = 'Bearer ' + localStorage.getItem('tokenSell')
@@ -114,7 +114,7 @@ export default {
                         }
                     })
 
-                    this.successCreate = true
+                    this.createAlertMessage = 'Товар успешно опубликован'
                     await new Promise(prom => setTimeout(prom, 1300))
                     this.getSeller()
                     this.getProducts()
@@ -124,10 +124,10 @@ export default {
                     this.priceValue = ''
                     this.selectValue = ''
                     this.closePublic()
-                    this.successCreate = false
+                    this.createAlertMessage = ''
                 } catch(error) {
                     if(error.response && error.response.status === 409) {
-                        this.existProd = true
+                        this.createAlertMessage = 'Товар с введенным описанием или фото уже существует'
                     }
                 }
             }
@@ -315,23 +315,8 @@ export default {
                 <div>
                     <p>Выберите категорию товара</p>
                     <select class="mt-2 w-100" v-model="selectValue">
-                        <option class="category-item">Верхняя одежда</option>
-                        <option class="category-item">Обувь</option>
-                        <option class="category-item">Товары для дома</option>
-                        <option class="category-item">Аксессуары</option>
-                        <option class="category-item">Электроника</option>
-                        <option class="category-item">Игрушки</option>
-                        <option class="category-item">Мебель</option>
-                        <option class="category-item">Продукты</option>
-                        <option class="category-item">Бытовая техника</option>
-                        <option class="category-item">Зоотовары</option>
-                        <option class="category-item">Спорт</option>
-                        <option class="category-item">Автотовары</option>
-                        <option class="category-item">Школа</option>
-                        <option class="category-item">Книги</option>
-                        <option class="category-item">Ювелирные изделия</option>
-                        <option class="category-item">Здоровье</option>
-                        <option class="category-item">Сад и дача</option>
+                        <option disabled value="" selected class="category-item">Выберите категорию</option>
+                        <option class="category-item" v-for="category in categoriesArray">{{ category }}</option>
                     </select>
                 </div>
                 <div>
@@ -352,9 +337,7 @@ export default {
                 <button class="btn" :class="{
                         'opacity': !CreateFill
                     }" >Опубликовать товар</button>
-                <div v-if="notCorrect" class="w-100 mt-1 mb-4 p-2 text-center alert alert-danger">Произошла ошибка в заполнении</div>
-                <div v-if="successCreate" class="w-100 mt-1 mb-4 p-2 text-center alert alert-success">Товар успешно опубликован</div>
-                <div v-if="existProd" class="w-100 mt-1 mb-4 p-2 text-center alert alert-danger">Товар с введенным описанием или фото уже существует</div>
+                <div v-if="this.createAlertMessage !== ''" class="w-100 mt-1 mb-4 p-2 text-center alert" :class="this.createAlertMessage === 'Товар успешно опубликован' ? 'alert-success' : 'alert-danger'">{{ this.createAlertMessage }}</div>
             </form>
         </div>
     </div>

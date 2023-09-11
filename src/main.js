@@ -1,14 +1,16 @@
 import axios from 'axios'
 // заменить переменными окружения
-axios.defaults.baseURL = 'http://' + 'localhost' + ':' + 3333
+
+const backend_host = import.meta.env.VITE_BACKEND_HOST
+const backend_port = import.meta.env.VITE_BACKEND_PORT
+
+axios.defaults.baseURL = 'http://' + backend_host + ':' + backend_port
 axios.defaults.withCredentials = true
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import utc from 'dayjs/plugin/utc'
 
-dayjs.extend(utc)
 dayjs.locale('ru')
 dayjs.extend(relativeTime)
 
@@ -17,7 +19,7 @@ import App from './App.vue'
 import router from './router/router'
 import store from './store/store'
 
-let app = createApp(App)
+const app = createApp(App)
 
 app
     .use(router)
