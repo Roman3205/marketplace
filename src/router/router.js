@@ -27,6 +27,7 @@ import SellManage from '@/views/SellManage.vue'
 import SellChats from '@/views/SellChats.vue'
 import SellMessenger from '@/views/SellMessenger.vue'
 import CreateOrderManual from '@/views/CreateOrderManual.vue'
+// import { lazyLoad } from '@/lazy.js'
 
 let router = createRouter({
     history: createWebHistory(),
