@@ -2,6 +2,7 @@
 
 import axios from 'axios'
 import dayjs from 'dayjs'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -14,17 +15,27 @@ export default {
         this.loadChats()
     },
 
+    computed: {
+        ...mapGetters({
+            getTokenSeller: 'auth/getTokenSeller'
+        })
+    },
+
     methods: {
         async loadChats() {
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
 
-            let response = await axios.get('/seller/chats/all', {
-                headers: {
-                    Authorization: token
-                }
-            })
+                let response = await axios.get('/seller/chats/all', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.chats = response.data
+                this.chats = response.data
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         getTime(date) {

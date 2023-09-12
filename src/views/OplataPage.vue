@@ -20,5 +20,5 @@
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/oplata.scss';
+    @import '@/assets/scss/oplata.scss';
 </style>

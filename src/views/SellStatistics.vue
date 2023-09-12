@@ -1,6 +1,6 @@
 <script>
 
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import dayjs from 'dayjs'
 import axios from 'axios'
 
@@ -48,6 +48,11 @@ export default {
         ...mapState({
             categoriesArray: state => state.categoriesArray
         }),
+
+        ...mapGetters({
+            getTokenSeller: 'auth/getTokenSeller'
+        }),
+
         emptyValue() {
             return this.discount >= 5 && this.discount <= 90
         },
@@ -82,14 +87,18 @@ export default {
         },
 
         async getSeller() {
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
-            let response = await axios.get('/seller/main', {
-                headers: {
-                    Authorization: token
-                }
-            })
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
+                let response = await axios.get('/seller/main', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.sellerInfo = response.data
+                this.sellerInfo = response.data
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async CreateProd(evt) {
@@ -101,7 +110,7 @@ export default {
                 this.createAlertMessage = 'Произошла ошибка в заполнении'
             } else {
                 try {
-                    let token = 'Bearer ' + localStorage.getItem('tokenSell')
+                    let token = 'Bearer ' + this.getTokenSeller
                     await axios.post('/product/create', {
                         title: this.inputName,
                         description: this.textareaValue,
@@ -128,84 +137,102 @@ export default {
                 } catch(error) {
                     if(error.response && error.response.status === 409) {
                         this.createAlertMessage = 'Товар с введенным описанием или фото уже существует'
+                    } else {
+                        console.log('Ошибка при отправке запроса на сервер: ' + error);
                     }
                 }
             }
         },
 
         async getProducts() {
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
-            let response = await axios.get('/seller/products/all', {
-                headers: {
-                    Authorization: token
-                }
-            })
-            this.products = response.data
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
+                let response = await axios.get('/seller/products/all', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+                this.products = response.data
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async deleteProduct(evt, item) {
             evt.preventDefault()
             this.deleteProd = false
 
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
             
-            await axios.post('/product/remove', {
-                id: item._id
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+                await axios.post('/product/remove', {
+                    id: item._id
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.deleteProd = true
+                this.deleteProd = true
 
-            await new Promise(prom => setTimeout(prom, 1300))
+                await new Promise(prom => setTimeout(prom, 1300))
 
-            this.getProducts()
+                this.getProducts()
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async returnCurrentProduct(evt, item) {
             evt.preventDefault()
             this.recycleProd = false
 
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
             
-            await axios.post('/product/return/sell', {
-                id: item._id
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+                await axios.post('/product/return/sell', {
+                    id: item._id
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.recycleProd = true
+                this.recycleProd = true
 
-            await new Promise(prom => setTimeout(prom, 1300))
+                await new Promise(prom => setTimeout(prom, 1300))
 
-            this.getProducts()
+                this.getProducts()
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async setDiscount(evt) {
             evt.preventDefault()
             this.discountSuccess = false
 
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
             
-            await axios.post('/discount/set', {
-                id: this.discountItem,
-                discount: this.discount
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+                await axios.post('/discount/set', {
+                    id: this.discountItem,
+                    discount: this.discount
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.discountSuccess = true
-            await new Promise(prom => setTimeout(prom, 1300))
-            this.getProducts()
-            this.discount = ''
-            this.closeSale()
-            this.discountSuccess = false
+                this.discountSuccess = true
+                await new Promise(prom => setTimeout(prom, 1300))
+                this.getProducts()
+                this.discount = ''
+                this.closeSale()
+                this.discountSuccess = false
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         getTime(date) {

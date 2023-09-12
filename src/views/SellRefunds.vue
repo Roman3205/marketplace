@@ -2,6 +2,7 @@
 
 import axios from 'axios'
 import dayjs from 'dayjs'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -14,62 +15,84 @@ export default {
         this.loadRefunds()
     },
 
+    computed: {
+        ...mapGetters({
+            getTokenSeller: 'auth/getTokenSeller'
+        })
+    },
+
     methods: {
         async loadRefunds() {
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
 
-            let response = await axios.get('/seller/refunds/all', {
-                headers: {
-                    Authorization: token
-                }
-            })
+                let response = await axios.get('/seller/refunds/all', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.refunds = response.data
+                this.refunds = response.data
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async statusForward(item) {
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
             
-            await axios.post('/seller/refund/change', {
-                status: item.status,
-                id: item._id
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+                await axios.post('/seller/refund/change', {
+                    status: item.status,
+                    id: item._id
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.loadRefunds()
+                this.loadRefunds()
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async statusReject(item, status) {
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
             
-            await axios.post('/seller/refund/change', {
-                status: status,
-                id: item._id
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+                await axios.post('/seller/refund/change', {
+                    status: status,
+                    id: item._id
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.loadRefunds()
+                this.loadRefunds()
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async statusAccept(item, status) {
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
             
-            await axios.post('/seller/refund/change', {
-                status: status,
-                id: item._id
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+                await axios.post('/seller/refund/change', {
+                    status: status,
+                    id: item._id
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.loadRefunds()
+                this.loadRefunds()
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         getTime(data) {

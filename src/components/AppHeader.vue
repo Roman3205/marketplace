@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import { scrollWin } from './AppFooter.vue'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -29,10 +29,23 @@ export default {
     computed: {
         ...mapState({
             categoriesArray: state => state.categoriesArray
+        }),
+
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken',
+            getTokenSeller: 'auth/getTokenSeller'
         })
     },
+    
 
     methods: {
+        ...mapActions({
+            searchProductsFunction: 'searchProductsFunction',
+            saveInputValue: 'saveInputValue',
+            setFilteredCategory: 'setFilteredCategory',
+            getCategory: 'getCategory'
+        }),
+
         goRoute(evt, routeTo) {
             if(routeTo === 'main') {
                 this.searchProductsFunction([])
@@ -55,28 +68,26 @@ export default {
 
         openMenu() {
             this.isOpenMenu = true
-            document.documentElement.querySelector('.appear-menu').classList.add('open-menu')
-            document.documentElement.querySelector('.content-app').style.opacity = '0.4'
-            document.documentElement.querySelector('.content-app').style.pointerEvents = 'none'
-            document.documentElement.style.overflowY = 'hidden'
-            document.querySelector('.header').style.pointerEvents = 'none'
+            const root = document.documentElement
+            root.querySelector('.space-menu').classList.add('open-space')
+            root.querySelector('.appear-menu').classList.add('open-menu')
+            root.style.overflowY = 'hidden'
             scrollWin()
         },
 
         closeMenu() {
             this.isOpenMenu = false
-            document.documentElement.querySelector('.appear-menu').classList.remove('open-menu')
-            document.documentElement.querySelector('.content-app').style.opacity = '1'
-            document.documentElement.querySelector('.content-app').style.pointerEvents = 'all'
-            document.documentElement.style.overflowY = 'scroll'
-            document.querySelector('.header').style.pointerEvents = 'all'
+            const root = document.documentElement
+            root.querySelector('.space-menu').classList.remove('open-space')
+            root.querySelector('.appear-menu').classList.remove('open-menu')
+            root.style.overflowY = 'scroll'
             scrollWin()
         },
 
         async getUser() {
-            if(!localStorage.getItem('tokenSell')) {
+            if(this.getTokenSeller === null) {
                 try {
-                    let token = 'Bearer ' + localStorage.getItem('token')
+                    let token = 'Bearer ' + this.getAccessToken
                     let response = await axios.get('/main', {
                         headers: {
                             Authorization: token
@@ -85,15 +96,19 @@ export default {
                     
                     this.userInfo = response.data
                 } catch (error) {
-
+                    return
                 }
             }
         },
 
         async getProductsAll() {
-            if(!localStorage.getItem('tokenSell')) {
-                let response = await axios.get('/products/all')
-                this.products = response.data
+            if(this.getTokenSeller === null) {
+                try {
+                    let response = await axios.get('/products/all')
+                    this.products = response.data
+                } catch (error) {
+                    console.log('Ошибка при отправке запроса на сервер: ' + error);
+                }
             }
         },
 
@@ -106,6 +121,11 @@ export default {
                 let filterProducts = this.products.filter((product) => regex.test(product.title))
                 this.searchProductsFunction(filterProducts)
                 this.saveInputValue(this.searchInput)
+            } else if (this.searchInput === '') {
+                this.searchProductsFunction([])
+                this.saveInputValue('')
+            } else {
+                return
             }
         },
 
@@ -122,21 +142,17 @@ export default {
             await new Promise(prom => setTimeout(prom, 100))
 
             this.closeMenu()
-        },
-
-        ...mapActions(['searchProductsFunction']),
-        ...mapActions(['saveInputValue']),
-        ...mapActions(['setFilteredCategory']),
-        ...mapActions(['getCategory'])
+        }
     }
 }
 </script>
 <template>
-    <div class="appear-menu">
-        <div class="categories">
-            <div class="category-item" v-for="item in categoriesArray" @click="categoryFilter($event, item)">{{ item }}</div>
+    <div class="space-menu" @click="closeMenu">
+        <div class="appear-menu" @click.stop>
+            <div class="categories">
+                <div class="category-item" v-for="item in categoriesArray" @click="categoryFilter($event, item)">{{ item }}</div>
+            </div>
         </div>
-        <i class="fa fa-times" @click="closeMenu" ></i>
     </div>
     <div class="container" :class="{
         'opacity': isOpenMenu
@@ -179,17 +195,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/header.scss';
-    .postList-enter-active,
-    .postList-leave-active {
-        transition: all 0.4s ease;
-    }
-    .postList-enter-from,
-    .postList-leave-to {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-    .postList-move {
-        transition: transform 0.4s ease;
-    }
+    @import '@/assets/scss/header.scss';
+
 </style>

@@ -167,12 +167,13 @@
     }
 }
 
-@media screen and (max-width: 1350px) {  
+@media screen and (max-width: 1400px) {  
     .wrapper {
         flex-direction: column-reverse;
         width: 100%;
-        padding: 30px 30px;
+        padding: 0px 15px;
         gap: 0px;
+        margin-top: 15px;
     }
 
     .history, .balance, .balance-menu {

@@ -78,6 +78,7 @@
 @media screen and (max-width: 1500px) {
     .wrapper {
         flex-direction: column;
+        margin-top: 35px;
     }
 
     .chats-container, .wrapper {
@@ -99,8 +100,9 @@
     }
 
     .chats-container {
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 25px;
+        padding-right: 25px;
+        margin-top: 20px;
     }
 
     .chat-block {

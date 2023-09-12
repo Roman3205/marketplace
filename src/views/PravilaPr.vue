@@ -20,5 +20,5 @@
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/prprav.scss';
+    @import '@/assets/scss/prprav.scss';
 </style>

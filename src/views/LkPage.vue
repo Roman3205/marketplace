@@ -2,6 +2,7 @@
 
 import axios from 'axios'
 import { scrollWin } from '../components/AppFooter.vue';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     data() {
@@ -14,7 +15,17 @@ export default {
         this.getUser()
     },
 
+    computed: {
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken'
+        })
+    },
+
     methods: {
+        ...mapActions({
+            deleteAccessToken: 'auth/deleteAccessToken'
+        }),
+
         goRoute(evt, routeTo) {
             evt.preventDefault()
             this.$router.push({
@@ -24,7 +35,7 @@ export default {
         },
 
         async getUser() {
-            let token = 'Bearer ' + localStorage.getItem('token');
+            let token = 'Bearer ' + this.getAccessToken
             let response = await axios.get('/main', {
                 headers: {
                     Authorization: token
@@ -35,12 +46,12 @@ export default {
 
         async LogOut(evt) {
             evt.stopPropagation()
-            await new Promise(prom => setTimeout(prom, 1300))
+            await axios.post('/logout')
+            this.deleteAccessToken()
             this.$router.push({
                 name: 'main'
             })
-            await axios.post('/logout')
-            localStorage.removeItem('token')
+            await new Promise(prom => setTimeout(prom, 2000))
             window.location.reload()
         }
     }

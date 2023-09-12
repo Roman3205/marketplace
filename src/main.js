@@ -1,11 +1,12 @@
 import axios from 'axios'
-// заменить переменными окружения
 
 const backend_host = import.meta.env.VITE_BACKEND_HOST
 const backend_port = import.meta.env.VITE_BACKEND_PORT
 
 axios.defaults.baseURL = 'http://' + backend_host + ':' + backend_port
-axios.defaults.withCredentials = true
+
+// jwt in cookies
+// axios.defaults.withCredentials = true
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'

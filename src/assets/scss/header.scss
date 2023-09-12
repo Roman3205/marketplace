@@ -109,6 +109,23 @@
     }
 }
 
+.space-menu {
+    visibility: hidden;
+    z-index: 999;
+    cursor: pointer;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.open-space {
+    visibility: visible;
+}
+
 .appear-menu {
     overflow-y: hidden;
     padding: 0;
@@ -127,7 +144,7 @@
 
     .fa-times {
         font-size: 38px;
-        color: rgb(101, 101, 101);
+        color: rgb(91, 91, 91);
         opacity: 1!important;
         cursor: pointer;
         top: 10px;
@@ -138,12 +155,12 @@
 
 .categories::-webkit-scrollbar {
     border-radius: 15px;
-    background-color: lightgray;
+    background-color: rgb(185, 185, 185);
 }
 
 .categories::-webkit-scrollbar-thumb {
     max-height: 50%;
-    background-color: gray;
+    background-color: rgb(114, 114, 114);
     border-radius: 15px;
 }
 

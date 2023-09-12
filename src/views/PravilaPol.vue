@@ -53,5 +53,5 @@
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/polprav.scss';
+    @import '@/assets/scss/polprav.scss';
 </style>

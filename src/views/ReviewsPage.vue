@@ -3,6 +3,7 @@
 import { scrollWin } from '../components/AppFooter.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -20,7 +21,11 @@ export default {
     computed: {
         emptyValue() {
             return this.inputValue !== ''
-        }
+        },
+
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken'
+        })
     },
 
     methods: {
@@ -33,38 +38,47 @@ export default {
         },
 
         async loadReviews() {
-            let token = 'Bearer ' + localStorage.getItem('token')
+            try {
+                let token = 'Bearer ' + this.getAccessToken
 
-            let response = await axios.get('/reviews/all', {
-                headers: {
-                    Authorization: token
-                }
-            })
+                let response = await axios.get('/reviews/all', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.reviews = response.data
+                this.reviews = response.data
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async deleteReview(evt, review) {
             evt.stopPropagation()
             evt.preventDefault()
-            this.notificationTrue = false
+            try {
+                this.notificationTrue = false
 
-            let token = 'Bearer ' + localStorage.getItem('token')
-            
-            await axios.post('/review/remove', {
-                id: review._id,
-                article: review.product_id.article
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+                let token = 'Bearer ' + this.getAccessToken
+                
+                await axios.post('/review/remove', {
+                    id: review._id,
+                    article: review.product_id.article
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.notificationTrue = true
+                this.notificationTrue = true
 
-            await new Promise(prom => setTimeout(prom, 1000))
+                await new Promise(prom => setTimeout(prom, 1000))
 
-            this.loadReviews()
+                this.loadReviews()
+
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         goProduct(evt, review) {

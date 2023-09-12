@@ -74,7 +74,7 @@ export default {
                     if (error.response && error.response.status === 409) {
                         this.alertMessage = 'Аккаунт продавца с введенной почтой уже существует'
                     } else {
-                        return
+                        console.log('Ошибка при отправке запроса на сервер: ' + error);
                     }
                 }
             }
@@ -140,6 +140,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/sellsignup.scss';
+    @import '@/assets/scss/sellsignup.scss';
     
 </style>

@@ -2,6 +2,7 @@
 
 import axios from 'axios'
 import dayjs from 'dayjs'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -24,10 +25,16 @@ export default {
         clearInterval(this.timer)
     },
 
+    computed: {
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken'
+        })
+    },
+
     methods: {
         async loadInfo() {
             try {
-                let token = 'Bearer ' + localStorage.getItem('token')
+                let token = 'Bearer ' + this.getAccessToken
 
                 let response = await axios.get('/user/chat', {
                     params: {
@@ -52,6 +59,8 @@ export default {
                     
                 } else if(error.response && error.response.status === 409) {
                     this.$router.push('/not-found')
+                } else {
+                    console.log('Ошибка при отправке запроса на сервер: ' + error);
                 }
             }
         },
@@ -64,23 +73,27 @@ export default {
         async sendMessage(evt) {
             evt.preventDefault()
 
-            let token = 'Bearer ' + localStorage.getItem('token')
+            try {
+                let token = 'Bearer ' + this.getAccessToken
 
-            if(this.text !== '') {
-                await axios.post('/user/message/send', {
-                    text: this.text,
-                    to: this.to,
-                    id: this.$route.params.id
-                }, {
-                    headers: {
-                        Authorization: token
-                    }
-                })
+                if(this.text !== '') {
+                    await axios.post('/user/message/send', {
+                        text: this.text,
+                        to: this.to,
+                        id: this.$route.params.id
+                    }, {
+                        headers: {
+                            Authorization: token
+                        }
+                    })
 
-                this.text = ''
+                    this.text = ''
+                }
+
+                this.loadInfo()
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
             }
-
-            this.loadInfo()
         },
 
         getDate(date) {

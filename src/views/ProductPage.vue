@@ -4,6 +4,7 @@ import { opacityEffectsOff, opacityEffectsOn } from './InfoDetails.vue'
 import { scrollWin } from '../components/AppFooter.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -23,7 +24,11 @@ export default {
     computed: {
         emptyValue() {
             return this.inputValue.length >= 30 && this.highlightedStars !== 0
-        }
+        },
+
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken'
+        })
     },
 
     mounted() {
@@ -34,7 +39,7 @@ export default {
         showReviewCreate(evt) {
             evt.preventDefault()
 
-            if(!localStorage.getItem('token')) {
+            if(!this.getAccessToken) {
                 this.$router.push({
                     name: 'login'
                 })
@@ -88,6 +93,8 @@ export default {
             } catch (error) {
                 if(error.response && error.response.status === 404) {
                     this.$router.push('/not-found')
+                } else {
+                    console.log('Ошибка при отправке запроса на сервер: ' + error);
                 }
             }
         },
@@ -95,7 +102,7 @@ export default {
         async CreateReview(evt) {
             evt.preventDefault()
 
-            if(!localStorage.getItem('token')) {
+            if(this.getAccessToken === null) {
                 this.$router.push({
                     name: 'login'
                 })
@@ -109,7 +116,7 @@ export default {
                 this.reviewAlertMessage = 'Произошла ошибка в заполнении'
             } else {
                 try {
-                    let token = 'Bearer ' + localStorage.getItem('token')
+                    let token = 'Bearer ' + this.getAccessToken
                     await axios.post('/review/create', {
                         text: this.inputValue,
                         rating: this.highlightedStars,
@@ -134,6 +141,8 @@ export default {
                         this.closeReviewCreate()
                         this.prodRecieved = true
                         opacityEffectsOn()
+                    } else {
+                        console.log('Ошибка при отправке запроса на сервер: ' + error);
                     }
                 }
             }
@@ -144,9 +153,9 @@ export default {
             this.addSuccess = false
             this.alreadyInCart = false
 
-            let token = 'Bearer ' + localStorage.getItem('token')
+            let token = 'Bearer ' + this.getAccessToken
 
-            if(!localStorage.getItem('token')) {
+            if(!this.getAccessToken) {
                 this.$router.push({
                     name: 'login'
                 })
@@ -164,7 +173,7 @@ export default {
                 this.addSuccess = true
                 this.checkInCart()
             } catch (error) {
-                return
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
             }
         },
 
@@ -172,7 +181,7 @@ export default {
             this.alreadyInCart = false
 
             try {
-                let token = 'Bearer ' + localStorage.getItem('token')
+                let token = 'Bearer ' + this.getAccessToken
                 await axios.get('/product/check', {
                     params: {
                         article: this.$route.params.article
@@ -185,6 +194,8 @@ export default {
             } catch (error) {
                 if(error.response && error.response.status === 409) {
                     this.alreadyInCart = true
+                } else {
+                    console.log('Ошибка при отправке запроса на сервер: ' + error);
                 }
             }
         },

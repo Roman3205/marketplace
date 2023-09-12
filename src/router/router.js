@@ -180,8 +180,8 @@ let router = createRouter({
 })
 
 router.beforeEach((from, to, next) => {
-    let token = localStorage.getItem('token')
-    let tokenSell = localStorage.getItem('tokenSell')
+    let token = localStorage.token || localStorage.getItem('token')
+    let tokenSell = localStorage.tokenSeller || localStorage.getItem('tokenSeller')
 
     let securityLogin = [
         'lk',
@@ -204,9 +204,16 @@ router.beforeEach((from, to, next) => {
         'manage'
     ]
 
+    let additionalRoutes = [
+        'cart',
+        'main',
+        'product'
+    ]
+
     if (
         (!token && securityLogin.includes(from.name)) || 
-        (tokenSell && securityLogin.includes(from.name))
+        (tokenSell && securityLogin.includes(from.name)) ||
+        (tokenSell && additionalRoutes.includes(from.name))
     ) {
         router.push('/security/login')
     } else if (

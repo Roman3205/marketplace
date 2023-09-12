@@ -2,6 +2,7 @@
 
 import axios from 'axios'
 import dayjs from 'dayjs'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -13,17 +14,27 @@ export default {
     mounted() {
         this.loadOrders()
     },
+    
+    computed: {
+        ...mapGetters({
+            getTokenSeller: 'auth/getTokenSeller'
+        })
+    },
 
     methods: {
         async loadOrders() {
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
-            let response = await axios.get('/seller/orders/all', {
-                headers: {
-                    Authorization: token
-                }
-            })
-            
-            this.orders = response.data
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
+                let response = await axios.get('/seller/orders/all', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+                
+                this.orders = response.data
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         getTime(date) {
@@ -32,17 +43,21 @@ export default {
         },
 
         async statusForward(item) {
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
-            await axios.post('/seller/order/change', {
-                status: item.status,
-                id: item._id
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
+                await axios.post('/seller/order/change', {
+                    status: item.status,
+                    id: item._id
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.loadOrders()
+                this.loadOrders()
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         }
     }
 }

@@ -39,5 +39,5 @@
 </template>
 
 <style scoped lang="scss">
-  @import '../assets/scss/vozvrat.scss';
+  @import '@/assets/scss/vozvrat.scss';
 </style>

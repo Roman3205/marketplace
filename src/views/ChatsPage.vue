@@ -3,6 +3,7 @@
 import { scrollWin } from '../components/AppFooter.vue';
 import dayjs from 'dayjs'
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -15,17 +16,27 @@ export default {
         this.loadChats()
     },
 
+    computed: {
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken'
+        })
+    },
+
     methods: {
         async loadChats() {
-            let token = 'Bearer ' + localStorage.getItem('token')
+            try {
+                let token = 'Bearer ' + this.getAccessToken
 
-            let response = await axios.get('/chats/all', {
-                headers: {
-                    Authorization: token
-                }
-            })
+                let response = await axios.get('/chats/all', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.chats = response.data
+                this.chats = response.data
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         getTime(date) {

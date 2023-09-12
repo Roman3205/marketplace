@@ -3,6 +3,7 @@
 import axios from 'axios'
 import { opacityEffectsOff, opacityEffectsOn, scrollMenu } from './InfoDetails.vue'
 import dayjs from 'dayjs'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -23,7 +24,11 @@ export default {
     computed: {
         emptyValue() {
             return this.inputValue !== ''
-        }
+        },
+
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken'
+        })
     },
 
     methods: {
@@ -46,47 +51,59 @@ export default {
         },
 
         async getUser() {
-            let token = 'Bearer ' + localStorage.getItem('token');
-            let response = await axios.get('/main', {
-                headers: {
-                    Authorization: token
-                }
-            })
-            this.userInfo = response.data
+            try {
+                let token = 'Bearer ' + this.getAccessToken
+                let response = await axios.get('/main', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+                this.userInfo = response.data
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async balanceTopUp(evt) {
             evt.preventDefault()
-            this.successTopUp = false
+            try {
+                this.successTopUp = false
 
-            let token = 'Bearer ' + localStorage.getItem('token')
-            await axios.post('/balance/topup', {
-                money: this.inputValue
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+                let token = 'Bearer ' + this.getAccessToken
+                await axios.post('/balance/topup', {
+                    money: this.inputValue
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.successTopUp = true
+                this.successTopUp = true
 
-            await new Promise(prom => setTimeout(prom, 1300))
-            this.getUser()
-            this.getOperations()
-            this.inputValue = ''
-            this.closeDon()
-            this.successTopUp = false
+                await new Promise(prom => setTimeout(prom, 1300))
+                this.getUser()
+                this.getOperations()
+                this.inputValue = ''
+                this.closeDon()
+                this.successTopUp = false
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async getOperations() {
-            let token = 'Bearer ' + localStorage.getItem('token')
-            let response = await axios.get('/balance/operations', {
-                headers: {
-                    Authorization: token
-                }
-            })
+            try {
+                let token = 'Bearer ' + this.getAccessToken
+                let response = await axios.get('/balance/operations', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.operations = response.data
+                this.operations = response.data
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         getTime(date) {

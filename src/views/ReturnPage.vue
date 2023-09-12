@@ -4,6 +4,7 @@ import { opacityEffectsOn, opacityEffectsOff } from './InfoDetails.vue';
 import { scrollWin } from '../components/AppFooter.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -29,29 +30,37 @@ export default {
 
         linkValue() {
             return this.inputValue2.length >= 22
-        }
+        },
+
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken'
+        })
     },
 
     methods: {
         async showFill(evt, item) {
             evt.preventDefault()
-            this.currentRefund = null
-            this.showFillMenu = true
-            opacityEffectsOn()
+            try {
+                this.currentRefund = null
+                this.showFillMenu = true
+                opacityEffectsOn()
 
-            let token = 'Bearer ' + localStorage.getItem('token')
+                let token = 'Bearer ' + this.getAccessToken
 
-            let response = await axios.get('/refund', {
-                params: {
-                    id: item._id
-                },
+                let response = await axios.get('/refund', {
+                    params: {
+                        id: item._id
+                    },
 
-                headers: {
-                    Authorization: token
-                }
-            })
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.currentRefund = response.data
+                this.currentRefund = response.data
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async refundFill(evt, item) {
@@ -65,28 +74,32 @@ export default {
             if(/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputValue2) || !/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputValue1) || filter.test(this.inputValue1)) {
                 this.notCorrectFill = true
             } else {
-                let token = 'Bearer ' + localStorage.getItem('token')
+                try {
+                    let token = 'Bearer ' + this.getAccessToken
 
-                await axios.post('/refund/fill', {
-                    id: item._id,
-                    albumLink: this.inputValue2,
-                    text: this.inputValue1
-                }, {
-                    headers: {
-                        Authorization: token
-                    }
-                })
+                    await axios.post('/refund/fill', {
+                        id: item._id,
+                        albumLink: this.inputValue2,
+                        text: this.inputValue1
+                    }, {
+                        headers: {
+                            Authorization: token
+                        }
+                    })
 
-                this.isFillRefund = true
+                    this.isFillRefund = true
 
-                await new Promise(prom => setTimeout(prom, 1300))
+                    await new Promise(prom => setTimeout(prom, 1300))
 
-                this.closeFill()
+                    this.closeFill()
 
-                this.inputValue1 = ''
-                this.inputValue2 = ''
+                    this.inputValue1 = ''
+                    this.inputValue2 = ''
 
-                this.loadRefunds()
+                    this.loadRefunds()
+                } catch (error) {
+                    console.log('Ошибка при отправке запроса на сервер: ' + error);
+                }
             }
         },
 
@@ -104,29 +117,37 @@ export default {
         },
 
         async loadRefunds() {
-            let token = 'Bearer ' + localStorage.getItem('token')
+            try {
+                let token = 'Bearer ' + this.getAccessToken
 
-            let response = await axios.get('/refund/all', {
-                headers: {
-                    Authorization: token
-                }
-            })
+                let response = await axios.get('/refund/all', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.refunds = response.data
+                this.refunds = response.data
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async returnMoney(item) {
-            let token = 'Bearer ' + localStorage.getItem('token')
+            try {
+                let token = 'Bearer ' + this.getAccessToken
 
-            await axios.post('/refund/return/money', {
-                id: item._id
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+                await axios.post('/refund/return/money', {
+                    id: item._id
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.loadRefunds()
+                this.loadRefunds()
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         getTime(date) {

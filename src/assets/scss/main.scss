@@ -8,6 +8,11 @@
     overflow-y: hidden;
 }
 
+p {
+    margin-top: 0px!important;
+    line-height: 23px!important;
+}
+
 .wrapper {
     background-color: #fff;
     width: 1400px;
@@ -137,14 +142,14 @@
 
 @media screen and (max-width: 1200px) {
     .wrapper {
-        margin-left: 0px;
-        margin-right: 0px;
+        margin-left: 0px!important;
+        margin-right: 0px!important;
         gap: 30px;
         margin-top: 40px;
     }
 
     .slider {
-        height: 300px;
+        height: 400px;
         margin-top: -15px;
         flex-direction: column;
         align-items: center;
@@ -152,7 +157,7 @@
 
         div {
             width: 95%;
-            height: 200px;
+            height: 300px;
         }
 
         button:first-of-type {
@@ -200,6 +205,16 @@
 
         .image-prod {
             background-size: 100% 100%;
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .slider {
+        height: 300px;
+
+        div {
+            height: 200px;
         }
     }
 }

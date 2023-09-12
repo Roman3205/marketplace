@@ -4,9 +4,9 @@ import authModule from "./authModule"
 let store = createStore({
     state: {
         products: [],
-        value: '',
+        value: "",
         categoryFiltered: [],
-        category: '',
+        category: "",
         categoriesArray: [
             'Верхняя одежда',
             'Обувь',
@@ -47,19 +47,19 @@ let store = createStore({
     },
 
     actions: {
-        async searchProductsFunction({ commit }, products) {
+        searchProductsFunction({commit}, products) {
             commit('setProducts', products)
         },
 
-        async saveInputValue({ commit }, value) {
+        saveInputValue({commit}, value) {
             commit('setInput', value)
         },
 
-        async setFilteredCategory({ commit }, products) {
+        setFilteredCategory({commit}, products) {
             commit('setCategory', products)
         },
 
-        async getCategory({ commit }, category) {
+        getCategory({commit}, category) {
             commit('setCategoryTitle', category)
         }
     },

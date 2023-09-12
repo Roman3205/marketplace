@@ -10,7 +10,6 @@ let frontHost = process.env.FRONTEND_HOST
 let backPort = process.env.VITE_BACKEND_PORT
 let backHost = process.env.VITE_BACKEND_HOST
 
-
 app.listen(backPort, () => {
     console.log('http://' + backHost + ':' + backPort)
 })
@@ -241,7 +240,7 @@ let VerifyTokenUser = (req, res, next) => {
         return res.status(401).send('Вы не авторизованы')
     }
 
-    jwt.verify(token.replace('Bearer ', ''), 'user', (error, decoded) => {
+    jwt.verify(token.replace('Bearer ', ''), process.env.TOKEN_USER, (error, decoded) => {
         if (error) {
             return res.status(401).send('Вы не авторизованы')
         }
@@ -253,12 +252,13 @@ let VerifyTokenUser = (req, res, next) => {
 
 let VerifyTokenSeller = (req, res, next) => {
     const token = req.headers.authorization
+    // const token = req.headers.cookie
 
     if(!token) {
         return res.status(401).send('Вы не авторизованы')
     }
-
-    jwt.verify(token.replace('Bearer ', ''), 'seller', (error, decoded) => {
+    // jwt.verify(token.replace('tokenUser=', ''), 'user', (error, decoded) => {
+    jwt.verify(token.replace('Bearer ', ''), process.env.TOKEN_SELLER, (error, decoded) => {
         if(error) {
             return res.status(401).send('Вы не авторизованы')
         }
@@ -359,11 +359,13 @@ app.post('/login', async (req,res) => {
         return res.status(400).send('Неверные данные') 
     }
 
-    let token = jwt.sign({_id: customer._id}, 'user')
+    let token = jwt.sign({_id: customer._id}, process.env.TOKEN_USER)
 
-    res.cookie('tokenUser', token, {
+    res.cookie(process.env.COOKIE_USER, token, {
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: 'none',
+        secure: 'none'
     })
 
     res.send(token)
@@ -397,7 +399,7 @@ app.post('/mail/change', VerifyTokenUser, async (req, res) => {
 
     await customer.save()
 
-    return res.status(200).send('Почта успешно изменена')
+    res.status(200).send('Почта успешно изменена')
 })
 
 app.post('/name/change', VerifyTokenUser, async (req, res) => {
@@ -1141,7 +1143,7 @@ app.post('/refund/return/money', VerifyTokenUser, async (req, res) => {
 })
 
 app.post('/logout', async (req, res) => {
-    res.clearCookie('tokenUser', {
+    res.clearCookie(process.env.COOKIE_USER, {
         httpOnly: true,
         maxAge: 0,
         sameSite: 'none'
@@ -1201,7 +1203,12 @@ app.post('/login/seller', async (req, res) => {
         return res.status(400).send('Неверные данные') 
     }
 
-    let token = jwt.sign({_id: seller._id}, 'seller')
+    let token = jwt.sign({_id: seller._id}, process.env.TOKEN_SELLER)
+
+    res.cookie(process.env.COOKIE_SELLER, token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000
+    })
 
     res.send(token)
 })
@@ -1574,7 +1581,7 @@ app.post('/seller/message/send', VerifyTokenSeller, async (req, res) => {
 })
 
 app.post('/logout/seller', async (req, res) => {
-    res.clearCookie('user-jwt', {
+    res.clearCookie(process.env.COOKIE_SELLER, {
         httpOnly: true,
         maxAge: 0,
         sameSite: 'none'

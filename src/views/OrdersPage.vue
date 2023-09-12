@@ -3,6 +3,7 @@
 import { scrollWin } from '../components/AppFooter.vue';
 import dayjs from 'dayjs'
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -27,6 +28,12 @@ export default {
         this.loadPurchases()
     },
 
+    computed: {
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken'
+        })
+    },
+
     methods: {
         goRoute(evt, routeTo) {
             evt.preventDefault()
@@ -37,27 +44,35 @@ export default {
         },
 
         async getSearchPurchases() {
-            let token = 'Bearer ' + localStorage.getItem('token')
-            let response = await axios.get('/purchases', {
-                headers: {
-                    Authorization: token
-                }
-            })
+            try {
+                let token = 'Bearer ' + this.getAccessToken
+                let response = await axios.get('/purchases', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            let purchases = response.data
-            let regex = new RegExp(this.searchInput, 'i')
-            this.searchPurchases = purchases.orders.filter((order) => regex.test(order.product_id.title) || regex.test(order.product_id.article))
+                let purchases = response.data
+                let regex = new RegExp(this.searchInput, 'i')
+                this.searchPurchases = purchases.orders.filter((order) => regex.test(order.product_id.title) || regex.test(order.product_id.article))
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async loadPurchases() {
-            let token = 'Bearer ' + localStorage.getItem('token')
-            let response = await axios.get('/purchases', {
-                headers: {
-                    Authorization: token
-                }
-            })
+            try {
+                let token = 'Bearer ' + this.getAccessToken
+                let response = await axios.get('/purchases', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.purchases = response.data
+                this.purchases = response.data
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async createChat(evt, item) {
@@ -67,7 +82,7 @@ export default {
             this.existChat = false
 
             try {
-                let token = 'Bearer ' + localStorage.getItem('token')
+                let token = 'Bearer ' + this.getAccessToken
                 
                 await axios.post('/chat/create', {
                     id: item.product_id.brand_id
@@ -82,6 +97,8 @@ export default {
             } catch (error) {
                 if(error.response && error.response.status === 409) {
                     this.existChat = true
+                } else {
+                    console.log('Ошибка при отправке запроса на сервер: ' + error);
                 }
             }
         },
@@ -93,7 +110,7 @@ export default {
             this.existRefund = false
 
             try {
-                let token = 'Bearer ' + localStorage.getItem('token')
+                let token = 'Bearer ' + this.getAccessToken
 
                 await axios.post('/refund/create', {
                     productId: item.product_id._id,
@@ -110,6 +127,8 @@ export default {
             } catch (error) {
                 if(error.response && error.response.status === 409) {
                     this.existRefund = true
+                } else {
+                    console.log('Ошибка при отправке запроса на сервер: ' + error);
                 }
             }
         },

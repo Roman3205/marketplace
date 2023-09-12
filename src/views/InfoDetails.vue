@@ -1,6 +1,7 @@
 <script>
 
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 const opacityEffectsOn = () => {
     document.documentElement.style.overflowY = 'hidden'
@@ -47,7 +48,11 @@ export default {
     computed: {
         emptyValue() {
             return this.inputMail === ''
-        }
+        },
+
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken'
+        })
     },
 
     methods: {
@@ -74,14 +79,18 @@ export default {
         },
 
         async getUser() {
-            let token = 'Bearer ' + localStorage.getItem('token');
-            let response = await axios.get('/main', {
-                headers: {
-                    Authorization: token
-                }
-            })
-            this.userInfo = response.data
-            this.inputName = this.userInfo.name
+            try {
+                let token = 'Bearer ' + this.getAccessToken;
+                let response = await axios.get('/main', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+                this.userInfo = response.data
+                this.inputName = this.userInfo.name
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async ChangeMail(evt) {
@@ -89,7 +98,7 @@ export default {
             
             try {
                 evt.preventDefault()
-                let token = 'Bearer ' + localStorage.getItem('token');
+                let token = 'Bearer ' + this.getAccessToken
                 await axios.post('/mail/change', {
                     mail: this.inputMail
                 }, { headers: {
@@ -108,6 +117,8 @@ export default {
             } catch (error) {
                 if(error.response && error.response.status === 409) {
                     this.mailAlertMessage = 'Почта уже привязана к другому аккаунту'
+                } else {
+                    console.log('Ошибка при отправке запроса на сервер: ' + error);
                 }
             }
         },
@@ -121,7 +132,7 @@ export default {
                 this.nameAlertMessage = 'Ошибка заполнения'
             } else {
                 try {
-                    let token = 'Bearer ' + localStorage.getItem('token');
+                    let token = 'Bearer ' + this.getAccessToken;
                     await axios.post('/name/change', {
                         name: this.inputName
                     }, { headers: {
@@ -136,7 +147,7 @@ export default {
                     this.getUser()
                     window.location.reload()
                 } catch (error) {
-                    
+                    console.log('Ошибка при отправке запроса на сервер: ' + error);
                 }
             }
         }

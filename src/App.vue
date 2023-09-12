@@ -36,12 +36,14 @@ export default {
 
   methods: {
     ...mapActions({
-      loadToken: 'auth/loadToken'
+      loadToken: 'auth/loadToken',
+      loadTokenSeller: 'auth/loadTokenSeller'
     })
   },
 
   created() {
     this.loadToken()
+    this.loadTokenSeller()
     // this.$store.dispatch('auth/loadToken')
   }
 }

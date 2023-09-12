@@ -4,6 +4,7 @@ import { scrollWin } from '../components/AppFooter.vue'
 import { opacityEffectsOn, opacityEffectsOff } from './InfoDetails.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import {  mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -22,6 +23,12 @@ export default {
 
     mounted() {
         this.loadCart()
+    },
+
+    computed: {
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken'
+        })
     },
 
     methods: {
@@ -46,38 +53,46 @@ export default {
         },
 
         async loadCart() {
-            let token = 'Bearer ' + localStorage.getItem('token')
+            try {
+                let token = 'Bearer ' + this.getAccessToken
 
-            let response = await axios.get('/cart', {
-                headers: {
-                    Authorization: token
-                }
-            })
+                let response = await axios.get('/cart', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.userInfo = response.data.customer
-            this.cartInfo = response.data.cart
-            this.products = response.data.cart.products
+                this.userInfo = response.data.customer
+                this.cartInfo = response.data.cart
+                this.products = response.data.cart.products
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         async removeFromCart(evt, item) {
             evt.stopPropagation()
             evt.preventDefault()
-            this.notificationTrue = false
+            try {
+                this.notificationTrue = false
 
-            let token = 'Bearer ' + localStorage.getItem('token')
-            await axios.post('/cart/remove', {
-                article: item.article
-            }, {
-                headers: {
-                    Authorization: token
-                }
-            })
+                let token = 'Bearer ' + this.getAccessToken
+                await axios.post('/cart/remove', {
+                    article: item.article
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.notificationTrue = true
+                this.notificationTrue = true
 
-            await new Promise(prom => setTimeout(prom, 600))
+                await new Promise(prom => setTimeout(prom, 600))
 
-            this.loadCart()
+                this.loadCart()
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         getRandomDateDelivery() {
@@ -110,7 +125,7 @@ export default {
             this.runOutProd = false
 
             try {
-                let token = 'Bearer ' + localStorage.getItem('token')
+                let token = 'Bearer ' + this.getAccessToken
                 await axios.post('/order/create', {
                     products: this.products
                 }, {
@@ -139,6 +154,8 @@ export default {
                     this.titleRunOut = error.response.data.data.map(product => (
                         'Товар ' + "'" + product.title + "'" + ' закончился, удалите его из корзины'
                     )).join(', ')
+                } else {
+                    console.log('Ошибка при отправке запроса на сервер: ' + error);
                 }
             }
         }

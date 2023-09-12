@@ -53,5 +53,5 @@
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/aboutus.scss';
+    @import '@/assets/scss/aboutus.scss';
 </style>

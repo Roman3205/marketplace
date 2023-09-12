@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -24,27 +25,37 @@ export default {
         clearInterval(this.timer)
     },
 
+    computed: {
+        ...mapGetters({
+            getTokenSeller: 'auth/getTokenSeller'
+        })
+    },
+
     methods: {
         async loadInfo() {
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
 
-            let response = await axios.get('/seller/chat', {
-                params: {
-                    id: this.$route.params.id
-                },
-                    
-                headers: {
-                    Authorization: token
-                }
-            })
+                let response = await axios.get('/seller/chat', {
+                    params: {
+                        id: this.$route.params.id
+                    },
+                        
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.information = response.data.chat
-            this.messages = response.data.messages
-            this.to = this.information[0].people[0]._id
+                this.information = response.data.chat
+                this.messages = response.data.messages
+                this.to = this.information[0].people[0]._id
 
-            this.$nextTick(() => {
-                this.scrollToBottom()
-            })
+                this.$nextTick(() => {
+                    this.scrollToBottom()
+                })
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         scrollToBottom() {
@@ -55,23 +66,27 @@ export default {
         async sendMessage(evt) {
             evt.preventDefault()
 
-            let token = 'Bearer ' + localStorage.getItem('tokenSell')
+            try {
+                let token = 'Bearer ' + this.getTokenSeller
 
-            if(this.text !== '') {
-                await axios.post('/seller/message/send', {
-                    text: this.text,
-                    to: this.to,
-                    id: this.$route.params.id
-                }, {
-                    headers: {
-                        Authorization: token
-                    }
-                })
+                if(this.text !== '') {
+                    await axios.post('/seller/message/send', {
+                        text: this.text,
+                        to: this.to,
+                        id: this.$route.params.id
+                    }, {
+                        headers: {
+                            Authorization: token
+                        }
+                    })
 
-                this.text = ''
+                    this.text = ''
+                }
+
+                this.loadInfo()
+            } catch(error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
             }
-
-            this.loadInfo()
         },
 
         getDate(date) {

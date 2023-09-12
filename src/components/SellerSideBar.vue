@@ -1,9 +1,14 @@
 <script>
 
 import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
     methods: {
+        ...mapActions({
+            deleteTokenSeller: 'auth/deleteTokenSeller'
+        }),
+
         goRoute(evt, routeTo) {
             evt.preventDefault()
             this.$router.push({
@@ -19,12 +24,17 @@ export default {
 
         async LogOut(evt) {
             evt.preventDefault()
-            this.$router.push({
-                name: 'main'
-            })
-            await axios.post('/logout/seller')
-            localStorage.removeItem('tokenSell')
-            window.location.reload()
+            try {
+                this.deleteTokenSeller()
+                await axios.post('/logout/seller')
+                this.$router.push({
+                    name: 'main'
+                })
+                await new Promise(prom => setTimeout(prom, 2000))
+                window.location.reload()
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 <script>
 
 import axios from 'axios'
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
     data() {
@@ -14,15 +14,11 @@ export default {
         }
     },
 
-    computed: {
-        ...mapGetters({
-            getToken: 'auth/getAccessToken'
-        })
-    },
-
     methods: {
         ...mapActions({
-            updateAccessToken: 'auth/updateAccessToken'
+            updateAccessToken: 'auth/updateAccessToken',
+            deleteTokenSeller: 'auth/deleteTokenSeller',
+            clearTokens: 'auth/clearTokens'
         }),
 
         goReg(evt) {
@@ -46,10 +42,8 @@ export default {
                 this.alertMessage = 'Заполните все поля'
             } else {
                 try {
-                    // разобраться тут
                     await axios.post('/logout/seller')
-                    localStorage.removeItem('tokenSell')
-                    //
+                    this.clearTokens()
 
                     let response = await axios.post('/login', {
                         mail: this.mail,
@@ -67,6 +61,8 @@ export default {
                         this.alertMessage = 'Пользователь не найден'
                     } else if (error.response && error.response.status === 400) {
                         this.alertMessage = 'Неверно введены данные'
+                    } else {
+                        console.log('Ошибка при отправке запроса на сервер: ' + error);
                     }
                 }
             }
@@ -79,7 +75,6 @@ export default {
     <div class="wrapper">
 		<form @submit="Login" class="inner__form form">
 			<h3>Вход</h3>
-            {{ getToken }}
 			<div class="form__block form-wrapper">
 				<input v-model="mail" type="email" placeholder="Почта" class="form-control">
 			</div>

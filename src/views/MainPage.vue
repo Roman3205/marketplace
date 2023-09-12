@@ -26,10 +26,14 @@ export default {
             return this.images[this.currentIndex]
         },
 
-        ...mapGetters(['filteredProducts']),
-        ...mapGetters(['inputValueState']),
-        ...mapGetters(['categoryState']),
-        ...mapGetters(['categoryFilteredProducts'])
+        ...mapGetters({
+            filteredProducts: 'filteredProducts',
+            inputValueState: 'inputValueState',
+            categoryState: 'categoryState',
+            categoryFilteredProducts: 'categoryFilteredProducts',
+            isLeave: 'auth/getLeaveStatus',
+            isLeaveSeller: 'auth/getLeaveSellerStatus'
+        })
     },
 
     methods: {
@@ -60,10 +64,14 @@ export default {
         },
 
         async getProducts() {
-            let response = await axios.get('/products/all')
-            this.productsMain = response.data
+            try {
+                let response = await axios.get('/products/all')
+                this.productsMain = response.data
 
-            this.productsTrend = this.productsMain.filter(product => product.amountSold > 10)
+                this.productsTrend = this.productsMain.filter(product => product.amountSold > 10)
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         goProduct(evt, item) {
@@ -106,9 +114,12 @@ export default {
 <template>
     <div class="container">
         <div class="wrapper">
-            <div class="notification">
-            <div class="alert alert-info w-100 text-center">Вы вышли из аккаунта</div>
-        </div>
+            <div class="notification" v-if="this.isLeave === true">
+                <div class="alert alert-info w-100 text-center">Вы вышли из аккаунта пользователя</div>
+            </div>
+            <div class="notification" v-if="this.isLeaveSeller === true">
+                <div class="alert alert-info w-100 text-center">Вы вышли из аккаунта продавца</div>
+            </div>
             <div class="results" v-if="categoryState && categoryFilteredProducts.length == 0">
                 <h2><b>{{ categoryState }}</b></h2>
                 <p class="ms-5 mt-5">Ничего не найдено</p>

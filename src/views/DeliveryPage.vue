@@ -3,6 +3,7 @@
 import { scrollWin } from '../components/AppFooter.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -18,6 +19,12 @@ export default {
         this.loadOrders()
     },
 
+    computed: {
+        ...mapGetters({
+            getAccessToken: 'auth/getAccessToken'
+        })
+    },
+
     methods: {
         goRoute(evt, routeTo) {
             evt.preventDefault()
@@ -28,42 +35,50 @@ export default {
         },
 
         async loadOrders() {
-            let token = 'Bearer ' + localStorage.getItem('token')
+            try {
+                let token = 'Bearer ' + this.getAccessToken
 
-            let response = await axios.get('/orders/all', {
-                headers: {
-                    Authorization: token
+                let response = await axios.get('/orders/all', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+
+                this.orders = response.data
+
+                this.totalPrice = 0
+                
+                for(let i = 0; i < this.orders.orders.length; i++) {
+                    this.totalPrice += this.orders.orders[i].money
                 }
-            })
-
-            this.orders = response.data
-
-            this.totalPrice = 0
-            
-            for(let i = 0; i < this.orders.orders.length; i++) {
-                this.totalPrice += this.orders.orders[i].money
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
             }
         },
 
         async setRecieved(evt, item) {
             evt.preventDefault()
             evt.stopPropagation()
-            this.successRecieved = false
+            try {
+                this.successRecieved = false
 
-            let token = 'Bearer ' + localStorage.getItem('token')
+                let token = 'Bearer ' + this.getAccessToken
 
-            await axios.post('/order/recieved', {
-                id: item._id
-            },{
-                headers: {
-                    Authorization: token
-                }
-            })
+                await axios.post('/order/recieved', {
+                    id: item._id
+                },{
+                    headers: {
+                        Authorization: token
+                    }
+                })
 
-            this.successRecieved = true
-            await new Promise(prom => setTimeout(prom, 750))
+                this.successRecieved = true
+                await new Promise(prom => setTimeout(prom, 750))
 
-            this.loadOrders()
+                this.loadOrders()
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
+            }
         },
 
         goProduct(evt, item) {

@@ -1,6 +1,7 @@
 <script>
 
 import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
     data() {
@@ -14,6 +15,12 @@ export default {
     },
 
     methods: {
+        ...mapActions({
+            deleteAccessToken: 'auth/deleteAccessToken',
+            updateTokenSeller: 'auth/updateTokenSeller',
+            clearTokens: 'auth/clearTokens'
+        }),
+
         goReg(evt) {
             evt.preventDefault()
             this.$router.push({
@@ -36,7 +43,7 @@ export default {
             } else {
                 try {
                     await axios.post('/logout')
-                    localStorage.removeItem('token')
+                    this.clearTokens()
                     
                     let response = await axios.post('/login/seller', {
                         mail: this.mail,
@@ -44,7 +51,7 @@ export default {
                     })
 
                     this.alertMessage = 'Вход выполнен успешно'
-                    localStorage.setItem('tokenSell', response.data)
+                    this.updateTokenSeller(response.data)
                     await new Promise(prom => setTimeout(prom, 1300))
                     this.$router.push({
                         name: 'statistics'
@@ -54,6 +61,8 @@ export default {
                         this.alertMessage = 'Пользователь не найден'
                     } else if (error.response && error.response.status === 400) {
                         this.alertMessage = 'Неверно введены данные'
+                    } else {
+                        console.log('Ошибка при отправке запроса на сервер: ' + error);
                     }
                 }
             }
