@@ -152,6 +152,7 @@ export default {
             <div class="categories">
                 <div class="category-item" v-for="item in categoriesArray" @click="categoryFilter($event, item)">{{ item }}</div>
             </div>
+        <i class="fa fa-times" @click="closeMenu" ></i>
         </div>
     </div>
     <div class="container" :class="{
