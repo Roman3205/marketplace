@@ -81,6 +81,20 @@ export default {
           </ul>
         </div>
       </div>
+      <div class="menu-bars">
+        <div class="home" @click="goRoute($event, 'main')">
+          <img src="../../public/images/house.png" alt="" width="40">
+        </div>
+        <div class="cart" @click="goRoute($event, 'cart')">
+          <img src="../../public/images/shop-cart.png" alt="" width="40">
+        </div>
+        <div class="seller-icon" @click="goRoute($event, 'sellLogin')">
+          <img src="../../public/images/seller.png" alt="" width="40">
+        </div>
+        <div class="user" @click="goRoute($event, 'lk')">
+          <img src="../../public/images/user-icon.png" alt="" width="40">
+        </div>
+      </div>
       <div class="copyright">
         <p>2023 © Marketplace — интернет-магазин одежды, обуви и аксессуаров. <br>Все права защищены.</p>
       </div>

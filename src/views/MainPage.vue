@@ -122,7 +122,7 @@ export default {
             </div>
             <div class="results" v-if="categoryState && categoryFilteredProducts.length == 0">
                 <h2><b>{{ categoryState }}</b></h2>
-                <p class="ms-5 mt-5">Ничего не найдено</p>
+                <p class="ms-5 mt-3">Ничего не найдено</p>
             </div>
             <div class="search-result" v-if="categoryState && categoryFilteredProducts.length != 0">
                 <h2><b>{{ categoryState }}</b> <span style="font-size: 19px;">{{ categoryFilteredProducts.length }} {{ categoryProducts() }}</span></h2>
@@ -145,7 +145,7 @@ export default {
             </div>
             <div class="results" v-if="inputValueState && filteredProducts.length == 0">
                 <h2><b>Результаты поиска</b></h2>
-                <p class="ms-5 mt-5">Ничего не найдено</p>
+                <p class="ms-5 mt-3">Ничего не найдено</p>
             </div>
             <div class="search-result" v-if="inputValueState && filteredProducts.length != 0">
                 <h2><b>По вашему запросу "{{ inputValueState }}" найдено</b><span class="ms-4" style="font-size: 19px;">{{ filteredProducts.length }} {{ productsText() }}</span></h2>
@@ -212,7 +212,7 @@ export default {
                     </div>
                 </div>
             </div>
-            <div class="block-products info-card mt-5">
+            <div class="block-products info-card mt-lg-5">
                 <h2><b>Широкий ассортимент и высокое качество</b></h2>
                 <p>Интернет-магазин Marketplace – это доступные цены, широкий, регулярно обновляемый ассортимент. В онлайн-каталоге Marketplace представлено около 300 000 ведущих брендов одежды, электроники, мебели и других товаров для всех сфер жизни. Покупателям предлагается электроника, книжная продукция, детские товары. В интернет-магазине можно приобрести продукцию для дома, продукты питания, товары для красоты, ювелирные изделия, игрушки. Для удобства пользования онлайн-каталог поделен на разделы, все товары можно сортировать по ряду критериев: цена, материал изготовления, сезонность, бренд.</p>
             </div>

@@ -152,7 +152,7 @@ export default {
             <div class="categories">
                 <div class="category-item" v-for="item in categoriesArray" @click="categoryFilter($event, item)">{{ item }}</div>
             </div>
-        <i class="fa fa-times" @click="closeMenu" ></i>
+            <i class="fa fa-times" @click="closeMenu" ></i>
         </div>
     </div>
     <div class="container" :class="{
@@ -182,11 +182,7 @@ export default {
                     <i class="fa fa-user-o"></i>
                     <span>{{ userInfo.name }}</span>
                 </div>
-                <div v-if="!userInfo" class="header__cart" @click="goRoute($event, 'login')" >
-                    <i class="fa fa-shopping-cart"></i>
-                    <span>Корзина</span>
-                </div>
-                <div v-if="userInfo" class="header__cart" @click="goRoute($event, 'cart')" >
+                <div class="header__cart" @click="goRoute($event, 'cart')" >
                     <i class="fa fa-shopping-cart"></i>
                     <span>Корзина</span>
                 </div>

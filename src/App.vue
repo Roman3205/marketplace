@@ -107,7 +107,6 @@ export default {
       visibility: hidden;
       cursor: pointer;
   }
-  
 
   @keyframes notification {
       0% {
@@ -185,6 +184,16 @@ export default {
 
     .router-seller {
       overflow: hidden;
+    }
+  }
+
+  @media screen and (max-width: 1300px) {
+    .header {
+      min-height: 150px;
+    }
+
+    .footer {
+      height: 80px;
     }
   }
 </style>
