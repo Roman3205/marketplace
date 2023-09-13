@@ -17,7 +17,8 @@ export default {
             createAlertMessage: '',
             notificationTrue: undefined,
             runOutProd: undefined,
-            titleRunOut: null
+            titleRunOut: null,
+            loading: undefined
         }
     },
 
@@ -54,6 +55,7 @@ export default {
 
         async loadCart() {
             try {
+                this.loading = true
                 let token = 'Bearer ' + this.getAccessToken
 
                 let response = await axios.get('/cart', {
@@ -62,6 +64,7 @@ export default {
                     }
                 })
 
+                this.loading = false
                 this.userInfo = response.data.customer
                 this.cartInfo = response.data.cart
                 this.products = response.data.cart.products
@@ -86,9 +89,9 @@ export default {
                 })
 
                 this.notificationTrue = true
-
-                await new Promise(prom => setTimeout(prom, 600))
-
+                let id = this.products.indexOf(item)
+                this.products.splice(id, 1)
+                await new Promise(prom => setTimeout(prom, 1100))
                 this.loadCart()
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
@@ -136,11 +139,9 @@ export default {
 
                 this.createAlertMessage = 'Заказ прошел успешно и оплачен'
 
-                await new Promise(prom => setTimeout(prom, 1400))
-
+                await new Promise(prom => setTimeout(prom, 900))
                 this.loadCart()
-
-                await new Promise(prom => setTimeout(prom, 1000))
+                await new Promise(prom => setTimeout(prom, 900))
 
                 this.$router.push({
                     name: 'delivery'
@@ -172,12 +173,13 @@ export default {
         <div class="notification" v-if="runOutProd">
             <div v-if="titleRunOut" class="alert alert-info w-100 text-center">{{ titleRunOut }}</div>
         </div>
-        <div v-if="products.length === 0" class="wrapper-no-content">
+        <div v-if="products.length == 0 && !loading" class="wrapper-no-content">
             <h2><b>В корзине пока пусто</b></h2>
             <p>Загляните на главную, чтобы выбрать товары или найдите нужное в поиске</p>
             <button class="no-content-button" @click="goRoute($event, 'main')" >Перейти на главную</button>
         </div>
-        <div v-if="products.length !== 0" class="wrapper" :class="{
+        <spinner-loading v-if="loading" style="height: 301px; display: flex; align-items: center; justify-content: center;"></spinner-loading>
+        <div v-if="products.length != 0 && !loading" class="wrapper" :class="{
             'opacity': showChangeMenu
         }">
             <h2><b>Корзина</b></h2>

@@ -12,7 +12,8 @@ export default {
             inputValue: '',
             userInfo: null,
             operations: [],
-            successTopUp: undefined
+            successTopUp: undefined,
+            loading: undefined
         }
     },
 
@@ -93,12 +94,16 @@ export default {
 
         async getOperations() {
             try {
+                this.loading = true
+
                 let token = 'Bearer ' + this.getAccessToken
                 let response = await axios.get('/balance/operations', {
                     headers: {
                         Authorization: token
                     }
                 })
+
+                this.loading = false
 
                 this.operations = response.data
             } catch (error) {
@@ -143,7 +148,8 @@ export default {
                 </div>
             </div>
             <div class="history">
-                <div class="no-history" v-if="operations.length == 0">
+                <spinner-loading v-if="loading" class="mt-4" style="overflow: hidden; display: flex; justify-content: center;"></spinner-loading>
+                <div class="no-history" v-if="operations.length == 0 && !loading">
                     <p>Операций по балансу пока нет</p>
                     <p>После совершения первой операции, покажем ее здесь</p>
                 </div>

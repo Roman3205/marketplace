@@ -14,7 +14,8 @@ export default {
             notificationTrue: undefined,
             existChat: undefined,
             notificationRefundTrue: undefined,
-            existRefund: undefined
+            existRefund: undefined,
+            loading: undefined
         }
     },
 
@@ -62,12 +63,15 @@ export default {
 
         async loadPurchases() {
             try {
+                this.loading = true
                 let token = 'Bearer ' + this.getAccessToken
                 let response = await axios.get('/purchases', {
                     headers: {
                         Authorization: token
                     }
                 })
+                
+                this.loading = false
 
                 this.purchases = response.data
             } catch (error) {
@@ -198,6 +202,7 @@ export default {
                         </div>
                     </div>
                 </div>
+                <spinner-loading v-if="loading" class="mt-4" style="overflow: hidden; display: flex; justify-content: center;"></spinner-loading>
                 <div class="content" v-if="!searchInput">
                     <div class="product" v-for="(item) in purchases.orders">
                         <div class="image-prod" @click="goProduct($event, item)" :style="'background: url(' + item.product_id.picture + ') no-repeat center center;'">
@@ -217,7 +222,7 @@ export default {
                     </div>
                 </div>
             </div>
-            <div class="no-orders" v-if="purchases.orders == 0">
+            <div class="no-orders" v-if="purchases.orders == 0 && !loading">
                 <p><b>Здесь будут ваши покупки</b></p>
                 <p>На данный момент вы ничего не покупали</p>
                 <button @click="goRoute($event, 'main')">На главную</button>

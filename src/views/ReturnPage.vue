@@ -15,7 +15,8 @@ export default {
             refunds: [],
             currentRefund: null,
             isFillRefund: undefined,
-            notCorrectFill: undefined
+            notCorrectFill: undefined,
+            loading: undefined
         }
     },
 
@@ -118,6 +119,7 @@ export default {
 
         async loadRefunds() {
             try {
+                this.loading = true
                 let token = 'Bearer ' + this.getAccessToken
 
                 let response = await axios.get('/refund/all', {
@@ -125,6 +127,7 @@ export default {
                         Authorization: token
                     }
                 })
+                this.loading = false
 
                 this.refunds = response.data
             } catch (error) {
@@ -164,8 +167,9 @@ export default {
         <div class="wrapper" :class="{
             'opacity': showFillMenu
         }" >
-            <h2><b>Возвраты</b></h2>
-            <div class="no-returns mt-4" v-if="refunds.length == 0">
+            <spinner-loading v-if="loading" class="mt-4" style="overflow: hidden; display: flex; justify-content: center;"></spinner-loading>
+            <h2 v-if="!loading"><b>Возвраты</b></h2>
+            <div class="no-returns mt-4" v-if="refunds.length == 0 && !loading">
                 <p><b>Здесь будут ваши возвраты</b></p>
                 <p>В разделе покупки у каждого товара можно<br> создать заявку на его возврат</p>
                 <button @click="goRoute($event, 'orders')" >Перейти к покупкам</button>

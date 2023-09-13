@@ -11,7 +11,8 @@ export default {
             orders: [],
             totalPrice: 0,
             date: new Date(),
-            successRecieved: undefined
+            successRecieved: undefined,
+            loading: undefined
         }
     },
 
@@ -36,6 +37,8 @@ export default {
 
         async loadOrders() {
             try {
+                this.loading = true
+
                 let token = 'Bearer ' + this.getAccessToken
 
                 let response = await axios.get('/orders/all', {
@@ -44,7 +47,9 @@ export default {
                     }
                 })
 
-                this.orders = response.data
+                this.loading = false
+
+                this.orders = response.data.orders
 
                 this.totalPrice = 0
                 
@@ -73,8 +78,9 @@ export default {
                 })
 
                 this.successRecieved = true
-                await new Promise(prom => setTimeout(prom, 750))
-
+                let id = this.orders.indexOf(item)
+                this.orders.splice(id, 1)
+                await new Promise(prom => setTimeout(prom, 500))
                 this.loadOrders()
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
@@ -114,13 +120,14 @@ export default {
             <div class="alert alert-success w-100 text-center">Товар получен вами в пункте выдачи</div>
         </div>
         <div class="wrapper">
-            <h2><b>Доставка</b></h2>
-            <div class="no-delivery mt-4" v-if="orders.orders == 0">
+            <h2 v-if="!loading"><b>Доставка</b></h2>
+            <spinner-loading v-if="loading" class="mt-4" style="overflow: hidden; display: flex; justify-content: center;"></spinner-loading>
+            <div class="no-delivery mt-4" v-if="this.orders.length == 0 && !loading">
                 <p><b>Пока у вас нет доставок</b></p>
                 <p>Для активной доставки нужно оплатить<br> выбранные товары из корзины</p>
                 <button @click="goRoute($event, 'cart')" >Перейти к корзине</button>
             </div>
-                <div class="delivery-block" v-if="orders.orders != 0">
+                <div class="delivery-block" v-if="this.orders.length != 0">
                     <div class="delivery-title">
                         <div class="dostavka">
                             <img src="https://static.tildacdn.com/tild3563-6631-4138-b639-386636343539/IMG_3708.PNG" alt="" width="30">
@@ -131,7 +138,7 @@ export default {
                     </div>
                     <div class="delivery-items">
                         <transition-group name="group-second">
-                            <div class="item" v-for="(item) in orders.orders" @click="goProduct($event, item)" :key="item._id" :style="item.status === 'Готов к получению' ? {maxHeight: '500px!important'} : {}" >
+                            <div class="item" v-for="(item) in orders" @click="goProduct($event, item)" :key="item._id" :style="item.status === 'Готов к получению' ? {maxHeight: '500px!important'} : {}" >
                                 <div class="image-delivery-prod" :style="'background: url('+ item.product_id.picture +') no-repeat center center;'" >
                                     <button class="btn text-success btn-outline-success oplata">Оплачен</button>
                                 </div>

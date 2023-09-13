@@ -10,7 +10,8 @@ export default {
         return {
             inputValue: '',
             reviews: [],
-            notificationTrue: undefined
+            notificationTrue: undefined,
+            loading: undefined
         }
     },
 
@@ -39,6 +40,7 @@ export default {
 
         async loadReviews() {
             try {
+                this.loading = true
                 let token = 'Bearer ' + this.getAccessToken
 
                 let response = await axios.get('/reviews/all', {
@@ -47,7 +49,9 @@ export default {
                     }
                 })
 
-                this.reviews = response.data
+                this.loading = false
+
+                this.reviews = response.data.reviews
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
             }
@@ -71,9 +75,10 @@ export default {
                 })
 
                 this.notificationTrue = true
-
-                await new Promise(prom => setTimeout(prom, 1000))
-
+                let id = this.reviews.indexOf(review)
+                console.log(id);
+                this.reviews.splice(id, 1)
+                await new Promise(prom => setTimeout(prom, 600))
                 this.loadReviews()
 
             } catch (error) {
@@ -106,15 +111,16 @@ export default {
             <div class="alert alert-info w-100 text-center">Отзыв успешно удален</div>
         </div>
         <div class="wrapper">
-            <h2><b>Отзывы</b></h2>
-            <div class="no-feedbacks"  v-if="reviews.reviews == 0">
+            <spinner-loading v-if="loading" class="mt-4" style="overflow: hidden; display: flex; justify-content: center;"></spinner-loading>
+            <h2 v-if="!loading"><b>Отзывы</b></h2>
+            <div class="no-feedbacks" v-if="reviews.length == 0 && !loading">
                 <p><b>Здесь будут ваши отзывы</b></p>
                 <p>Помогите другим покупателям сделать выбор — <br>поделитесь мнением о товарах в разделе Покупки</p>
                 <button @click="goRoute($event, 'orders')" >Перейти к покупкам</button>
             </div>
-            <div class="feedbacks-container"  v-if="reviews.reviews != 0">
+            <div class="feedbacks-container"  v-if="reviews.length != 0">
                 <transition-group name="common-group">
-                    <div class="feedback" v-for="(review) in reviews.reviews" :key="review._id">
+                    <div class="feedback" v-for="(review) in reviews" :key="review._id">
                         <div class="image-feed">
                             <img :src="review.product_id.picture" width="150" alt="" @click="goProduct($event, review.product_id)">
                             <div class="action-menu nothide">

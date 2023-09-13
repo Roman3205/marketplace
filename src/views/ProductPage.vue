@@ -17,7 +17,8 @@ export default {
             addSuccess: undefined,
             alreadyInCart: undefined,
             prodRecieved: undefined,
-            reviewAlertMessage: ''
+            reviewAlertMessage: '',
+            loading: undefined
         }
     },
 
@@ -81,11 +82,14 @@ export default {
 
         async getParamsProduct() {
             try {
+                this.loading = true
                 let response = await axios.get('/product', {
                     params: {
                         article: this.$route.params.article
                     }
                 })
+
+                this.loading = false
 
                 this.product = response.data
 
@@ -171,7 +175,7 @@ export default {
                 })
 
                 this.addSuccess = true
-                this.checkInCart()
+                this.alreadyInCart = true
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
             }
@@ -239,6 +243,7 @@ export default {
         <div class="wrapper" :class="{
             'opacity': showReviewBar || prodRecieved
         }" >
+            <spinner-loading v-if="loading" class="mt-4" style="align-self: center; overflow: hidden;"></spinner-loading>
             <div class="prod-title" v-if="product">
                 <h2><b>{{ product.brand_id.brandName }} / {{ product.title }}</b></h2>
                 <div class="info">

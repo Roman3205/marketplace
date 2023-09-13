@@ -15,7 +15,7 @@
 
 .group-second-enter-active,
 .group-second-leave-active {
-    transition: all 0.5s ease;
+    transition: all 0.65s ease;
 }
 
 .group-second-enter-from,
@@ -25,5 +25,5 @@
 }
 
 .group-second-move {
-    transition: transform 0.5s ease;
+    transition: transform 0.65s ease;
 }

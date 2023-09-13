@@ -235,11 +235,13 @@ let Message = mongoose.model('message', messageSchema)
 
 let VerifyTokenUser = (req, res, next) => {
     const token = req.headers.authorization
+    // const token = req.headers.cookie
 
     if (!token) {
         return res.status(401).send('Вы не авторизованы')
     }
 
+    // jwt.verify(token.replace(`${COOKIE_USER}=`, ''), process.env.TOKEN_USER, (error, decoded) => {
     jwt.verify(token.replace('Bearer ', ''), process.env.TOKEN_USER, (error, decoded) => {
         if (error) {
             return res.status(401).send('Вы не авторизованы')
@@ -257,7 +259,8 @@ let VerifyTokenSeller = (req, res, next) => {
     if(!token) {
         return res.status(401).send('Вы не авторизованы')
     }
-    // jwt.verify(token.replace('tokenUser=', ''), 'user', (error, decoded) => {
+
+    // jwt.verify(token.replace(`${COOKIE_SELLER}=`, ''), process.env.TOKEN_SELLER, (error, decoded) => {
     jwt.verify(token.replace('Bearer ', ''), process.env.TOKEN_SELLER, (error, decoded) => {
         if(error) {
             return res.status(401).send('Вы не авторизованы')

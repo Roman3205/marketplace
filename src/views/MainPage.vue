@@ -13,7 +13,8 @@ export default {
             ],
             currentIndex: 1,
             productsMain: [],
-            productsTrend: []
+            productsTrend: [],
+            loading: undefined
         }
     },
 
@@ -65,7 +66,9 @@ export default {
 
         async getProducts() {
             try {
+                this.loading = true
                 let response = await axios.get('/products/all')
+                this.loading = false
                 this.productsMain = response.data
 
                 this.productsTrend = this.productsMain.filter(product => product.amountSold > 10)
@@ -175,6 +178,7 @@ export default {
             </div>
             <div class="block-products" v-if="inputValueState === '' && categoryState === ''">
                 <h2><b>Мы рекомендуем вам</b></h2>
+                <spinner-loading v-if="loading" style="align-self: center;"></spinner-loading>
                 <div class="content">
                     <div class="product" v-for="(item) in  productsMain" @click="goProduct($event, item)" >
                         <div class="image-prod" :style="'background: url(' + item.picture + ') no-repeat center center;'">
@@ -194,7 +198,8 @@ export default {
             </div>
             <div class="block-products" v-if="inputValueState === '' && categoryState === ''">
                 <h2><b>Хиты продаж</b></h2>
-                <h5 class="ms-5 mt-3" v-if="productsTrend.length == 0">Предложений нет</h5>
+                <spinner-loading class="mt-3" v-if="loading" style="align-self: center;"></spinner-loading>
+                <h5 class="ms-5 mt-3" v-if="productsTrend.length == 0 && !loading">Предложений нет</h5>
                 <div class="content" v-if="productsTrend.length != 0">
                     <div class="product" v-for="(item) in  productsTrend" @click="goProduct($event, item)" >
                         <div class="image-prod" :style="'background: url(' + item.picture + ') no-repeat center center;'">

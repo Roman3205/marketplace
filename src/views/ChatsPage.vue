@@ -1,6 +1,5 @@
 <script>
 
-import { scrollWin } from '../components/AppFooter.vue';
 import dayjs from 'dayjs'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
@@ -8,7 +7,8 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
-            chats: []
+            chats: [],
+            loading: undefined
         }
     },
 
@@ -25,6 +25,7 @@ export default {
     methods: {
         async loadChats() {
             try {
+                this.loading = true
                 let token = 'Bearer ' + this.getAccessToken
 
                 let response = await axios.get('/chats/all', {
@@ -32,6 +33,8 @@ export default {
                         Authorization: token
                     }
                 })
+
+                this.loading = false
 
                 this.chats = response.data
             } catch (error) {
@@ -68,9 +71,10 @@ export default {
                     <img src="../../images/picchats.jpg" width="200" alt="">
                 </div>
             </div>
-            <p v-if="chats.length == 0">Пока у вас нет никаких чатов</p>
-            <div class="chats-container" v-if="chats.length != 0">
-                <div class="chat-block" v-for="(item) in chats" @click="goChat($event, item)" >
+            <div class="chats-container">
+                <spinner-loading v-if="loading" class="mt-4" style="overflow: hidden; display: flex; justify-content: center;"></spinner-loading>
+                <p v-if="chats.length == 0 && !loading">Пока у вас нет никаких чатов</p>
+                <div class="chat-block" v-if="chats.length != 0" v-for="(item) in chats" @click="goChat($event, item)" >
                     <div class="user">
                         <img src="../../images/operator.jpg" width="70" alt="">
                         <h2><b>{{ item.people[0].brandName }}</b></h2>
