@@ -1146,11 +1146,7 @@ app.post('/refund/return/money', VerifyTokenUser, async (req, res) => {
 })
 
 app.post('/logout', async (req, res) => {
-    res.clearCookie(process.env.COOKIE_USER, {
-        httpOnly: true,
-        maxAge: 0,
-        sameSite: 'none'
-    })
+    res.clearCookie(process.env.COOKIE_USER)
 
     res.sendStatus(200)
 })
@@ -1584,11 +1580,7 @@ app.post('/seller/message/send', VerifyTokenSeller, async (req, res) => {
 })
 
 app.post('/logout/seller', async (req, res) => {
-    res.clearCookie(process.env.COOKIE_SELLER, {
-        httpOnly: true,
-        maxAge: 0,
-        sameSite: 'none'
-    });
+    res.clearCookie(process.env.COOKIE_SELLER)
 
     res.sendStatus(200)
 })

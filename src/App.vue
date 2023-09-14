@@ -44,7 +44,12 @@ export default {
   created() {
     this.loadToken()
     this.loadTokenSeller()
-    // this.$store.dispatch('auth/loadToken')
+    this.$store.dispatch('auth/loadToken')
+    // vue-cookies
+    // console.log(this.$cookies.set('test', 'testvalue', "1d"));
+    // console.log(this.$cookies.get('test'));
+    // console.log(this.$cookies.isKey('test'));
+    // console.log(this.$cookies.keys('test'));
   }
 }
 </script>

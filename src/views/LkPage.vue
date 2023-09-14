@@ -46,7 +46,7 @@ export default {
 
         async LogOut(evt) {
             evt.stopPropagation()
-            await axios.post('/logout')
+            // await axios.post('/logout') cookies from server
             this.deleteAccessToken()
             this.$router.push({
                 name: 'main'

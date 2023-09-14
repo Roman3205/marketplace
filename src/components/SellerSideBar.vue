@@ -26,7 +26,7 @@ export default {
             evt.preventDefault()
             try {
                 this.deleteTokenSeller()
-                await axios.post('/logout/seller')
+                // await axios.post('/logout/seller') cookies from server
                 this.$router.push({
                     name: 'main'
                 })
