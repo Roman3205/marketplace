@@ -22,7 +22,7 @@ export default {
         this.timer = setInterval(this.loadInfo, 50000)
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         clearInterval(this.timer)
     },
 

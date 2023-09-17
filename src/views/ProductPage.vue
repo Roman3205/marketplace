@@ -43,7 +43,7 @@ export default {
             evt.preventDefault()
 
             if(!this.getAccessToken) {
-                this.$router.push({
+                return this.$router.push({
                     name: 'login'
                 })
             }
