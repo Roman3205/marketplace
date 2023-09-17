@@ -18,7 +18,9 @@ export default {
             alreadyInCart: undefined,
             prodRecieved: undefined,
             reviewAlertMessage: '',
-            loading: undefined
+            loading: undefined,
+            isClickAdd: false,
+            isClickReview: false
         }
     },
 
@@ -105,6 +107,8 @@ export default {
 
         async CreateReview(evt) {
             evt.preventDefault()
+            this.isClickReview = false
+            this.isClickReview = true
 
             if(this.getAccessToken === null) {
                 this.$router.push({
@@ -148,6 +152,8 @@ export default {
                     } else {
                         console.log('Ошибка при отправке запроса на сервер: ' + error);
                     }
+                } finally {
+                    this.isClickReview = false
                 }
             }
         },
@@ -155,6 +161,8 @@ export default {
         async addToCart(evt) {
             evt.preventDefault()
             this.addSuccess = false
+            this.isClickAdd = false
+            this.isClickAdd = true
             this.alreadyInCart = false
 
             let token = 'Bearer ' + this.getAccessToken
@@ -178,6 +186,8 @@ export default {
                 this.alreadyInCart = true
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickAdd = false
             }
         },
 
@@ -287,7 +297,7 @@ export default {
                         <div class="rub">
                             <p><b>{{ product.price }}</b></p><i class="fa fa-rub"></i>
                         </div>
-                        <button class="btn button-buy" :disabled="showReviewBar" @click="addToCart" v-if="!alreadyInCart && product.runOut == false" >Добавить в корзину</button>
+                        <button class="btn button-buy" :disabled="showReviewBar || isClickAdd" @click="addToCart" v-if="!alreadyInCart && product.runOut == false" >Добавить в корзину</button>
                         <button class="btn button-buy" disabled v-if="product.runOut == true" >Товар закончился на складе</button>
                         <button class="btn button-cart" v-if="alreadyInCart && product.runOut == false" @click="goRoute($event, 'cart')">Перейти в корзину</button>
                         <p><b>{{ getDeliver(currentDate) }}</b> доставка со склада</p>
@@ -349,7 +359,7 @@ export default {
                         <textarea v-model="inputValue" name="" id="" cols="" rows="4" maxlength="150" style="font-size: 22px;"></textarea>
                     </div>
                 </div>
-                <button class="btn" :disabled="!emptyValue" :class="{
+                <button class="btn" :disabled="!emptyValue || isClickReview" :class="{
                     'opacity': !emptyValue
                 }" >Отправить</button>
             </form>

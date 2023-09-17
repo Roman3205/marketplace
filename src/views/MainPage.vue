@@ -188,7 +188,7 @@ export default {
                             <h5><b>{{ item.price }}</b></h5>
                             <i class="fa fa-rub"></i>
                             <h5 v-if="item.discount > 0" :style="item.discount > 0 ? {textDecoration: 'line-through', color: 'dimgray', transform: 'scale(0.89)'} : {}">
-                                <b>{{ Number(item.price + (item.price / 100 * item.discount)).toFixed(0) }}</b>
+                                <b>{{ Number(item.price / (100 - item.discount) * 100).toFixed(0) }}</b>
                             </h5>
                             <i v-if="item.discount > 0" :style="item.discount > 0 ? {color: 'gray', transform: 'scale(0.77)', marginLeft: '-8px'} : {}" class="fa fa-rub"></i>
                         </div>

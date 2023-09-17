@@ -11,7 +11,8 @@ export default {
             text: '',
             to: '',
             messages: [],
-            timer: null
+            timer: null,
+            isClickSent: false
         }
     },
 
@@ -74,6 +75,8 @@ export default {
             evt.preventDefault()
 
             try {
+                this.isClickSent = false
+                this.isClickSent = true
                 let token = 'Bearer ' + this.getAccessToken
 
                 if(this.text !== '') {
@@ -93,6 +96,8 @@ export default {
                 this.loadInfo()
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickSent = false
             }
         },
 
@@ -125,8 +130,8 @@ export default {
                 </div>
                 <div class="send-message-form">
                     <form @submit="sendMessage">
-                        <input v-model="text" type="text" class="form-control" >
-                        <button type="submit" class="btn">Отправить</button>
+                        <input v-model="text" type="text" placeholder="Введите сообщение" class="form-control" >
+                        <button type="submit" class="btn" :disabled="isClickSent">Отправить</button>
                     </form>
                 </div>
             </div>

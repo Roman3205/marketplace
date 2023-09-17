@@ -11,7 +11,8 @@ export default {
             inputValue: '',
             reviews: [],
             notificationTrue: undefined,
-            loading: undefined
+            loading: undefined,
+            isClickDelete: false
         }
     },
 
@@ -60,6 +61,8 @@ export default {
         async deleteReview(evt, review) {
             evt.stopPropagation()
             evt.preventDefault()
+            this.isClickDelete = false
+            this.isClickDelete = true
             try {
                 this.notificationTrue = false
 
@@ -83,6 +86,8 @@ export default {
 
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickDelete = false
             }
         },
 
@@ -124,7 +129,7 @@ export default {
                         <div class="image-feed">
                             <img :src="review.product_id.picture" width="150" alt="" @click="goProduct($event, review.product_id)">
                             <div class="action-menu nothide">
-                                <button @click="deleteReview($event, review)" class="btn btn-danger"><span>Удалить</span><i class="fa fa-trash"></i></button>
+                                <button :disabled="isClickDelete" @click="deleteReview($event, review)" class="btn btn-danger"><span>Удалить</span><i class="fa fa-trash"></i></button>
                             </div>
                         </div>
                         <div class="main-content">
@@ -145,7 +150,7 @@ export default {
                                 <textarea name="" id="" disabled maxlength="150">{{ review.text }}</textarea>
                             </div>
                             <div class="action-menu hide">
-                                <button @click="deleteReview($event, review)" class="btn btn-danger"><span>Удалить</span><i class="fa fa-trash"></i></button>
+                                <button :disabled="isClickDelete" @click="deleteReview($event, review)" class="btn btn-danger"><span>Удалить</span><i class="fa fa-trash"></i></button>
                             </div>
                         </div>
                     </div>

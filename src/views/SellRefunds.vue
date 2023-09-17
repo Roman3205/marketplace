@@ -7,7 +7,11 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
-            refunds: []
+            refunds: [],
+            isClickChange: false,
+            isClickAccept: false,
+            isClickReject: false,
+            loading: undefined
         }
     },
 
@@ -24,6 +28,7 @@ export default {
     methods: {
         async loadRefunds() {
             try {
+                this.loading = true
                 let token = 'Bearer ' + this.getTokenSeller
 
                 let response = await axios.get('/seller/refunds/all', {
@@ -31,15 +36,20 @@ export default {
                         Authorization: token
                     }
                 })
-
+                this.loading = false
+                
                 this.refunds = response.data
             } catch(error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickChange = false
             }
         },
 
         async statusForward(item) {
             try {
+                this.isClickChange = false
+                this.isClickChange = true
                 let token = 'Bearer ' + this.getTokenSeller
             
                 await axios.post('/seller/refund/change', {
@@ -59,6 +69,8 @@ export default {
 
         async statusReject(item, status) {
             try {
+                this.isClickReject = false
+                this.isClickReject = true
                 let token = 'Bearer ' + this.getTokenSeller
             
                 await axios.post('/seller/refund/change', {
@@ -73,11 +85,15 @@ export default {
                 this.loadRefunds()
             } catch(error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickReject = false
             }
         },
 
         async statusAccept(item, status) {
             try {
+                this.isClickAccept = false
+                this.isClickAccept = true
                 let token = 'Bearer ' + this.getTokenSeller
             
                 await axios.post('/seller/refund/change', {
@@ -92,6 +108,8 @@ export default {
                 this.loadRefunds()
             } catch(error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickAccept = false
             }
         },
 
@@ -107,8 +125,9 @@ export default {
 <template>
     <div class="container">
         <div class="wrapper">
-            <h2><b>Заявки на возврат ваших товаров</b></h2>
-            <h5 class="mt-4" v-if="refunds.length == 0">Заявок на возврат товаров вашего бренда нет</h5>
+            <h2 v-if="!loading"><b>Заявки на возврат ваших товаров</b></h2>
+            <h5 class="mt-4" v-if="refunds.length == 0 && !loading">Заявок на возврат товаров вашего бренда нет</h5>
+            <spinner-loading v-if="loading" style="overflow: hidden; display: flex; align-self: center;"></spinner-loading>
             <div class="container-orders" v-if="refunds.length != 0">
                 <div class="sell-order" v-for="(item) in refunds">
                     <div class="left-side-sell">
@@ -134,9 +153,9 @@ export default {
                         <div class="change-status" v-if="item.status !== 'Одобрен' && item.status !== 'Отказан'">
                             <p>Изменить состояние</p>
                             <div class="status">
-                                <button v-if="item.status !== 'В рассмотрении'" class="next" @click="statusForward(item)">Изменить статус<i class="fa fa-arrow-right"></i></button>
-                                <button v-if="item.status === 'В рассмотрении'" class="btn btn-danger" @click="statusReject(item, 'Отказан')">Отказать</button>
-                                <button v-if="item.status === 'В рассмотрении'" class="btn btn-success" @click="statusAccept(item, 'Одобрен')">Одобрить</button>
+                                <button :disabled="isClickChange" v-if="item.status !== 'В рассмотрении'" class="next" @click="statusForward(item)">Изменить статус<i class="fa fa-arrow-right"></i></button>
+                                <button :disabled="isClickReject" v-if="item.status === 'В рассмотрении'" class="btn btn-danger" @click="statusReject(item, 'Отказан')">Отказать</button>
+                                <button :disabled="isClickAccept" v-if="item.status === 'В рассмотрении'" class="btn btn-success" @click="statusAccept(item, 'Одобрен')">Одобрить</button>
                             </div>
                         </div>
                         <p class="text-center" v-if="item.status === 'Одобрен' && item.returnMoney == false"><u>Когда пользователь<br> выберет возврат средств у<br> данного возврата, деньги<br> с вашего баланса спишутся</u></p>

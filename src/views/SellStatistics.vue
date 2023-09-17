@@ -35,7 +35,11 @@ export default {
             products: [],
             discountSuccess: undefined,
             deleteProd: undefined,
-            recycleProd: undefined
+            recycleProd: undefined,
+            loading: undefined,
+            isClickProd: false,
+            isClickDiscount: false,
+            isClickDelete: false
         }
     },
 
@@ -103,6 +107,8 @@ export default {
 
         async CreateProd(evt) {
             evt.preventDefault()
+            this.isClickProd = false
+            this.isClickProd = true
             this.createAlertMessage = ''
 
             let filter = /([a-zA-Zа-яА-Я])\1{1}/;
@@ -140,18 +146,22 @@ export default {
                     } else {
                         console.log('Ошибка при отправке запроса на сервер: ' + error);
                     }
+                } finally {
+                    this.isClickProd = false
                 }
             }
         },
 
         async getProducts() {
             try {
+                this.loading = true
                 let token = 'Bearer ' + this.getTokenSeller
                 let response = await axios.get('/seller/products/all', {
                     headers: {
                         Authorization: token
                     }
                 })
+                this.loading = false
                 this.products = response.data
             } catch(error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
@@ -160,6 +170,8 @@ export default {
 
         async deleteProduct(evt, item) {
             evt.preventDefault()
+            this.isClickDelete = false
+            this.isClickDelete = true
             this.deleteProd = false
 
             try {
@@ -180,6 +192,8 @@ export default {
                 this.getProducts()
             } catch(error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickDelete = false
             }
         },
 
@@ -210,6 +224,8 @@ export default {
 
         async setDiscount(evt) {
             evt.preventDefault()
+            this.isClickDiscount = false
+            this.isClickDiscount = true
             this.discountSuccess = false
 
             try {
@@ -232,6 +248,8 @@ export default {
                 this.discountSuccess = false
             } catch(error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickDiscount = false
             }
         },
 
@@ -296,7 +314,8 @@ export default {
                     <button class="btn" @click="showPublic" ><b>Опубликовать новый товар</b></button>
                 </div>
                 <div class="container-blocks">
-                    <h5 class="mt-4" v-if="products.products == 0">У вас нет опубликованных товаров</h5>
+                    <spinner-loading v-if="loading" style="overflow: hidden; display: flex; align-self: center;"></spinner-loading>
+                    <h5 class="mt-4" v-if="products.products == 0 && !loading">У вас нет опубликованных товаров</h5>
                     <div class="products-card" v-for="(item) in products.products" v-if="products.products != 0">
                         <div class="info-prod p-2">
                             <div class="image-prod" :style="'background: url(' + item.picture + ') no-repeat center center; border: 2px solid gray;'">
@@ -310,7 +329,7 @@ export default {
                         </div>
                         <div class="manage-prod">
                             <button class="btn btn-outline-success" @click="showSale($event, item)" ><b>Повесить скидку</b></button>
-                            <button v-if="item.runOut == false" class="btn btn-outline-danger" @click="deleteProduct($event, item)"><b>Товар закончился<i class="fa fa-trash"></i></b></button>
+                            <button :disabled="isClickDelete" v-if="item.runOut == false" class="btn btn-outline-danger" @click="deleteProduct($event, item)"><b>Товар закончился<i class="fa fa-trash"></i></b></button>
                             <button v-if="item.runOut == true" class="btn btn-outline-primary" @click="returnCurrentProduct($event, item)"><b>Возобновить продажу<i class="fa fa-recycle"></i></b></button>
                         </div>
                     </div>
@@ -327,7 +346,7 @@ export default {
                 </div>
                 <button class="btn" :class="{
                         'opacity': !emptyValue
-                    }" >Применить</button>
+                    }" :disabled="isClickDiscount">Применить</button>
             </form>
             <div v-if="discountSuccess" class="w-100 mt-1 mb-4 p-2 text-center alert alert-success">Скидка успешно создана</div>
         </div>
@@ -363,7 +382,7 @@ export default {
                 </div>
                 <button class="btn" :class="{
                         'opacity': !CreateFill
-                    }" >Опубликовать товар</button>
+                    }" :disabled="isClickProd">Опубликовать товар</button>
                 <div v-if="this.createAlertMessage !== ''" class="w-100 mt-1 mb-4 p-2 text-center alert" :class="this.createAlertMessage === 'Товар успешно опубликован' ? 'alert-success' : 'alert-danger'">{{ this.createAlertMessage }}</div>
             </form>
         </div>

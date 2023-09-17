@@ -12,7 +12,8 @@ export default {
             totalPrice: 0,
             date: new Date(),
             successRecieved: undefined,
-            loading: undefined
+            loading: undefined,
+            isClickRecieve: false
         }
     },
 
@@ -53,8 +54,8 @@ export default {
 
                 this.totalPrice = 0
                 
-                for(let i = 0; i < this.orders.orders.length; i++) {
-                    this.totalPrice += this.orders.orders[i].money
+                for(let i = 0; i < this.orders.length; i++) {
+                    this.totalPrice += this.orders[i].money
                 }
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
@@ -64,6 +65,9 @@ export default {
         async setRecieved(evt, item) {
             evt.preventDefault()
             evt.stopPropagation()
+
+            this.isClickRecieve = false
+            this.isClickRecieve = true
             try {
                 this.successRecieved = false
 
@@ -84,6 +88,8 @@ export default {
                 this.loadOrders()
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickRecieve = false
             }
         },
 
@@ -152,7 +158,7 @@ export default {
                                 'alert-primary': item.status === 'Передан в доставку',
                                 'alert-success': item.status === 'Готов к получению',
                                 }">{{ item.status }}</div>
-                                <div v-if="item.status === 'Готов к получению'" class="get recieve mb-2">Получили заказ? <div class="alert alert-success" @click="setRecieved($event, item)">Да</div></div>
+                                <div v-if="item.status === 'Готов к получению'" class="get recieve mb-2">Получили заказ? <div class="alert alert-success" :class="{'click-recieve': isClickRecieve}" @click="setRecieved($event, item)">Да</div></div>
                                 <div v-if="item.status !== 'Готов к получению'" class="get" style="pointer-events: none;"><div class="alert alert-warning">Заказ еще не доставлен</div></div>
                             </div>
                         </transition-group>

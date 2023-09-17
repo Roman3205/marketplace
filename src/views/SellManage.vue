@@ -7,7 +7,9 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
-            orders: []
+            orders: [],
+            isClickManage: false,
+            loading: undefined
         }
     },
 
@@ -24,16 +26,19 @@ export default {
     methods: {
         async loadOrders() {
             try {
+                this.loading = true
                 let token = 'Bearer ' + this.getTokenSeller
                 let response = await axios.get('/seller/orders/all', {
                     headers: {
                         Authorization: token
                     }
                 })
-                
+                this.loading = false
                 this.orders = response.data
             } catch(error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickManage = false
             }
         },
 
@@ -44,6 +49,8 @@ export default {
 
         async statusForward(item) {
             try {
+                this.isClickManage = false
+                this.isClickManage = true
                 let token = 'Bearer ' + this.getTokenSeller
                 await axios.post('/seller/order/change', {
                     status: item.status,
@@ -67,8 +74,9 @@ export default {
 <template>
     <div class="container">
         <div class="wrapper">
-            <h2><b>Заказы ваших товаров</b></h2>
-            <h5 class="mt-4" v-if="orders.length == 0" >Ваши товары еще никто не заказывал</h5>
+            <h2 v-if="!loading"><b>Заказы ваших товаров</b></h2>
+            <spinner-loading v-if="loading" style="overflow: hidden; display: flex; align-self: center;"></spinner-loading>
+            <h5 class="mt-4" v-if="orders.length == 0 && !loading" >Ваши товары еще никто не заказывал</h5>
             <div class="container-orders" v-if="orders.length != 0">
                 <div class="sell-order" v-for="(item) in orders">
                     <div class="left-side-sell">
@@ -90,7 +98,7 @@ export default {
                         <div class="change-status" v-if="item.status !== 'Готов к получению'">
                             <p>Изменить состояние</p>
                             <div class="status">
-                                <button class="next" @click="statusForward(item)">Изменить статус<i class="fa fa-arrow-right"></i></button>
+                                <button :disabled="isClickManage" class="next" @click="statusForward(item)">Изменить статус<i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>

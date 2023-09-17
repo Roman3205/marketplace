@@ -16,7 +16,10 @@ export default {
             currentRefund: null,
             isFillRefund: undefined,
             notCorrectFill: undefined,
-            loading: undefined
+            loading: undefined,
+            loadingFill: undefined,
+            isClickFill: false,
+            isClickReturn: false
         }
     },
 
@@ -47,6 +50,7 @@ export default {
                 opacityEffectsOn()
 
                 let token = 'Bearer ' + this.getAccessToken
+                this.loadingFill = true
 
                 let response = await axios.get('/refund', {
                     params: {
@@ -57,7 +61,7 @@ export default {
                         Authorization: token
                     }
                 })
-
+                this.loadingFill = false
                 this.currentRefund = response.data
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
@@ -67,6 +71,8 @@ export default {
         async refundFill(evt, item) {
             evt.preventDefault()
 
+            this.isClickFill = false
+            this.isClickFill = true
             this.isFillRefund = false
             this.notCorrectFill = false
 
@@ -87,7 +93,6 @@ export default {
                             Authorization: token
                         }
                     })
-
                     this.isFillRefund = true
 
                     await new Promise(prom => setTimeout(prom, 1300))
@@ -100,6 +105,8 @@ export default {
                     this.loadRefunds()
                 } catch (error) {
                     console.log('Ошибка при отправке запроса на сервер: ' + error);
+                } finally {
+                    this.isClickFill = false
                 }
             }
         },
@@ -137,6 +144,8 @@ export default {
 
         async returnMoney(item) {
             try {
+                this.isClickReturn = false
+                this.isClickReturn = true
                 let token = 'Bearer ' + this.getAccessToken
 
                 await axios.post('/refund/return/money', {
@@ -150,6 +159,8 @@ export default {
                 this.loadRefunds()
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickReturn = false
             }
         },
 
@@ -184,7 +195,7 @@ export default {
                         <p v-if="item.returnMoney" class="text-success"><u>Средства возвращены</u></p>
                         <button v-if="item.text === '' && item.albumLink === ''" class="btn btn-primary" @click="showFill($event, item)" >Заполнить заявку</button>
                         <button v-if="item.text !== '' && item.albumLink !== '' && item.status !== 'Отказан' && item.status !== 'Одобрен'" class="btn btn-success" disabled>Заявка заполнена</button>
-                        <button @click="returnMoney(item)" v-if="item.status === 'Одобрен' && item.returnMoney == false" class="btn btn-primary text-white">Вернуть средства</button>
+                        <button :disabled="isClickReturn" @click="returnMoney(item)" v-if="item.status === 'Одобрен' && item.returnMoney == false" class="btn btn-primary text-white">Вернуть средства</button>
                         <button @click="goRoute($event, 'balance')" v-if="item.returnMoney == true" class="btn btn-primary text-white">Посмотреть баланс</button>
                     </div>
                     <div class="status">Статус возврата: <div class="alert" :class="{
@@ -198,6 +209,7 @@ export default {
         </div>
         <div class="write-return" v-if="showFillMenu" style="opacity: 1!important; z-index: 999;">
             <i class="fa fa-times" @click="closeFill" ></i>
+            <spinner-loading class="mt-4" v-if="loadingFill" style="display: flex; justify-content: center; align-items: center; align-self: center; overflow: hidden;"></spinner-loading>
             <form class="content form-fill" v-if="currentRefund" @submit="refundFill($event, currentRefund)" >
                 <div class="product">
                     <div class="info">
@@ -226,7 +238,7 @@ export default {
                         <textarea v-model="inputValue1" maxlength="250"></textarea>
                     </div>
                 </div>
-                <button class="btn mb-2" :disabled="!isFillValue" :class="{
+                <button class="btn mb-2" :disabled="!isFillValue || isClickFill" :class="{
                     'opacity': !isFillValue
                 }" >Отправить</button>
             </form>

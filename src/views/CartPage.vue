@@ -4,7 +4,7 @@ import { scrollWin } from '../components/AppFooter.vue'
 import { opacityEffectsOn, opacityEffectsOff } from './InfoDetails.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import {  mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -18,7 +18,9 @@ export default {
             notificationTrue: undefined,
             runOutProd: undefined,
             titleRunOut: null,
-            loading: undefined
+            loading: undefined,
+            isClickOrder: false,
+            isClickRemove: false
         }
     },
 
@@ -76,6 +78,8 @@ export default {
         async removeFromCart(evt, item) {
             evt.stopPropagation()
             evt.preventDefault()
+            this.isClickRemove = false
+            this.isClickRemove = true
             try {
                 this.notificationTrue = false
 
@@ -95,6 +99,8 @@ export default {
                 this.loadCart()
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickRemove = false
             }
         },
 
@@ -123,6 +129,8 @@ export default {
 
         async createOrders(evt) {
             evt.preventDefault()
+            this.isClickOrder = false
+            this.isClickOrder = true
 
             this.createAlertMessage = ''
             this.runOutProd = false
@@ -158,6 +166,8 @@ export default {
                 } else {
                     console.log('Ошибка при отправке запроса на сервер: ' + error);
                 }
+            } finally {
+                this.isClickOrder = false
             }
         }
     }
@@ -195,7 +205,7 @@ export default {
                                     <p class="pt-lg-4">Доставка со склада продавца</p>
                                 </div>
                                 <div class="action-menu">
-                                    <button class="btn btn-danger" :disabled="showChangeMenu" @click="removeFromCart($event, item)" >Удалить<i class="fa fa-trash"></i></button>
+                                    <button class="btn btn-danger" :disabled="showChangeMenu || isClickRemove" @click="removeFromCart($event, item)" >Удалить<i class="fa fa-trash"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -213,7 +223,7 @@ export default {
                                 <h2><b>Итого</b></h2>
                                 <div class="money"><h2><b>{{ cartInfo.totalCost }}</b></h2><h2><b><i class="fa fa-rub"></i></b></h2></div>
                             </div>
-                            <button class="btn" :disabled="showChangeMenu" @click="createOrders" >Заказать</button>
+                            <button class="btn" :disabled="showChangeMenu || isClickOrder" @click="createOrders" >Заказать</button>
                             <div v-if="createAlertMessage !== ''" class="alert w-100 mt-2 text-center" :class="this.createAlertMessage === 'Заказ прошел успешно и оплачен' ? 'alert-success' : 'alert-danger'">{{ this.createAlertMessage }}</div>
                             <div class="check">
                                 <i class="fa fa-check"></i> <p>Соглашаюсь с <b @click="goRoute($event, 'pravilapol')">правилами пользования<br> торговой площадкой</b> и <b @click="goRoute($event, 'vozvrat')">возврата</b></p>

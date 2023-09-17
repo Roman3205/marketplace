@@ -20,6 +20,10 @@
     gap: 20px;
 }
 
+.click-recieve {
+    pointer-events: none;
+}
+
 .dostavka, .delivery-items, .delivery-total-amount h2, .rub-z {
     display: flex;
     align-items: center;

@@ -7,7 +7,8 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
-            chats: []
+            chats: [],
+            loading: undefined
         }
     },
 
@@ -25,13 +26,13 @@ export default {
         async loadChats() {
             try {
                 let token = 'Bearer ' + this.getTokenSeller
-
+                this.loading = true
                 let response = await axios.get('/seller/chats/all', {
                     headers: {
                         Authorization: token
                     }
                 })
-
+                this.loading = false
                 this.chats = response.data
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
@@ -68,7 +69,8 @@ export default {
                     <img src="../../images/picchats.jpg" width="80" alt="">
                 </div>
             </div>
-            <h5 class="no-chats mt-4" v-if="chats.length == 0">С вами еще никто не связывался</h5>
+            <spinner-loading v-if="loading" class="mt-lg-5" style="overflow: hidden; display: flex; align-self: center;"></spinner-loading>
+            <h5 class="no-chats mt-4" v-if="chats.length == 0 && !loading">С вами еще никто не связывался</h5>
             <div class="chats-container" v-if="chats.length != 0">
                 <div class="chat-block" v-for="(item) in chats" @click="goChat($event, item)" >
                     <div class="user">

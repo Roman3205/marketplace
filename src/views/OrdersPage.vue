@@ -15,7 +15,9 @@ export default {
             existChat: undefined,
             notificationRefundTrue: undefined,
             existRefund: undefined,
-            loading: undefined
+            loading: undefined,
+            isClickRefund: false,
+            isClickChat: false
         }
     },
 
@@ -84,6 +86,8 @@ export default {
             evt.stopPropagation()
             this.notificationTrue = false
             this.existChat = false
+            this.isClickChat = false
+            this.isClickChat = true
 
             try {
                 let token = 'Bearer ' + this.getAccessToken
@@ -104,6 +108,8 @@ export default {
                 } else {
                     console.log('Ошибка при отправке запроса на сервер: ' + error);
                 }
+            } finally {
+                this.isClickChat = false
             }
         },
 
@@ -112,6 +118,8 @@ export default {
             evt.stopPropagation()
             this.notificationRefundTrue = false
             this.existRefund = false
+            this.isClickRefund = false
+            this.isClickRefund = true
 
             try {
                 let token = 'Bearer ' + this.getAccessToken
@@ -134,6 +142,8 @@ export default {
                 } else {
                     console.log('Ошибка при отправке запроса на сервер: ' + error);
                 }
+            } finally {
+                this.isClickRefund = false
             }
         },
 
@@ -195,8 +205,8 @@ export default {
                                 <div class="active">
                                     <p>Заказан: {{ getTime(item.createdAt) }}</p>
                                     <p>Получен: {{ getTime(item.updatedAt) }}</p>
-                                    <button class="create-chat hover" @click="createChat($event, item)" >Чат с продавцом</button>
-                                    <button class="create-chat hover mt-4">Возврат</button>
+                                    <button class="create-chat hover" :disabled="isClickChat" @click="createChat($event, item)" >Чат с продавцом</button>
+                                    <button class="create-chat hover mt-4" :disabled="isClickRefund" @click="createRefund($event, item)">Возврат</button>
                                 </div>
                             </div>
                         </div>
@@ -215,8 +225,8 @@ export default {
                             <div class="active">
                                 <p>Заказан: {{ getTime(item.createdAt) }}</p>
                                 <p>Получен: {{ getTime(item.updatedAt) }}</p>
-                                <button class="create-chat hover" @click="createChat($event, item)" >Чат с продавцом</button>
-                                <button class="create-chat hover mt-4" @click="createRefund($event, item)">Возврат</button>
+                                <button class="create-chat hover" :disabled="isClickChat" @click="createChat($event, item)" >Чат с продавцом</button>
+                                <button class="create-chat hover mt-4" :disabled="isClickRefund" @click="createRefund($event, item)">Возврат</button>
                             </div>
                         </div>
                     </div>

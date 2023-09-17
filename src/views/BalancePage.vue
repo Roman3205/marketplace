@@ -13,7 +13,8 @@ export default {
             userInfo: null,
             operations: [],
             successTopUp: undefined,
-            loading: undefined
+            loading: undefined,
+            isClickTopUp: false
         }
     },
 
@@ -68,6 +69,8 @@ export default {
         async balanceTopUp(evt) {
             evt.preventDefault()
             try {
+                this.isClickTopUp = false
+                this.isClickTopUp = true
                 this.successTopUp = false
 
                 let token = 'Bearer ' + this.getAccessToken
@@ -89,6 +92,8 @@ export default {
                 this.successTopUp = false
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+            } finally {
+                this.isClickTopUp = false
             }
         },
 
@@ -178,7 +183,7 @@ export default {
                         <span @click="autoV($event, 100)">100 Р</span><span @click="autoV($event, 500)">500 Р</span><span @click="autoV($event, 1000)">1000 Р</span>
                     </div>
                 </div>
-                <button class="btn" :disabled="!emptyValue" :class="{
+                <button class="btn" :disabled="!emptyValue || isClickTopUp" :class="{
             'opacity': !emptyValue
         }" >Оплатить</button>
             </form>
