@@ -3,7 +3,8 @@ import axios from 'axios'
 // const backend_host = import.meta.env.VITE_BACKEND_HOST
 // const backend_port = import.meta.env.VITE_BACKEND_PORT
 
-axios.defaults.baseURL = 'https://' + VITE_BACKEND_HOST
+// axios.defaults.baseURL = 'https://server-marketplace.onrender.com'
+axios.defaults.baseURL = 'https://' + process.env.VITE_BACKEND_HOST
 
 // jwt in cookies from server
 // axios.defaults.withCredentials = true
