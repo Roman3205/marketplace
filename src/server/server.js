@@ -17,8 +17,7 @@ app.listen(backPort, () => {
 let cors = require('cors')
 app.use(cors({
     credentials: true,
-    // origin: 'http://' + frontHost + ':' + frontPort
-    origin: 'https://marketplace-inky-five.vercel.app'
+    origin: 'http://' + frontHost + ':' + frontPort
 }))
 
 app.use(express.json())
