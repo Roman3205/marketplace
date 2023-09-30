@@ -87,6 +87,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/sellchats.scss';
+    @import '@/assets/scss/sellchats.scss';
 
 </style>

@@ -390,6 +390,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/sellstatistics.scss';
+    @import '@/assets/scss/sellstatistics.scss';
 
 </style>

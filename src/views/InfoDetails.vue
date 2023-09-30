@@ -222,6 +222,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/infodetails.scss';
+    @import '@/assets/scss/infodetails.scss';
 
 </style>

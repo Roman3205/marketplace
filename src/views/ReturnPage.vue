@@ -1,7 +1,7 @@
 <script>
 
 import { opacityEffectsOn, opacityEffectsOff } from './InfoDetails.vue';
-import { scrollWin } from '../components/AppFooter.vue'
+import { scrollWin } from '@/components/AppFooter.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { mapGetters } from 'vuex'
@@ -250,6 +250,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/return.scss';
+    @import '@/assets/scss/return.scss';
 
 </style>

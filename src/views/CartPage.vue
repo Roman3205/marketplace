@@ -1,6 +1,6 @@
 <script>
 
-import { scrollWin } from '../components/AppFooter.vue'
+import { scrollWin } from '@/components/AppFooter.vue'
 import { opacityEffectsOn, opacityEffectsOff } from './InfoDetails.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'

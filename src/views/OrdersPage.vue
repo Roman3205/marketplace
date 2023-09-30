@@ -1,6 +1,6 @@
 <script>
 
-import { scrollWin } from '../components/AppFooter.vue';
+import { scrollWin } from '@/components/AppFooter.vue';
 import dayjs from 'dayjs'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
@@ -242,6 +242,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/orders.scss';
+    @import '@/assets/scss/orders.scss';
 
 </style>

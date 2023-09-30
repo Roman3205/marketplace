@@ -94,5 +94,5 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/selllogin.scss';
+    @import '@/assets/scss/selllogin.scss';
 </style>

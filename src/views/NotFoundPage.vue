@@ -25,5 +25,5 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/notfound.scss';
+    @import '@/assets/scss/notfound.scss';
 </style>

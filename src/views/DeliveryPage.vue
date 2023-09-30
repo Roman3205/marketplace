@@ -1,6 +1,6 @@
 <script>
 
-import { scrollWin } from '../components/AppFooter.vue'
+import { scrollWin } from '@/components/AppFooter.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { mapGetters } from 'vuex'

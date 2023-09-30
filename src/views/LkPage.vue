@@ -130,5 +130,5 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/lk.scss';
+    @import '@/assets/scss/lk.scss';
 </style>

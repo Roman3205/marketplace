@@ -66,6 +66,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '../assets/scss/sellersidebar.scss';
+    @import '@/assets/scss/sellersidebar.scss';
 
 </style>
