@@ -65,7 +65,7 @@ export default {
             <div class="row block__1">
                 <div class="block__content" @click="goRoute($event, 'details')" >
                     <div class="block__content__top">
-                        <img src="@/assets/images/user.png" alt="" width="68">
+                        <img src="/src/assets/images/user.png" alt="" width="68">
                         <h2 v-if="userInfo">{{ userInfo.name }}</h2>
                     </div>
                     <div class="user-info">
@@ -75,14 +75,14 @@ export default {
                 </div>
                 <div class="block__content" @click="goRoute($event, 'delivery')" >
                     <div class="block__content__top">
-                        <img src="@/assets/images/dostavka.png" alt="" width="68">
+                        <img src="/src/assets/images/dostavka.png" alt="" width="68">
                         <h2>Доставки</h2>
                     </div>
                     <p>Мои активные доставки</p>
                 </div>
                 <div class="block__content tov" @click="goRoute($event, 'orders')" >
                     <div class="block__content__top">
-                        <img src="@/assets/images/otzv.png" alt="" width="70">
+                        <img src="/src/assets/images/otzv.png" alt="" width="70">
                         <h2>Покупки</h2>
                     </div>
                     <p v-if="userInfo">Товаров куплено <strong><span class="upper-span">{{ userInfo.boughtProducts }}</span></strong></p>
@@ -92,7 +92,7 @@ export default {
                 <div class="block__content balmoney" @click="goRoute($event, 'balance')" >
                     <div class="block__content__top balance-cont">
                         <div class="balance-title">
-                            <img src="@/assets/images/picbalance.png" alt="" width="55">
+                            <img src="/src/assets/images/picbalance.png" alt="" width="55">
                             <h2>Баланс</h2>
                         </div>
                         <div class="rub">
@@ -103,7 +103,7 @@ export default {
                 </div>
                 <div class="block__content" @click="goRoute($event, 'reviews')" >
                     <div class="block__content__top">
-                        <img src="@/assets/images/otzv.png" alt="" width="68">
+                        <img src="/src/assets/images/otzv.png" alt="" width="68">
                         <h2>Отзывы</h2>
                     </div>
                     <p>Все ваши отзывы</p>
@@ -112,14 +112,14 @@ export default {
             <div class="row block__3">
                 <div class="block__content" @click="goRoute($event, 'chats')" >
                     <div class="block__content__top">
-                        <img src="@/assets/images/chats.png" alt="" width="70">
+                        <img src="/src/assets/images/chats.png" alt="" width="70">
                         <h2>Чаты</h2>
                     </div>
                     <p>Все ваши переписки хранятся здесь</p>
                 </div>
                 <div class="block__content" @click="goRoute($event, 'refund')" >
                     <div class="block__content__top">
-                        <img src="@/assets/images/vozvrat.png" alt="" width="68">
+                        <img src="/src/assets/images/vozvrat.png" alt="" width="68">
                         <h2>Возвраты</h2>
                     </div>
                     <p>Возвраты и их оформление</p>

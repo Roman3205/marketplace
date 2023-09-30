@@ -83,16 +83,16 @@ export default {
       </div>
       <div class="menu-bars">
         <div class="home" @click="goRoute($event, 'main')">
-          <img src="@/assets/images/house.png" alt="" width="40">
+          <img src="/src/assets/images/house.png" alt="" width="40">
         </div>
         <div class="cart" @click="goRoute($event, 'cart')">
-          <img src="@/assets/images/shop-cart.png" alt="" width="40">
+          <img src="/src/assets/images/shop-cart.png" alt="" width="40">
         </div>
         <div class="seller-icon" @click="goRoute($event, 'sellLogin')">
-          <img src="@/assets/images/seller.png" alt="" width="40">
+          <img src="/src/assets/images/seller.png" alt="" width="40">
         </div>
         <div class="user" @click="goRoute($event, 'lk')">
-          <img src="@/assets/images/user-icon.png" alt="" width="40">
+          <img src="/src/assets/images/user-icon.png" alt="" width="40">
         </div>
       </div>
       <div class="copyright">

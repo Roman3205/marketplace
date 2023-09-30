@@ -6,9 +6,9 @@ export default {
     data() {
         return {
             typeF: 'password',
-            imageF: '@/assets/images/hide.png',
+            imageF: '/src/assets/images/hide.png',
             typeS: 'password',
-            imageS: '@/assets/images/hide.png',
+            imageS: '/src/assets/images/hide.png',
             name: '',
             mail: '',
             password: '',
@@ -29,10 +29,10 @@ export default {
             evt.preventDefault()
             if(field === 'F') {
                 this.typeF = this.typeF === 'password' ? 'text' : 'password'
-                this.imageF = this.typeF === 'password' ? '@/assets/images/hide.png' : '@/assets/images/show.png'
+                this.imageF = this.typeF === 'password' ? '/src/assets/images/hide.png' : '/src/assets/images/show.png'
             } else if(field === 'S') {
                 this.typeS = this.typeS === 'password' ? 'text' : 'password'
-                this.imageS = this.typeS === 'password' ? '@/assets/images/hide.png' : '@/assets/images/show.png'
+                this.imageS = this.typeS === 'password' ? '/src/assets/images/hide.png' : '/src/assets/images/show.png'
             }
         },
 
@@ -90,7 +90,7 @@ export default {
     <div class="wrapper">
 			<div class="container-regis">
                 <div class="inner__image">
-				<img src="@/assets/images/regimage.png" width="420" alt="">
+				<img src="/src/assets/images/regimage.png" width="420" alt="">
 			</div>
 			<form @submit="Registration" class="inner__form form">
 				<h3>Форма регистрации</h3>

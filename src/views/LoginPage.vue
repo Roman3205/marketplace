@@ -7,7 +7,7 @@ export default {
     data() {
         return {
             type: 'password',
-            image: '@/assets/images/hide.png',
+            image: '/src/assets/images/hide.png',
             mail: '',
             password: '',
             alertMessage: ''
@@ -31,7 +31,7 @@ export default {
         toggle(evt) {
             evt.preventDefault()
             this.type = this.type === 'password' ? 'text' : 'password'
-            this.image = this.type === 'password' ? '@/assets/images/hide.png' : '@/assets/images/show.png'
+            this.image = this.type === 'password' ? '/src/assets/images/hide.png' : '/src/assets/images/show.png'
         },
 
         async Login(evt) {
