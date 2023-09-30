@@ -12,30 +12,15 @@ export default defineConfig({
     }
   },
   server: {
-    port: 5555
-  },
-  build: {
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, './index.html'),
-      },
-    },
-  },
-  server: {
+    port: 5555,
     fs: {
       strict: false,
-    },
+    }
   },
   optimizeDeps: {
     include: [
       'vue',
       'vue-router',
     ],
-  },
-  // Добавьте следующую настройку для поддержки истории маршрутизации
-  server: {
-    fs: {
-      strict: false,
-    },
-  },
+  }
 })
