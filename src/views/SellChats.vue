@@ -66,7 +66,7 @@ export default {
                 <h2><b>Сообщения</b></h2><br>
                 <div class="icon">
                     <p>Тут собраны все чаты и сообщения, которые созданы пользователями в адрес вашего бренда</p>
-                    <img src="../../images/picchats.jpg" width="80" alt="">
+                    <img src="@/assets/images/picchats.jpg" width="80" alt="">
                 </div>
             </div>
             <spinner-loading v-if="loading" class="mt-lg-5" style="overflow: hidden; display: flex; align-self: center;"></spinner-loading>
@@ -74,7 +74,7 @@ export default {
             <div class="chats-container" v-if="chats.length != 0">
                 <div class="chat-block" v-for="(item) in chats" @click="goChat($event, item)" >
                     <div class="user">
-                        <img src="../../images/operator.jpg" width="70" alt="">
+                        <img src="@/assets/images/operator.jpg" width="70" alt="">
                         <h2><b>{{ item.people[0].name }}</b></h2>
                     </div>
                     <h6>Нажмите на чат, чтобы войти в переписку</h6>

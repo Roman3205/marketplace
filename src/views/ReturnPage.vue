@@ -80,6 +80,7 @@ export default {
 
             if(/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputValue2) || !/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputValue1) || filter.test(this.inputValue1)) {
                 this.notCorrectFill = true
+                this.isClickFill = false
             } else {
                 try {
                     let token = 'Bearer ' + this.getAccessToken

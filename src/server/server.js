@@ -914,7 +914,9 @@ app.get('/chats/all', VerifyTokenUser, async (req, res) => {
         },
     ])
 
-    res.send(chats)
+    let chatsAll = chats.sort((a,b) => b.createdAt - a.createdAt)
+
+    res.send(chatsAll)
 })
 
 app.get('/user/chat', VerifyTokenUser, async (req, res) => {
@@ -1484,7 +1486,9 @@ app.get('/seller/chats/all', VerifyTokenSeller, async (req, res) => {
         }
     ])
 
-    res.send(chats)
+    let chatsAll = chats.sort((a,b) => b.createdAt - a.createdAt)
+
+    res.send(chatsAll)
 })
 
 app.get('/seller/chat', VerifyTokenSeller, async (req, res) => {

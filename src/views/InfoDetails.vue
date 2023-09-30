@@ -161,7 +161,7 @@ export default {
         <div class="wrapper__1" :class="{
         'opacity': showChangeMail || showChangeName }">
             <div class="username-block">
-                <label for="file"><img src="../../images/user.png" alt="" width="140"></label>
+                <label for="file"><img src="@/assets/images/user.png" alt="" width="140"></label>
                 <input type="file" class="d-none" id="file">
                 <h2 v-if="userInfo"><b>{{ userInfo.name }}</b></h2>
                 <i class="fa fa-pencil" @click="changeName"></i>

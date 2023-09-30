@@ -96,7 +96,7 @@ export default {
   }
 
   html::-webkit-scrollbar-thumb {
-    background: rgb(145, 51, 208);
+    background: rgb(66, 66, 214);
     width: 10px;
     height: 35%;
   }

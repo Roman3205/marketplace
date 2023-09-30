@@ -1,15 +1,15 @@
 <script>
 import axios from 'axios'
-import { scrollWin } from '../components/AppFooter.vue'
+import { scrollWin } from '@/components/AppFooter.vue'
 import { mapGetters } from 'vuex'
 
 export default {
     data() {
         return {
             images: [
-                '../../images/nike.jpg',
-                '../../images/waikiki.jpg',
-                '../../images/apple.jpg'
+                '@/assets/images/nike.jpg',
+                '@/assets/images/waikiki.jpg',
+                '@/assets/images/apple.jpg'
             ],
             currentIndex: 1,
             productsMain: [],

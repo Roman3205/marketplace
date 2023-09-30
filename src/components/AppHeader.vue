@@ -162,7 +162,7 @@ export default {
             <div class="header__money">
                 <i class="fa fa-rub"></i><span>RUB</span>
             </div>
-            <button @click="goRoute($event, 'sellLogin')" class="header__button btn btn-primary text-white">Стать продавцом</button>
+            <button @click="goRoute($event, 'sellLogin')" class="header__button btn text-white">Стать продавцом</button>
         </div>
         <div class="container__header header-bottom">
             <div class="header__menu">

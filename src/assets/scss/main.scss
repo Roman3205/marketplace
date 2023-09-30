@@ -44,6 +44,7 @@ p {
         justify-content: center;
         border-radius: 50%;
         background-color: inherit;
+        border: 3px solid rgb(66, 66, 214);
         align-items: center;
         opacity: 0.8;
         transition: 0.7s;
@@ -54,6 +55,7 @@ p {
 
         i {
             font-size: 23px;
+            color: rgb(66, 66, 214);
         }
     }
 
@@ -192,6 +194,11 @@ p {
             height: fit-content;
             margin-bottom: 15px;
         }
+    }
+
+    .rub h5, .rub i {
+        margin: 0;
+        font-size: 16px!important;
     }
 
     .product {

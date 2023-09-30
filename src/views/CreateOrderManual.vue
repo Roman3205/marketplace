@@ -10,22 +10,22 @@
                 <div class="block">
                     <h2><b>1. Войти или зарегистрироваться</b></h2>
                     <p>Оформить заказ можно только в личном кабинете. Войдите или зарегистрируйтесь.</p>
-                    <img src="../../images/step1.png" alt="">
+                    <img src="@/assets/images/step1.png" alt="">
                 </div>
                 <div class="block">
                     <h2><b>2. Добавить товар в «Корзину»</b></h2>
                     <p>В карточке товара выберите подходящий размер и нажмите «Добавить в корзину»:</p>
-                    <img src="../../images/step2.png" alt="">
+                    <img src="@/assets/images/step2.png" alt="">
                 </div>
                 <div class="block">
                     <h2><b>3. Перейти в корзину</b></h2>
                     <p>Для продолжения оформления заказа перейдите в «Корзину». <br> По клику на кнопку «Перейти в корзину» в карточке товара:</p>
-                    <img src="../../images/step3.png" alt="">
+                    <img src="@/assets/images/step3.png" alt="">
                 </div>
                 <div class="block">
                     <h2><b>4. Проверить заказ</b></h2>
                     <p>Проверьте состав заказа. Измените количество, отложите или удалите товар, если ошиблись с выбором:</p>
-                    <img src="../../images/step4.png" alt="">
+                    <img src="@/assets/images/step4.png" alt="">
                 </div>
                 <div class="block">
                     <h2><b>5. Выбрать способ оплаты</b></h2>

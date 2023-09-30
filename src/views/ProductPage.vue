@@ -1,7 +1,7 @@
 <script>
 
 import { opacityEffectsOff, opacityEffectsOn } from './InfoDetails.vue'
-import { scrollWin } from '../components/AppFooter.vue'
+import { scrollWin } from '@/components/AppFooter.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { mapGetters } from 'vuex'
@@ -122,6 +122,7 @@ export default {
             let filter = /([a-zA-Zа-яА-Я])\1{2}/;
             if (!/^[А-Яа-я\s,'-.!" "?]+$/.test(this.inputValue) || filter.test(this.inputValue)) {
                 this.reviewAlertMessage = 'Произошла ошибка в заполнении'
+                this.isClickReview = false
             } else {
                 try {
                     let token = 'Bearer ' + this.getAccessToken
@@ -318,7 +319,7 @@ export default {
                     <div class="row ms-lg-1 mt-lg-3 ms-lg-2" ref="reviews">
                         <div class="review" v-for="(item) in product.reviews">
                             <div class="rev-user">
-                                <img :src="'../..//images/' + item.author_id.profilePicture">
+                                <img :src="'@/assets//images/' + item.author_id.profilePicture">
                                 <div class="time">
                                     <div class="user">
                                         <b>{{ item.author_id.name }}</b>
