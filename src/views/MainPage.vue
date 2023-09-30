@@ -55,12 +55,12 @@ export default {
         },
 
         async changeSlidePrev() {
-            await new Promise(prom => setTimeout(prom, 450))
+            await new Promise(prom => setTimeout(prom, 150))
             this.prevSlide()
         },
 
         async changeSlideNext() {
-            await new Promise(prom => setTimeout(prom, 450))
+            await new Promise(prom => setTimeout(prom, 150))
             this.nextSlide()
         },
 

@@ -11,7 +11,7 @@ let backPort = process.env.VITE_BACKEND_PORT
 let backHost = process.env.VITE_BACKEND_HOST
 
 app.listen(backPort, () => {
-    console.log('https://' + backHost + ':' + backPort)
+    console.log('http://' + backHost + ':' + backPort)
 })
 
 let cors = require('cors')
