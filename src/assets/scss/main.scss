@@ -183,8 +183,9 @@ p {
     }
 
     .content {
-        gap: 30px;
+        gap: 0px;
         justify-content: left;
+        flex-wrap: wrap;
         margin: 0;
         padding: 0;
 
@@ -202,7 +203,7 @@ p {
     }
 
     .product {
-        width: 130px;
+        width: 145px;
         height: 280px;
         gap: 5px;
 

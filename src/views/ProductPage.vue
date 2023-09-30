@@ -319,7 +319,7 @@ export default {
                     <div class="row ms-lg-1 mt-lg-3 ms-lg-2" ref="reviews">
                         <div class="review" v-for="(item) in product.reviews">
                             <div class="rev-user">
-                                <img :src="'@/assets//images/' + item.author_id.profilePicture">
+                                <img :src="'/images/' + item.author_id.profilePicture">
                                 <div class="time">
                                     <div class="user">
                                         <b>{{ item.author_id.name }}</b>

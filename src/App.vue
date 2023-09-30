@@ -139,7 +139,10 @@ export default {
   }
 
   .changemenu-opacity {
-    opacity: 0.4;
+    /* opacity: 0.6; */
+    z-index: 900;
+    position: fixed;
+    filter: blur(5px);
   }
 
   textarea {
