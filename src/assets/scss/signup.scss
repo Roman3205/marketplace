@@ -54,7 +54,7 @@ ul {
 	background-size: cover;
 	background-repeat: no-repeat;
 	@extend %flex;
-	background: url('@/assets/images/bg.jpg') no-repeat center center fixed;
+	background: url('/images/bg.jpg') no-repeat center center fixed;
     background-size: cover;
 	width: 100%;
 }

@@ -235,7 +235,7 @@ export default {
                             <div class="left-side">
                                 <h2><b>Способы оплаты</b></h2>
                                 <div class="way">
-                                    <img src="/src/assets/images/picbalance.png" width="20" alt=""><p>Оплата балансом</p>
+                                    <img src="/images/picbalance.png" width="20" alt=""><p>Оплата балансом</p>
                                 </div>
                             </div>
                             <div class="right-side">
@@ -248,7 +248,7 @@ export default {
                             <div class="left-side">
                                 <h2 @click="goRoute($event, 'details')"><b>Мои данные</b></h2>
                                 <div class="way">
-                                    <img :src="'/src/assets/images/' + userInfo.profilePicture" width="25" alt=""><p>{{ userInfo.name }}</p>
+                                    <img :src="'/images/' + userInfo.profilePicture" width="25" alt=""><p>{{ userInfo.name }}</p>
                                 </div>
                             </div>
                             <div class="right-side">

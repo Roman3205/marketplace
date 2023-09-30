@@ -68,7 +68,7 @@ export default {
                 <h2><b>Сообщения</b></h2><br>
                 <div class="icon">
                     <p>Здесь показаны<br> все ваши чаты</p>
-                    <img src="/src/assets/images/picchats.jpg" width="200" alt="">
+                    <img src="/images/picchats.jpg" width="200" alt="">
                 </div>
             </div>
             <div class="chats-container">
@@ -76,7 +76,7 @@ export default {
                 <p v-if="chats.length == 0 && !loading">Пока у вас нет никаких чатов</p>
                 <div class="chat-block" v-if="chats.length != 0" v-for="(item) in chats" @click="goChat($event, item)" >
                     <div class="user">
-                        <img src="/src/assets/images/operator.jpg" width="70" alt="">
+                        <img src="/images/operator.jpg" width="70" alt="">
                         <h2><b>{{ item.people[0].brandName }}</b></h2>
                     </div>
                     <h6>Нажмите на чат, чтобы войти в переписку</h6>
