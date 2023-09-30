@@ -10,7 +10,7 @@
                 <div class="block__content1 box">
                     <div class="inner">
                         <h2><b>Быстрая <br>доставка</b></h2>
-                        <img src="@/assets/images/picdostavka.png" alt="" width="200">
+                        <img src="/images/picdostavka.png" alt="" width="200">
                     </div>
                     <div class="content">
                         <h2>Более 80%</h2>
