@@ -1,9 +1,10 @@
 import axios from 'axios'
 
 const backend_host = import.meta.env.VITE_BACKEND_HOST
-const backend_port = import.meta.env.VITE_BACKEND_PORT
+// const backend_port = import.meta.env.VITE_BACKEND_PORT
 
-axios.defaults.baseURL = 'https://' + backend_host + ':' + backend_port
+// axios.defaults.baseURL = 'https://' + backend_host + ':' + backend_port
+axios.defaults.baseURL = 'https://' + backend_host
 
 // jwt in cookies from server
 // axios.defaults.withCredentials = true
