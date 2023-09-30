@@ -140,6 +140,6 @@ export default {
 </template>
 
 <style scoped lang="scss">
-    @import '@/assets/scss/sellsignup.scss';
+    @import '@/assets/scss/sellSignup.scss';
     
 </style>
