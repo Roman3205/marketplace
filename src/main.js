@@ -4,7 +4,7 @@ const backend_host = import.meta.env.VITE_BACKEND_HOST
 // const backend_port = import.meta.env.VITE_BACKEND_PORT
 
 // axios.defaults.baseURL = 'https://' + backend_host + ':' + backend_port
-axios.defaults.baseURL = 'https://' + String(backend_host)
+axios.defaults.baseURL = 'https://' + String(backend_host).replaceAll('%27', '')
 
 // jwt in cookies from server
 // axios.defaults.withCredentials = true
