@@ -7,9 +7,9 @@ export default {
     data() {
         return {
             images: [
-                '/src/assets/images/nike.jpg',
-                '/src/assets/images/waikiki.jpg',
-                '/src/assets/images/apple.jpg'
+                '@/assets/images/nike.jpg',
+                '@/assets/images/waikiki.jpg',
+                '@/assets/images/apple.jpg'
             ],
             currentIndex: 1,
             productsMain: [],
