@@ -11,13 +11,14 @@ let backPort = process.env.VITE_BACKEND_PORT
 let backHost = process.env.VITE_BACKEND_HOST
 
 app.listen(backPort, () => {
-    console.log('http://' + backHost + ':' + backPort)
+    console.log('https://' + backHost + ':' + backPort)
 })
 
 let cors = require('cors')
 app.use(cors({
     credentials: true,
-    origin: 'http://' + frontHost + ':' + frontPort
+    // origin: 'http://' + frontHost + ':' + frontPort
+    origin: 'https://marketplace-inky-five.vercel.app'
 }))
 
 app.use(express.json())
