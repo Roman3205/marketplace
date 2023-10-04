@@ -111,6 +111,7 @@ export default {
       opacity: 0;
       visibility: hidden;
       cursor: pointer;
+      z-index: 999;
   }
 
   @keyframes notification {
@@ -141,7 +142,7 @@ export default {
   .changemenu-opacity {
     /* opacity: 0.6; */
     z-index: 900;
-    position: fixed;
+    /* position: fixed; */
     filter: blur(5px);
   }
 
@@ -192,6 +193,21 @@ export default {
 
     .router-seller {
       overflow: hidden;
+    }
+
+    .notification {
+      transform: translateX(100px);
+      animation-duration: 7.2s;
+    }
+
+    @keyframes notification {
+      40% {
+          transform: translateX(25px);
+          transition: opacity 0.2s ease, visibility 0.2s ease;
+          opacity: 1;
+          visibility: visible;
+      }
+
     }
   }
 
