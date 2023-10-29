@@ -17,13 +17,13 @@
 
 .form__block__toggle {
 	width: 40px;
-	margin-top: 0px;
-	height: 32.2px;
+	margin-top: -0.5px;
+	height: 32px;
 	transition: 0.5s;
 	overflow: hidden;
 
 	&:hover {
-		background-color: #9e9d9d;
+		background-color: #a6ba95;
 	}
 }
 
@@ -42,7 +42,7 @@ ul {
 	align-items: center;
 	padding: 30px;
 	gap: 50px;
-	background: #fff;
+	background: #623f55;
 	border-radius: 15px;
 }
 
@@ -63,11 +63,26 @@ ul {
 	padding: 40px;
 	border-radius: 10px;
 	margin: auto;
-	background-color: #fff;
+	background-color: #623f55!important;
 	display: flex;
 	width: 420px;
 	overflow: hidden;
 	flex-direction: column;
+
+	input {
+		color: #623f55!important;
+        outline: none;
+        box-shadow: none;
+        border: none;
+
+        &::-webkit-input-placeholder {
+            color: #623f55!important;
+        }
+	}
+
+	* {
+		color: #a6ba95!important;
+	}
 	
 	.form__info {
 		flex-direction: column;
@@ -123,14 +138,13 @@ ul {
 	cursor: pointer;
 	@extend %flex;
 	justify-content: center;
-	background: #333;
-	font-size: 15px;
-	color: #fff;
 	vertical-align: middle;
 	transition: 0.6s ease-in;
-	
+	background-color: #a6ba95!important;
+	color: #623f55!important;
+
 	&:hover {
-		opacity: 0.8;
+		opacity: 0.75!important;
 	}
 }
 

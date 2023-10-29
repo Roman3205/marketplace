@@ -5,7 +5,7 @@
 <template>
     <div class="container">
         <div class="wrapper">
-            <h2><b>Покупайте на Marketplace</b></h2>
+            <h2><b>Покупайте на Gorza</b></h2>
             <div class="blocks">
                 <div class="block__content1 box">
                     <div class="inner">

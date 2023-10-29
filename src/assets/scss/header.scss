@@ -5,7 +5,7 @@
 }
 
 .container {
-    background-color: rgb(55, 123, 195);
+    background-color: #623f55;
     width: 100%;
     height: 150px;
     display: flex;
@@ -13,11 +13,11 @@
     align-items: center;
     gap: 10px;
     color: #e6e6e6;
-    border-radius: 0px 0px 30px 30px;
+    border-radius: 0px 0px 30px 30px!important;
 }
 
 .fa-bars {
-    border: 1px solid #fff;
+    border: 2px solid #a6ba95;
     border-radius: 10px;
     padding: 5px;
     font-size: 44px!important;
@@ -29,7 +29,12 @@
 }
 
 .header__button {
-    background-color: rgb(66, 66, 214);
+    background-color: #55711a;
+    transition: 0.7s;
+
+    &:hover {
+        opacity: 0.75;
+    }
 }
 
 .header-bottom h1 {
@@ -51,6 +56,11 @@
     height: 50px;
     box-shadow: none;
     border: none;
+    color: #623f55!important;
+
+    &::-webkit-input-placeholder {
+        color: #623f55!important;
+    }
 }
 
 .box__user, .header__cart {
@@ -68,17 +78,17 @@
 
 .header__menu, .header__search, .box {
     display: flex;
-    gap: 35px;
+    gap: 45px;
 }
 
 .header__search {
-    gap: 15px;
+    gap: 20px;
     @extend %flex;
 }
 
 .header-bottom {
     @extend %flex;
-    gap: 60px;
+    gap: 120px;
 }
 
 .header__money {
@@ -96,7 +106,7 @@
 
 .category-item {
     border-radius: 10px;
-    background-color: rgb(66, 66, 214);
+    background-color: #623f55;
     color: #fff;
     padding: 20px;
     font-size: 15px;
@@ -123,7 +133,7 @@
     left: 0;
     position: fixed;
     display: flex;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.55);
 }
 
 .open-space {
@@ -145,11 +155,13 @@
     z-index: 999;
     pointer-events: all;
     opacity: 1!important;
+    background-color: transparent;
 
     .fa-times {
         font-size: 38px;
-        color: rgb(91, 91, 91);
+        color: #623f55!important;
         opacity: 1!important;
+        background-color: transparent;
         cursor: pointer;
         top: 10px;
         position: absolute;
@@ -159,18 +171,18 @@
 
 .categories::-webkit-scrollbar {
     border-radius: 15px;
-    background-color: rgb(185, 185, 185);
+    background-color: #a6ba95;
 }
 
 .categories::-webkit-scrollbar-thumb {
     max-height: 50%;
-    background-color: rgb(114, 114, 114);
+    background-color: #623f55;
     border-radius: 15px;
 }
 
 .categories {
     overflow-y: scroll;
-    background-color: #efefef;
+    background-color: #a6ba95;
     display: flex;
     flex-direction: column;
     padding: 30px 40px 50px 40px;
@@ -283,4 +295,8 @@
             height: 40px;
         }
     }
+}
+
+* {
+    color: #a6ba95!important;
 }

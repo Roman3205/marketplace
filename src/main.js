@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 // axios.defaults.baseURL = import.meta.env.VITE_BACKEND_HOST
-axios.defaults.baseURL = 'https://server-marketplace.onrender.com'
+// axios.defaults.baseURL = 'https://server-marketplace.onrender.com'
+axios.defaults.baseURL = 'http://localhost:3333'
 
 // jwt in cookies from server
 // axios.defaults.withCredentials = true

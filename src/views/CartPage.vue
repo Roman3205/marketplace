@@ -263,7 +263,7 @@ export default {
             <i class="fa fa-times" @click="closeChange" ></i>
             <div class="content">
                 <h2><b>Способ оплаты</b></h2>
-                <div class="bal">Баланс Marketplace</div>
+                <div class="bal">Баланс Gorza</div>
                 <button class="btn" @click="closeChange" >Выбрать</button>
             </div>
         </div>

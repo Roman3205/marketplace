@@ -90,13 +90,17 @@ export default {
     overflow-x: hidden;
   }
 
+  .header, .footer {
+    background-color: #a6ba95;
+  }
+
   html::-webkit-scrollbar {
-    background: rgb(208, 208, 208);
+    background: #a6ba95;
     width: 10px;
   }
 
   html::-webkit-scrollbar-thumb {
-    background: rgb(66, 66, 214);
+    background: #623f55;
     width: 10px;
     height: 35%;
   }
@@ -140,10 +144,10 @@ export default {
   }
 
   .changemenu-opacity {
-    /* opacity: 0.6; */
+    opacity: 0.85;
     z-index: 900;
     /* position: fixed; */
-    filter: blur(5px);
+    filter: blur(0.7px);
   }
 
   textarea {

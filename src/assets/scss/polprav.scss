@@ -42,11 +42,11 @@
     padding-top: 20px;
     width: 100%;
     flex-direction: column;
-    border-top: 2px solid lightgrey;
+    border-top: 2px solid #623f55;
 }
 
 .toggle-menu__5 .toggle__label {
-    border-bottom: 2px solid lightgrey;
+    border-bottom: 2px solid #623f55;
 }
 
 .toggle__label:hover {
@@ -112,4 +112,9 @@
     .blocks-container {
         margin-top: 35px;
     }
+}
+
+* {
+    background-color: #a6ba95!important;
+    color: #623f55!important;
 }

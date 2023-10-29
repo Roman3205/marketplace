@@ -167,7 +167,7 @@ export default {
         <div class="container__header header-bottom">
             <div class="header__menu">
                 <i class="fa fa-bars" @click="openMenu" ></i>
-                <h1 @click="goRoute($event, 'main')" >MARKETPLACE</h1>
+                <h1 @click="goRoute($event, 'main')" >GORZA</h1>
             </div>
             <div class="header__search">
                 <input type="text" v-model="searchInput" placeholder="Я ищу..." id="search" class="form-control">

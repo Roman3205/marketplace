@@ -34,16 +34,20 @@ p {
 }
 
 .inner {
-    background-color: rgb(246,246,246);
+    background-color: #623f55!important;
     padding: 25px;
     overflow: hidden;
-    border: 2px solid lightgray;
-    box-shadow: 5px 5px 5px lightgrey;
+    border: 2px solid #623f55;
     margin: 0px 10px 10px 0px;
     gap: 50px;
     border-radius: 15px;
     height: 330px;
     width: 250px;
+
+    h2 b, h2 {
+        background-color: #623f55!important;
+        color: #a6ba95!important;
+    }
 }
 
 .content {
@@ -73,4 +77,9 @@ p {
         margin-left: 0;
         margin-right: 0;
     }
+}
+
+* {
+    background-color: #a6ba95!important;
+    color: #623f55!important;
 }

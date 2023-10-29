@@ -274,7 +274,7 @@ export default {
                                 <i class="fa fa-thumbs-up"></i>{{ product.brand_id.sold }}<br>товаров продано
                             </div>
                             <div class="reg">
-                                {{ getTime(product.brand_id.createdAt) }}<br>на Marketplace
+                                {{ getTime(product.brand_id.createdAt) }}<br>на Gorza
                             </div>
                         </div>
                     </div>

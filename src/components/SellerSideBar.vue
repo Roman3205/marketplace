@@ -44,8 +44,8 @@ export default {
 <template>
     <div class="container">
         <div class="wrapper">
-            <h2 class="no-toggle"><b>Marketplace Partners</b></h2>
-            <h2 @click="openBar" class="opener-toggle"><b>Marketplace Partners</b></h2>
+            <h2 class="no-toggle"><b>Gorza Partners</b></h2>
+            <h2 @click="openBar" class="opener-toggle"><b>Gorza Partners</b></h2>
             <div class="nav-container">
                 <button class="btn" @click="goRoute($event, 'statistics')" :class="{
                     active: this.$route.name === 'statistics'

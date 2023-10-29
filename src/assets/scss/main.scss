@@ -44,7 +44,8 @@ p {
         justify-content: center;
         border-radius: 50%;
         background-color: inherit;
-        border: 3px solid rgb(66, 66, 214);
+        border: 3px solid #55711a;
+        background-color: #55711a!important;
         align-items: center;
         opacity: 0.8;
         transition: 0.7s;
@@ -55,14 +56,15 @@ p {
 
         i {
             font-size: 23px;
-            color: rgb(66, 66, 214);
+            color: #a6ba95!important;
+            background-color: #55711a!important;
         }
     }
 
     div {
         width: 85%;
         border-radius: 25px;
-        border: 2px solid gray;
+        border: 2px solid #623f55;
         overflow: hidden;
     }
 
@@ -90,14 +92,20 @@ p {
     border-radius: 15px;
     width: 215px;
     height: 340px;
-    background-color: #efefef;
+    background-color: #623f55!important;
     @include flex(column, 12px);
+    color: #a6ba95!important;
     margin: 10px;
-    border: 1px solid gray;
+    border: 1px solid #623f55;
     cursor: pointer;
 
+    * {
+        background-color: #623f55!important;
+        color: #a6ba95!important;
+    }
+
     &:hover {
-        box-shadow: 0px 0px 9px 7px lightgray;
+        box-shadow: 0px 0px 9px 7px #623f55;
     }
 
     p {
@@ -118,6 +126,7 @@ p {
             padding: 1px 3px;
             margin: 0px 0px 10px 10px;
             opacity: 1;
+            border-color: #623f55;
         }
     }
 
@@ -226,4 +235,9 @@ p {
             height: 200px;
         }
     }
+}
+
+* {
+    background-color: #a6ba95!important;
+    color: #623f55!important;
 }

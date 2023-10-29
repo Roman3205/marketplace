@@ -5,6 +5,7 @@
 .container {
     display: flex;
     justify-content: center;
+    background-color: #a6ba95!important;
 }
 
 .wrapper {
@@ -54,14 +55,17 @@
 }
 
 .balance-menu {
-    background-color: #efefef;
+    background-color: #623f55!important;
     padding: 25px;
     overflow: hidden;
-    box-shadow: 5px 5px 5px lightgrey;
     margin: 0px 15px 15px 0px;
     border-radius: 15px;
     width: 350px;
     gap: 20px;
+
+    * {
+        color: #a6ba95!important;
+    }
 
     i {
         margin-top: 10px;
@@ -69,9 +73,9 @@
     }
     
     button {
-        background-color: rgb(66, 66, 214);
+        background-color: #a6ba95;
+        color: #623f55!important;
         transition: 0.6s;
-        color: #fff;
     }
 
     button:hover {
@@ -104,11 +108,14 @@
     min-height: 320px;
     height: fit-content;
     border-radius: 15px;
-    background-color: #efefef;
+    background-color: #623f55!important;
     padding: 25px;
     overflow: hidden;
-    box-shadow: 5px 5px 5px lightgrey;
     padding: 20px;
+
+    * {
+        color: #a6ba95!important;
+    }
 
     i {
         position: absolute;
@@ -132,6 +139,8 @@
         span {
             background-color: rgb(213, 213, 213);
             padding: 5px;
+            background-color: #a6ba95!important;
+            color: #623f55!important;
             border-radius: 5px;
             cursor: pointer;
         }
@@ -148,22 +157,26 @@
         width: 100%;
         margin: 8px 0px 20px 0px;
         box-shadow: none;
+        color: #623f55!important;
+        outline: none;
+        box-shadow: none;
+        border: none;
+
+        &::-webkit-input-placeholder {
+            color: #623f55!important;
+        }
     }
 
     button {
         width: 100%;
-        transition: 0.6s;
+        transition: 0.7s;
         margin: 10px 0px;
-        color: rgb(66, 66, 214);
-        border: 3px solid rgb(66, 66, 214);
-        background-color: #fff;
+        background-color: #a6ba95!important;
+        color: #623f55!important;
 
         &:hover {
-            background-color: rgb(66, 66, 214);
             opacity: 0.8!important;
-            color: #fff;
         }
-        
     }
 }
 
@@ -203,4 +216,8 @@
     .no-history {
         margin-top: 0px;
     }
+}
+
+* {
+    color: #623f55!important;
 }

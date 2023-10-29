@@ -16,16 +16,27 @@
 %content {
     height: 180px;
     border-radius: 15px;
-    background-color: #efefef;
     padding: 25px;
     overflow: hidden;
-    box-shadow: inset -5px -5px 5px lightgrey;
+    box-shadow: inset -5px -5px 5px #623f55;
     transition: 0.35s;
 }
 
 .container {
     display: flex;
     justify-content: center;
+    background-color: #a6ba95!important;
+
+    button {
+        background-color: #55711a!important;
+        border-color: #55711a;
+        color: #a6ba95!important;
+        transition: 0.7s;
+
+        &:hover {
+            opacity: 0.75;
+        }
+    }
 }
 
 .wrapper h2 {
@@ -61,10 +72,11 @@
 }
 
 .block__content {
+    background-color: #623f55!important;
+    color: #a6ba95!important;
     @extend %content;
 
     &:hover {
-        box-shadow: inset 8px 8px 10px lightgrey;
         opacity: 0.85;
     }
 

@@ -33,8 +33,8 @@
     padding-top: 20px;
     width: 100%;
     flex-direction: column;
-    border-top: 2px solid lightgrey;
-    border-bottom: 2px solid lightgrey;
+    border-top: 2px solid #623f55;
+    border-bottom: 2px solid #623f55;
 }
 
 .toggle__label:hover {
@@ -90,4 +90,9 @@
         max-width: 1400px;
 
     }
+}
+
+* {
+    background-color: #a6ba95!important;
+    color: #623f55!important;
 }

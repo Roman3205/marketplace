@@ -41,6 +41,9 @@ select {
     margin-bottom: 25.5px;
     font-size: 18px;
     box-shadow: none;
+    background-color: #623f55!important;
+    outline: none;
+    border-color: #a6ba95;
 
     .category-item {
         padding: 0;
@@ -86,17 +89,16 @@ textarea {
     border: none;
 	border-radius: 5px;
 	cursor: pointer;
-	background: #333;
-	font-size: 15px;
-	color: #fff;
 	transition: 0.6s ease-in;
 	padding: 10px 70px;
     width: 100%;
     margin-top: 77px;
+	background-color: #a6ba95!important;
+	color: #623f55!important;
 
-    &:hover {
-        opacity: 0.75!important;
-    }
+	&:hover {
+		opacity: 0.75!important;
+	}
 }
 
 input:invalid+span:after {

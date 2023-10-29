@@ -12,7 +12,9 @@ export { scrollWin }
 export default {
   data() {
     return {
-      showScroll: false
+      showScroll: false,
+      backgroundColor: '#55711a',
+      color: '#a6ba95'
     }
   },
 
@@ -27,7 +29,6 @@ export default {
   methods: {
     handleScroll() {
       let position = document.documentElement.scrollTop
-
       if (position > 400) {
         this.showScroll = true
       } else {
@@ -70,7 +71,7 @@ export default {
         <div class="footer-col">
           <h2>Партнерам</h2>
           <ul>
-            <li @click="goRoute($event, 'sellLogin')" >Продавайте на Marketplace</li>
+            <li @click="goRoute($event, 'sellLogin')" >Продавайте на Gorza</li>
             <li @click="goRoute($event, 'pravilapr')" >Правила продажи</li>
           </ul>
         </div>
@@ -96,7 +97,7 @@ export default {
         </div>
       </div>
       <div class="copyright">
-        <p>2023 © Marketplace — интернет-магазин одежды, обуви и аксессуаров. <br>Все права защищены.</p>
+        <p>2023 © Gorza Marketplace — интернет-магазин одежды, обуви и аксессуаров. <br>Все права защищены.</p>
       </div>
       <div class="scroll-up inden-scroll" @click="scrollUp" v-if="showScroll" >
         <i class="fa fa-arrow-up"></i>
@@ -104,7 +105,16 @@ export default {
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
   @import '@/assets/scss/footer.scss';
 
+  .scroll-up {
+    background-color: v-bind(backgroundColor)!important;
+    color: v-bind(color)!important;
+
+    i {
+      background-color: v-bind(backgroundColor)!important;
+      color: v-bind(color)!important;
+    }
+  }
 </style>
