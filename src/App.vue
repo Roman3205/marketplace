@@ -105,7 +105,7 @@ export default {
     height: 35%;
   }
 
-    .notification {
+  .notification {
       position: fixed;
       top: 50px;
       right: 50px;
@@ -147,7 +147,7 @@ export default {
     opacity: 0.85;
     z-index: 900;
     /* position: fixed; */
-    filter: blur(0.7px);
+    filter: blur(0.70px);
   }
 
   textarea {
