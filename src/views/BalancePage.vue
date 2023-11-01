@@ -125,7 +125,7 @@ export default {
             if(item.name === 'replenishment') {
                 return 'Баланс пополнен на ' + item.money + ' (пополнение)'
             } else if(item.name === 'withdrawals') {
-                return 'С баланаса списано ' + item.money + ' (оплата заказа)'
+                return 'С баланса списано ' + item.money + ' (оплата заказа)'
             } else if(item.name === 'refund') {
                 return 'Баланс пополнен на ' + item.money + ' (возврат товара)'
             } else {

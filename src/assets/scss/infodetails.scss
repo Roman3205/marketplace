@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+	background: #a6ba95;
 
     .fa-pencil {
         font-size: 20px;
@@ -33,15 +34,17 @@
 .wrapper__1, .wrapper__2 {
     height: 190px;
     border-radius: 15px;
-    background-color: #efefef;
+    background-color: #623f55!important;
     width: 1383px;
     margin: 70px 70px;
     padding: 25px;
     overflow: hidden;
     display: flex;
     align-items: center;
-    box-shadow: 7px 7px 15px lightgrey;
-    transition: 0.35s;
+
+    * {
+        color: #a6ba95!important;
+    }
 }
 
 .opacity {
@@ -97,10 +100,9 @@
     min-height: 290px;
     height: fit-content;
     border-radius: 15px;
-    background-color: #efefef;
+    background-color: #623f55!important;
     padding: 25px;
     overflow: hidden;
-    box-shadow: 5px 5px 5px lightgrey;
     padding: 20px;
 
     i {
@@ -108,6 +110,7 @@
         right: 15px;
         top: 15px;
         font-size: 22px;
+        color: #a6ba95!important;
         cursor: pointer;
     }
 
@@ -116,28 +119,35 @@
         flex-direction: column;
         gap: 15px;
         margin-top: 25px;
+
+        h2, h5, p, span {
+            color: #a6ba95!important;
+        }
     }
 
     input {
         width: 100%;
         margin: 8px 0px 20px 0px;
+        color: #623f55!important;
+        outline: none;
         box-shadow: none;
+        border: none;
+
+        &::-webkit-input-placeholder {
+            color: #623f55!important;
+        }
     }
 
     button {
         width: 100%;
         transition: 0.6s;
         margin: 10px 0px;
-        color: rgb(66, 66, 214);
-        border: 3px solid rgb(66, 66, 214);
-        background-color: #fff;
-
+        background-color: #a6ba95!important;
+        color: #623f55!important;
+    
         &:hover {
-            background-color: rgb(66, 66, 214);
-            opacity: 0.8!important;
-            color: #fff;
+            opacity: 0.75!important;
         }
-        
     }
 }
 

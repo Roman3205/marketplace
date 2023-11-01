@@ -18,7 +18,7 @@ export default {
                 <button class="btn" @click="goMain" >Назад</button>
             </div>
             <div class="image">
-                <img src="/images/notfound.png" alt="" width="230">
+                <img src="/images/notfound.png" alt="" width="320">
             </div>
         </div>
     </div>

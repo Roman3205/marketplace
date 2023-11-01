@@ -182,8 +182,9 @@ export default {
             <div class="alert alert-success w-100 text-center">Чат с продавцом создан</div>
         </div>
         <div class="wrapper">
-            <h2><b>Покупки</b></h2>
-            <div class="orders">
+            <h2 v-if="!loading"><b>Покупки</b></h2>
+            <spinner-loading v-if="loading" class="mt-4" style="overflow: hidden; display: flex; justify-content: center;"></spinner-loading>
+            <div class="orders" v-if="purchases.orders != 0 && !loading">
                 <div class="input-search">
                     <input type="text" v-model="searchInput" class="form-control mb-5" placeholder="Название или артикул"><i class="fa fa-search"></i>
                 </div>
@@ -212,7 +213,7 @@ export default {
                         </div>
                     </div>
                 </div>
-                <spinner-loading v-if="loading" class="mt-4" style="overflow: hidden; display: flex; justify-content: center;"></spinner-loading>
+                <!-- <spinner-loading v-if="loading" class="mt-4" style="overflow: hidden; display: flex; justify-content: center;"></spinner-loading> -->
                 <div class="content" v-if="!searchInput">
                     <div class="product" v-for="(item) in purchases.orders">
                         <div class="image-prod" @click="goProduct($event, item)" :style="'background: url(' + item.product_id.picture + ') no-repeat center center;'">

@@ -99,6 +99,10 @@ export default {
     width: 10px;
   }
 
+  html {
+    background-color: #a6ba95;
+  }
+
   html::-webkit-scrollbar-thumb {
     background: #623f55;
     width: 10px;
@@ -155,6 +159,7 @@ export default {
   }
 
   .app {
+    background-color: #a6ba95;
     display: flex;
     justify-content: center;
   }

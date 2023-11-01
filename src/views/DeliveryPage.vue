@@ -151,15 +151,17 @@ export default {
                                 <div class="rub">
                                     <h6 class="pb-3 ps-lg-2"><span>{{ item.product_id.title }}</span></h6>
                                 </div>
-                                <div class="alert text-center" :class="{
-                                'alert-danger': item.status === 'Создан',
-                                'alert-info': item.status === 'Отправлен на сборку' || item.status === 'Собран',
-                                'alert-warning': item.status === 'Отсортирован', 
-                                'alert-primary': item.status === 'Передан в доставку',
-                                'alert-success': item.status === 'Готов к получению',
-                                }">{{ item.status }}</div>
-                                <div v-if="item.status === 'Готов к получению'" class="get recieve mb-2">Получили заказ? <div class="alert alert-success" :class="{'click-recieve': isClickRecieve}" @click="setRecieved($event, item)">Да</div></div>
-                                <div v-if="item.status !== 'Готов к получению'" class="get" style="pointer-events: none;"><div class="alert alert-warning">Заказ еще не доставлен</div></div>
+                                <div class="status-panel">
+                                    <div class="alert text-center" :class="{
+                                    'alert-danger': item.status === 'Создан',
+                                    'alert-info': item.status === 'Отправлен на сборку' || item.status === 'Собран',
+                                    'alert-warning': item.status === 'Отсортирован', 
+                                    'alert-primary': item.status === 'Передан в доставку',
+                                    'alert-success': item.status === 'Готов к получению',
+                                    }">{{ item.status }}</div>
+                                    <div v-if="item.status === 'Готов к получению'" class="get recieve">Получили заказ? <div class="alert alert-success" :class="{'click-recieve': isClickRecieve}" @click="setRecieved($event, item)">Да</div></div>
+                                    <div v-if="item.status !== 'Готов к получению'" class="get" style="pointer-events: none;"><div class="alert alert-warning">Заказ еще не доставлен</div></div>
+                                </div>
                             </div>
                         </transition-group>
                     </div>

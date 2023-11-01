@@ -17,8 +17,8 @@
 
 .form__block__toggle {
 	width: 40px;
-	margin-top: -0.5px;
-	height: 32px;
+	margin-top: 0px;
+	height: 30.5px;
 	transition: 0.5s;
 	overflow: hidden;
 
@@ -80,7 +80,7 @@ ul {
         }
 	}
 
-	* {
+	a, p, h3 {
 		color: #a6ba95!important;
 	}
 	

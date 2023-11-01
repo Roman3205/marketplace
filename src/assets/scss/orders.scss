@@ -4,8 +4,15 @@
     gap: $gap;
 }
 
+.container {
+    background-color: #a6ba95;
+}
+
+i, p, span, h2, h3, h5 {
+    color: #623f55!important;
+}
+
 .wrapper {
-    background-color: #fff;
     width: 1385px;
     height: auto;
     margin: 60px 70px 100px 70px;
@@ -38,11 +45,15 @@
     border-radius: 15px;
     width: 215px;
     height: fit-content;
-    background-color: #efefef;
+    background-color: #623f55!important;
     @include flex(column, 12px);
     margin: 10px;
-    border: 1px solid gray;
+    border: 2px solid black;
     cursor: pointer;
+
+    .div, p, span, h2, h3, h5 {
+        color: #a6ba95!important;
+    }
 
     .image-prod {
         height: 230px!important;
@@ -55,7 +66,7 @@
     }
 
     &:hover {
-        box-shadow: 0px 0px 9px 7px lightgray;
+        box-shadow: 0px 0px 9px 7px #623f55;
     }
 
     &:hover > .content-product {
@@ -74,9 +85,6 @@
         button {
             border-radius: 10px;
             border: none;
-            border: 2px solid rgb(66, 66, 214);
-            color: rgb(66, 66, 214);
-            background-color: #fff;
             padding: 5px 8px;
             margin-right: 0;
             transition: 0.6s;
@@ -88,8 +96,6 @@
 
         button.hover:hover {
             opacity: 0.75;
-            color: #fff;
-            background-color: rgb(66, 66, 214);
         }
     }
 
@@ -131,22 +137,37 @@
         width: 50%;
         margin-left: 45px;
         box-shadow: none;
-        border: 2px solid lightgray;
         margin-bottom: 15px;
     }
 }
 
 .no-orders button {
-    background-color: rgb(66, 66, 214);
     padding: 10px 25px;
     margin-top: 10px;
     border-radius: 10px;
-    color: #fff;
     border: none;
     transition: 0.6s;
+    background-color: #623f55!important;
+    color: #a6ba95!important;
+}
+
+input {
+    color: #623f55!important;
+    outline: none;
+    box-shadow: none;
+    border: none;
+
+    &::-webkit-input-placeholder {
+        color: #623f55!important;
+    }
+}
+
+button {
+    background-color: #a6ba95!important;
+    color: #623f55!important;
 
     &:hover {
-        opacity: 0.75;
+        opacity: 0.75!important;
     }
 }
 

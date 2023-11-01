@@ -11,6 +11,7 @@
 
 .container h2 {
     font-size: 24px;
+    color: #623f55;
 }
 
 .fa-star {
@@ -22,17 +23,21 @@
     width: 1385px;
     @include flex(column, 40px, none);
 
-    .no-feedbacks button {
-        background-color: rgb(66, 66, 214);
-        padding: 10px 25px;
-        margin-top: 10px;
-        border-radius: 10px;
-        color: #fff;
-        border: none;
-        transition: 0.6s;
+    .no-feedbacks {
+        color: #623f55;
 
-        &:hover {
-            opacity: 0.75;
+        button {
+            background-color: #623f55;
+            padding: 10px 25px;
+            margin-top: 10px;
+            border-radius: 10px;
+            color: #a6ba95;
+            border: none;
+            transition: 0.6s;
+    
+            &:hover {
+                opacity: 0.75;
+            }
         }
     }
 }
@@ -75,10 +80,15 @@
 }
 
 .feedback {
-    background-color: #efefef;
+    background-color: #623f55;
+    padding: 5px;
     border-radius: 15px;
     width: 100%;
     @include flex(row, 0px, space-between);
+
+    span, p, h2, h5, h6, b {
+        color: #a6ba95;
+    }
 
     img {
         border-radius: 10px;
@@ -129,15 +139,13 @@
         @include flex(row, 8px, center);
         align-items: center;
         transition: 0.6s;
+        background-color: #55711a;
+        border: none;
+        color: #a6ba95;
 
         &:hover {
             opacity: 0.75;
         }
-    }
-
-    .btn-edit {
-        background-color: rgb(66, 66, 214);
-        color: #fff;
     }
 }
 
@@ -148,6 +156,10 @@
 @media screen and (max-width: 1400px) {
     .nothide {
         display: flex;
+    }
+
+    .container {
+        min-height: 900px;
     }
 
     .wrapper {
@@ -199,5 +211,11 @@
         .action-menu {
             margin: 10px 10px 0px 0px;
         }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .container {
+        min-height: 400px;
     }
 }

@@ -11,6 +11,7 @@
 
 .container h2 {
     font-size: 24px;
+    color: #623f55;
 }
 
 .wrapper, .wrapper-no-content {
@@ -19,16 +20,15 @@
     @include flex(column, 40px, none);
 
     .no-feedbacks button {
-        background-color: rgb(66, 66, 214);
         padding: 10px 25px;
         margin-top: 10px;
         border-radius: 10px;
-        color: #fff;
-        border: none;
+        background-color: #a6ba95;
+        color: #623f55!important;
         transition: 0.6s;
-
+    
         &:hover {
-            opacity: 0.75;
+            opacity: 0.8!important;
         }
     }
 }
@@ -43,10 +43,11 @@
         border: none;
         transition: 0.6s;
         margin-bottom: 10px;
-        color: #fff;
-        background-color: rgb(66, 66, 214);
-
-        &:hover {
+        background-color: #623f55;
+        color: #a6ba95!important;
+        transition: 0.6s;
+    
+        button:hover {
             opacity: 0.8!important;
         }
     }
@@ -80,16 +81,21 @@
 }
 
 .product {
-    background-color: #efefef;
+    background-color: #623f55;
     border-radius: 15px;
     @include flex(row, 40px, space-between);
     height: 180px;
     width: 100%;
     cursor: pointer;
+    padding: 5px;
+
+    span, p, b, h2, h5, h6 {
+        color: #a6ba95!important;
+    }
 
     img {
         border-radius: 10px;
-        width: 150px
+        width: 150px;
     }
 }
 
@@ -102,7 +108,7 @@
         resize: none;
         padding: 10px;
         border-radius: 15px;
-        border: 2px solid lightgray;
+        border: 2px solid #623f55;
         cursor: pointer;
         background-color: #fff;
         width: 330px;
@@ -112,38 +118,30 @@
     .action-menu {
         align-self: flex-start;
         @include flex(column, 20px, none);
-    
-        .btn-danger, .btn-edit {
-            @include flex(row, 8px, center);
-            align-items: center;
-            transition: 0.6s;
-
-            &:hover {
-                opacity: 0.75;
-            }
-        }
-
-        .btn-edit {
-            background-color: rgb(66, 66, 214);
-            color: #fff;
-        }
     }
 }
 
 .oplata-menu {
     @include flex(column, 30px, none);
     padding-bottom: 10px;
+
+    span, p, b, h2, h5, h6, i {
+        color: #a6ba95!important;
+    }
 }
 
 .data-user {
     width: 400px;
     height: fit-content;
     border-radius: 15px;
-    background-color: #efefef;
+    background-color: #623f55;
     overflow: hidden;
-    box-shadow: 5px 5px 5px lightgrey;
     padding: 20px;
     margin-right: 8px;
+    
+    span, p, b, h2, h5, h6 {
+        color: #a6ba95!important;
+    }
 
     h2 {
         cursor: pointer;
@@ -176,10 +174,9 @@
     width: 400px;
     height: fit-content;
     border-radius: 15px;
-    background-color: #efefef;
+    background-color: #623f55;
     padding: 25px;
     overflow: hidden;
-    box-shadow: 5px 5px 5px lightgrey;
     padding: 20px;
 
     .active-menu {
@@ -215,16 +212,13 @@
         width: 100%;
         transition: 0.6s;
         margin-bottom: 10px;
-        color: rgb(66, 66, 214);
-        border: 3px solid rgb(66, 66, 214);
-        background-color: #fff;
-
-        &:hover {
-            background-color: rgb(66, 66, 214);
+        background-color: #a6ba95;
+        color: #623f55!important;
+        transition: 0.6s;
+    
+        button:hover {
             opacity: 0.8!important;
-            color: #fff;
         }
-        
     }
 
     .check {
@@ -254,11 +248,14 @@
     width: 300px;
     height: fit-content;
     border-radius: 15px;
-    background-color: #efefef;
+    background-color: #623f55;
     padding: 25px;
     overflow: hidden;
-    box-shadow: 5px 5px 5px lightgrey;
     padding: 20px;
+
+    span, p, b, h2, h5, h6, i {
+        color: #a6ba95!important;
+    }
 
     i {
         position: absolute;
@@ -276,32 +273,56 @@
     }
 
     .bal {
-        border: 2px solid rgb(66, 66, 214);
+        border: 2px solid #a6ba95;
         border-radius: 10px;
         padding: 5px 15px;
         width: 100%;
         text-align: center;
         cursor: pointer;
+        color: #a6ba95;
     }
 
     button {
         width: 100%;
         transition: 0.6s;
         margin: 10px 0px;
-        color: rgb(66, 66, 214);
-        border: 3px solid rgb(66, 66, 214);
-        background-color: #fff;
+    }
+}
+
+button {
+    background-color: #a6ba95;
+    color: #623f55!important;
+    transition: 0.6s;
+
+    &:hover {
+        opacity: 0.8!important;
+    }
+}
+
+.action-menu {
+    .btn-danger {
+        @include flex(row, 8px, center);
+        align-items: center;
+        transition: 0.6s;
+        background-color: #55711a;
+        border: none;
+        color: #a6ba95!important;
+
+        i {
+            color: #a6ba95;
+        }
 
         &:hover {
-            background-color: rgb(66, 66, 214);
-            opacity: 0.8!important;
-            color: #fff;
+            opacity: 0.75;
         }
-        
     }
 }
 
 @media screen and (max-width: 1300px) {
+    .container {
+        min-height: 900px;
+    }
+    
     .wrapper-mod {
         flex-direction: column;
         gap: 100px;
@@ -328,6 +349,10 @@
 }
 
 @media screen and (max-width: 900px) {
+    .container {
+        min-height: 400px;
+    }
+    
     .wrapper {
         margin-right: 20px;
         margin-left: 20px;

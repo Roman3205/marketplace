@@ -356,7 +356,7 @@ export default {
                 <h2><b>Создание товара</b></h2>
                 <div>
                     <p>Введите название</p>
-                    <input type="text" class="form-control mt-2" v-model="inputName" placeholder="Например, Беспроводные наушники" >
+                    <input type="text" class="form-control mt-2" maxlength="30" v-model="inputName" placeholder="Например, Беспроводные наушники" >
                 </div>
                 <div>
                     <p>Выберите категорию товара</p>
