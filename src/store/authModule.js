@@ -86,7 +86,7 @@ let authModule = {
         clearTokens({state}) {
             localStorage.removeItem('tokenSeller')
             localStorage.removeItem('token')
-            state.token = null
+            state.accessToken = null
             state.tokenSeller = null
         }
     },
