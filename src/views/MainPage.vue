@@ -198,7 +198,7 @@ export default {
             </div>
             <div class="block-products" v-if="inputValueState === '' && categoryState === ''">
                 <h2><b>Хиты продаж</b></h2>
-                <spinner-loading class="mt-3" v-if="loading" style="align-self: center;"></spinner-loading>
+                <spinner-loading v-if="loading" style="align-self: center;"></spinner-loading>
                 <h5 class="ms-5 mt-3" v-if="productsTrend.length == 0 && !loading">Предложений нет</h5>
                 <div class="content" v-if="productsTrend.length != 0">
                     <div class="product" v-for="(item) in  productsTrend" @click="goProduct($event, item)" >
