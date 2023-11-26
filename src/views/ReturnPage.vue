@@ -4,7 +4,6 @@ import { opacityEffectsOn, opacityEffectsOff } from './InfoDetails.vue';
 import { scrollWin } from '@/components/AppFooter.vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -34,11 +33,7 @@ export default {
 
         linkValue() {
             return this.inputValue2.length >= 22
-        },
-
-        ...mapGetters({
-            getAccessToken: 'auth/getAccessToken'
-        })
+        }
     },
 
     methods: {
@@ -48,17 +43,11 @@ export default {
                 this.currentRefund = null
                 this.showFillMenu = true
                 opacityEffectsOn()
-
-                let token = 'Bearer ' + this.getAccessToken
                 this.loadingFill = true
 
                 let response = await axios.get('/refund', {
                     params: {
                         id: item._id
-                    },
-
-                    headers: {
-                        Authorization: token
                     }
                 })
                 this.loadingFill = false
@@ -83,16 +72,11 @@ export default {
                 this.isClickFill = false
             } else {
                 try {
-                    let token = 'Bearer ' + this.getAccessToken
 
                     await axios.post('/refund/fill', {
                         id: item._id,
                         albumLink: this.inputValue2,
                         text: this.inputValue1
-                    }, {
-                        headers: {
-                            Authorization: token
-                        }
                     })
                     this.isFillRefund = true
 
@@ -128,13 +112,8 @@ export default {
         async loadRefunds() {
             try {
                 this.loading = true
-                let token = 'Bearer ' + this.getAccessToken
 
-                let response = await axios.get('/refund/all', {
-                    headers: {
-                        Authorization: token
-                    }
-                })
+                let response = await axios.get('/refund/all')
                 this.loading = false
 
                 this.refunds = response.data
@@ -147,14 +126,9 @@ export default {
             try {
                 this.isClickReturn = false
                 this.isClickReturn = true
-                let token = 'Bearer ' + this.getAccessToken
 
                 await axios.post('/refund/return/money', {
                     id: item._id
-                }, {
-                    headers: {
-                        Authorization: token
-                    }
                 })
 
                 this.loadRefunds()
@@ -187,7 +161,7 @@ export default {
                 <button @click="goRoute($event, 'orders')" >Перейти к покупкам</button>
             </div>
             <div class="return-container" v-if="refunds.length != 0">
-                <div class="return" v-for="(item) in refunds" >
+                <div class="return" v-for="(item) in refunds" :key="item">
                     <h2><b>Заявка от {{ getTime(item.createdAt) }}</b></h2>
                     <div class="content">
                         <p><b>Номер возврата: {{ item.uniqueNumber }}</b></p>
@@ -231,7 +205,9 @@ export default {
                         <span class="text-danger" v-if="!linkValue">Вставьте корректную ссылку</span>
                     </div>
                     <div class="text">
-                        <p><h2><b>Шаг 3:</b></h2></p>
+                        <p>
+                            <h2><b>Шаг 3:</b></h2>
+                        </p>
                         <div class="textarea-options">
                             <p>Опишите причину(ы) возврата</p>
                             <span>{{ this.inputValue1.length }} / 250</span>

@@ -2,9 +2,10 @@ import axios from 'axios'
 
 // axios.defaults.baseURL = import.meta.env.VITE_BACKEND_HOST
 axios.defaults.baseURL = 'https://server-marketplace.onrender.com'
+// axios.defaults.baseURL = 'http://localhost:3333'
 
 // jwt in cookies from server
-// axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
@@ -22,14 +23,15 @@ import components from './components/UI/ui'
 const app = createApp(App)
 
 // cookie for installation on client
-app.use(cookies, {
-    expires: '1d', 
-    path: '/', 
-    domain: '', 
-    secure: '', 
-    sameSite: 'Lax'
-})
-
+// app.use(cookies, {
+//     expires: '1d',
+//     path: '/',
+//     domain: '',
+//     secure: '',
+//     sameSite: 'Lax'
+// })
+import VNetworkGraph from "v-network-graph"
+import "v-network-graph/lib/style.css"
 components.forEach((component) => {
     app.component(component.name, component)
 })
@@ -37,4 +39,5 @@ components.forEach((component) => {
 app
     .use(router)
     .use(store)
+    .use(VNetworkGraph)
     .mount('#app')

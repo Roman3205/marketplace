@@ -94,7 +94,8 @@ p {
 
 .product {
     border-radius: 15px;
-    width: 215px;
+    min-width: 215px;
+    max-width: 250px;
     height: 340px;
     background-color: #623f55!important;
     @include flex(column, 12px);
@@ -105,6 +106,11 @@ p {
 
     p, span, h2, h5, h6, i {
         color: #a6ba95!important;
+    }
+
+    p {
+        padding-left: 0px;
+        padding-right: 10px;
     }
 
     &:hover {
@@ -238,5 +244,24 @@ p {
         div {
             height: 200px;
         }
+    }
+
+    .product {
+        min-width: 145px!important;
+        max-width: 180px!important;
+    }
+}
+
+@media screen and (max-width: 330px) {
+    .slider {
+        height: 300px;
+
+        div {
+            height: 200px;
+        }
+    }
+
+    .product {
+        min-width: 93%!important;
     }
 }

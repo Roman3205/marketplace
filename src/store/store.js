@@ -1,5 +1,4 @@
 import { createStore } from "vuex"
-import authModule from "./authModule"
 
 let store = createStore({
     state: {
@@ -47,19 +46,19 @@ let store = createStore({
     },
 
     actions: {
-        searchProductsFunction({commit}, products) {
+        searchProductsFunction({ commit }, products) {
             commit('setProducts', products)
         },
 
-        saveInputValue({commit}, value) {
+        saveInputValue({ commit }, value) {
             commit('setInput', value)
         },
 
-        setFilteredCategory({commit}, products) {
+        setFilteredCategory({ commit }, products) {
             commit('setCategory', products)
         },
 
-        getCategory({commit}, category) {
+        getCategory({ commit }, category) {
             commit('setCategoryTitle', category)
         }
     },
@@ -80,10 +79,6 @@ let store = createStore({
         categoryState(state) {
             return state.category
         }
-    },
-
-    modules: {
-        auth: authModule
     }
 })
 
