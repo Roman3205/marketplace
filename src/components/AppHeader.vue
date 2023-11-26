@@ -15,16 +15,23 @@ export default {
         }
     },
 
-    mounted() {
-        this.getUser()
-        this.getProductsAll()
+    created() {
+        this.debouncedClickSearch = _.debounce(this.getProductsAll, 900)
     },
 
-    watch: {
-        searchInput: {
-            handler: 'searchProducts'
-        }
+    unmounted() {
+        this.debouncedClickSearch.cancel()
     },
+
+    mounted() {
+        this.getUser()
+    },
+
+    // watch: {
+    //     searchInput: {
+    //         handler: 'debouncedClickSearch'
+    //     }
+    // },
 
     computed: {
         ...mapState({
@@ -102,30 +109,24 @@ export default {
         },
 
         async getProductsAll() {
-            if(this.getTokenSeller === null) {
-                try {
-                    let response = await axios.get('/products/all')
+            try {
+                if(this.getTokenSeller === null && this.searchInput !== '') {
+                   let response = await axios.get('/products/filter', {params: {value: this.searchInput}})
                     this.products = response.data
-                } catch (error) {
-                    console.log('Ошибка при отправке запроса на сервер: ' + error);
-                }
-            }
-        },
 
-        async searchProducts() {
-            if(this.searchInput !== '') {
-                this.$router.push('/')
-                this.setFilteredCategory([])
-                this.getCategory('')
-                let regex = new RegExp(this.searchInput, 'i')
-                let filterProducts = this.products.filter((product) => regex.test(product.title))
-                this.searchProductsFunction(filterProducts)
-                this.saveInputValue(this.searchInput)
-            } else if (this.searchInput === '') {
-                this.searchProductsFunction([])
-                this.saveInputValue('')
-            } else {
-                return
+                    this.$router.push('/')
+                    this.setFilteredCategory([])
+                    this.getCategory('')
+                    this.searchProductsFunction(this.products)
+                    this.saveInputValue(this.searchInput)
+                } else if (this.searchInput === '') {
+                    this.searchProductsFunction([])
+                    this.saveInputValue('')
+                } else {
+                    return
+                }
+            } catch (error) {
+                console.log('Ошибка при отправке запроса на сервер: ' + error);
             }
         },
 
@@ -135,7 +136,8 @@ export default {
             this.searchInput = ''
             this.searchProductsFunction([])
             this.saveInputValue('')
-            this.categoryFilterProducts = this.products.filter((product) => product.category === category)
+            let response = await axios.get('/products/category', {params: {category: category}})
+            this.categoryFilterProducts = response.data
             this.setFilteredCategory(this.categoryFilterProducts)
             this.getCategory(category)
 
@@ -170,7 +172,7 @@ export default {
                 <h1 @click="goRoute($event, 'main')" >GORZA</h1>
             </div>
             <div class="header__search">
-                <input type="text" v-model="searchInput" placeholder="Я ищу..." id="search" class="form-control">
+                <input type="text" @input="this.debouncedClickSearch" v-model="searchInput" placeholder="Я ищу..." id="search" class="form-control">
                 <label for="search"><i class="fa fa-search"></i></label>
             </div>
             <div class="header__box box">

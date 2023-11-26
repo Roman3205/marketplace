@@ -74,7 +74,7 @@ export default {
                 this.successTopUp = false
 
                 let token = 'Bearer ' + this.getAccessToken
-                await axios.post('/balance/topup', {
+                let response = await axios.post('/balance/topup', {
                     money: this.inputValue
                 }, {
                     headers: {
@@ -85,13 +85,15 @@ export default {
                 this.successTopUp = true
 
                 await new Promise(prom => setTimeout(prom, 1300))
-                this.getUser()
-                this.getOperations()
                 this.inputValue = ''
-                this.closeDon()
+                await axios.post(`${response.data.servBank}/transaction/crypt`, response.data).then((response) => {
+                    window.location.href = `${response.data.urlBank}/payment/${response.data.path}`
+                })
                 this.successTopUp = false
+                // window.open(`http://localhost:5444/payment/${responseTran.data.path}`, '_blank')
             } catch (error) {
                 console.log('Ошибка при отправке запроса на сервер: ' + error);
+                window.location.reload()
             } finally {
                 this.isClickTopUp = false
             }
@@ -187,7 +189,7 @@ export default {
             'opacity': !emptyValue
         }" >Оплатить</button>
             </form>
-            <div v-if="successTopUp" class="alert mt-1 alert-success w-100 text-center">Баланс успешно пополнен</div>
+            <div v-if="successTopUp" class="alert mt-1 alert-primary w-100 text-center">Перенаправляем на страницу платежа</div>
         </div>
     </div>
 </template>

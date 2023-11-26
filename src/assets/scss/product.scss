@@ -49,10 +49,11 @@
 
 .prod-content {
     justify-content: space-between;
+    padding-bottom: 10px;
 
     img {
         border-radius: 15px;
-        height: 620px;
+        height: 430px;
         border: 2px solid #623f55;
     }
 }
@@ -75,8 +76,13 @@
     }
 }
 
+.prod-description {
+    height: fit-content!important;
+}
+
 .brand {
     height: 150px;
+    width: 450px;
     @include flex(column, 10px);
     cursor: pointer;
 
@@ -89,7 +95,7 @@
     }
 
     .brand-info {
-        @include flex(row, 10px);
+        @include flex(row, 0px);
         justify-content: space-between;
 
         .sale, .reg {
@@ -146,7 +152,7 @@
 }
 
 .prod-menu {
-    @include flex(column-reverse, 100px);
+    @include flex(column-reverse, 20px);
 
     .prod-description {
         @include flex(column, 10px);
@@ -172,7 +178,7 @@
 }
 
 .reviews {
-    margin-top: 60px;
+    padding-top: 35px;
 
     .stars i {
         color: gold;
@@ -404,9 +410,9 @@ button {
     .prod-content {
         flex-direction: column;
 
-        img {
-            width: 100%;
-            height: 640px;
+        .prod-content img {
+            height: 380px;
+            width: 60%;
         }
 
         .prod-menu {
@@ -482,6 +488,20 @@ button {
     }
 
     .prod-content img {
-        height: 330px;
+        height: 380px;
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .wrapper {
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 30px;
+    }
+
+    .prod-content img {
+        height: 300px;
+        width: 98%;
     }
 }
